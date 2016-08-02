@@ -1,0 +1,38 @@
+{
+  "name": "ui-router-architecture-react",
+  "version": "1.0.0",
+  "description": "Architecture overview demo for React UI-Router",
+  "scripts": {
+    "start": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 3000 --config webpack.config.js --history-api-fallback --content-base ./"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.6.3",
+    "lodash": "^4.14.0",
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
+    "ui-router-react": "^0.2.0",
+    "ui-router-visualizer": "^2.0.5",
+    "whatwg-fetch": "^1.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.3.7",
+    "babel-core": "^6.11.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-syntax-trailing-function-commas": "^6.8.0",
+    "babel-plugin-transform-class-properties": "^6.11.5",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-es2016": "^6.11.3",
+    "babel-preset-react": "^6.11.1",
+    "copy-webpack-plugin": "^3.0.1",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.9.0",
+    "postcss-loader": "^0.9.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
