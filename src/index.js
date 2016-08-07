@@ -15,9 +15,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './router.config';
 
 ReactDOM.render(
-	<div>
-		<UIView/>
-		<Dialog/>
-	</div>,
-	document.getElementById('root')
+  <div>
+    <UIView/>
+    <Dialog/>
+  </div>,
+  document.getElementById('root')
 );

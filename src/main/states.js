@@ -11,9 +11,9 @@ import Home from '../main/Home';
  * 2) Provide a viewport (ui-view) for a substate to plug into
  */
 const appState = {
-	name: 'app',
-	redirectTo: 'welcome',
-	component: App
+  name: 'app',
+  redirectTo: 'welcome',
+  component: App
 }
 
 /**
@@ -21,10 +21,10 @@ const appState = {
  * can be matched to the URL.
  */
 const welcomeState = {
-	parent: 'app',
-	name: 'welcome',
-	url: '/welcome',
-	component: Welcome
+  parent: 'app',
+  name: 'welcome',
+  url: '/welcome',
+  component: Welcome
 }
 
 /**
@@ -33,10 +33,10 @@ const welcomeState = {
  * It shows giant buttons which activate their respective submodules: Messages, Contacts, Preferences
  */
 const homeState = {
-	parent: 'app',
-	name: 'home',
-	url: '/home',
-	component: Home
+  parent: 'app',
+  name: 'home',
+  url: '/home',
+  component: Home
 };
 
 
@@ -48,11 +48,11 @@ const homeState = {
  * reactivates the state that the user originally came from.
  */
 const loginState = {
-	parent: 'app',
-	name: 'login',
-	url: '/login',
-	component: Login,
-	resolve: { returnTo: returnTo }
+  parent: 'app',
+  name: 'login',
+  url: '/login',
+  component: Login,
+  resolve: { returnTo: returnTo }
 };
 
 /**
@@ -63,29 +63,29 @@ const loginState = {
  * return the main "app" state.
  */
  function returnTo ($transition$) {
-	 let redirectedFrom = $transition$.previous();
-	 // The user was redirected to the login state (via the requiresAuth hook)
-	 if (redirectedFrom != null) {
-		 // Follow the current transition's redirect chain all the way back to the original attempted transition
-		 while (redirectedFrom.previous()) {
-			 redirectedFrom = redirectedFrom.previous();
-		 }
-		 // return to the original attempted "to state"
+   let redirectedFrom = $transition$.previous();
+   // The user was redirected to the login state (via the requiresAuth hook)
+   if (redirectedFrom != null) {
+     // Follow the current transition's redirect chain all the way back to the original attempted transition
+     while (redirectedFrom.previous()) {
+       redirectedFrom = redirectedFrom.previous();
+     }
+     // return to the original attempted "to state"
 
-		 return { state: redirectedFrom.to(), params: redirectedFrom.params("to") };
-	 }
+     return { state: redirectedFrom.to(), params: redirectedFrom.params("to") };
+   }
 
-	 // The user was not redirected to the login state; they directly activated the login state somehow.
-	 // Return them to the state they came from.
-	 let fromState = $transition$.from();
-	 let fromParams = $transition$.params("from");
+   // The user was not redirected to the login state; they directly activated the login state somehow.
+   // Return them to the state they came from.
+   let fromState = $transition$.from();
+   let fromParams = $transition$.params("from");
 
-	 if (fromState.name !== '') {
-		 return {state: fromState, params: fromParams};
-	 }
+   if (fromState.name !== '') {
+     return {state: fromState, params: fromParams};
+   }
 
-	 // If the fromState's name is empty, then this was the initial transition. Just return them to the home state
-	 return { state: 'home' };
+   // If the fromState's name is empty, then this was the initial transition. Just return them to the home state
+   return { state: 'home' };
  }
 
 export default [appState, welcomeState, homeState, loginState];
