@@ -1,12 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import {UISref} from 'ui-router-react';
-import {isEqual} from 'lodash';
+import {isEqual, cloneDeep} from 'lodash';
 
 import ContactForm from './components/ContactForm';
 import {ContactsStorage} from '../global/dataSources';
 import DialogService from '../global/dialogService';
 /**
-* The component makes a copy of the contact data for editing by assining it to the component state.
+* The component makes a copy of the contact data for editing by assigning it to the component state.
 * The new copy and original (pristine) copy are used to determine if the contact is "dirty" or not.
 * If the user navigates to some other state while the contact is "dirty", the `uiCanExit` component
 * hook asks the user to confirm navigation away, losing any edits.
@@ -25,15 +25,14 @@ import DialogService from '../global/dialogService';
 class EditContact extends Component {
 	constructor (props) {
 		super(props);
-		this.pristineContact = this.props.resolves.contact;
 		this.canExit = false;
 		this.state = {
-			contact: this.pristineContact
+			contact: cloneDeep(this.props.resolves.contact)
 		}
 	}
 
-	uiCanExit = () => {
-		if (this.canExit || isEqual(this.state.contact, this.pristineContact)) return true;
+	uiCanExit = (trans) => {
+		if (this.canExit || isEqual(this.state.contact, this.props.resolves.contact)) return true;
 
 		let message = 'You have unsaved changes to this contact.';
 		let question = 'Navigate away and lose changes?';
