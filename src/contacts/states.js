@@ -11,15 +11,15 @@ import EditContact from './EditContact';
 * The contacts are fetched using a resolve.
 */
 const contactsState = {
-	parent: 'app', // declares that 'contacts' is a child of 'app'
-	name: "contacts",
-	url: "/contacts",
-	resolve: {
-		// Resolve all the contacts. The resolved contacts are injected as props into the Contacts component.
-		contacts: () => ContactsStorage.all()
-	},
-	data: { requiresAuth: true },
-	component: Contacts
+  parent: 'app', // declares that 'contacts' is a child of 'app'
+  name: "contacts",
+  url: "/contacts",
+  resolve: {
+    // Resolve all the contacts. The resolved contacts are injected as props into the Contacts component.
+    contacts: () => ContactsStorage.all()
+  },
+  data: { requiresAuth: true },
+  component: Contacts
 };
 
 /**
@@ -27,14 +27,14 @@ const contactsState = {
 * The contact to display is fetched using a resolve, based on the `contactId` parameter.
 */
 const viewContactState = {
-	name: 'contacts.contact',
-	url: '/:contactId',
-	resolve: {
-		// Resolve the contact, based on the contactId parameter value.
-		// The resolved contact is provided to the contactComponent's contact binding
-		contact: ($transition$) => ContactsStorage.get($transition$.params().contactId)
-	},
-	component: ContactView
+  name: 'contacts.contact',
+  url: '/:contactId',
+  resolve: {
+    // Resolve the contact, based on the contactId parameter value.
+    // The resolved contact is provided to the contactComponent's contact binding
+    contact: ($transition$) => ContactsStorage.get($transition$.params().contactId)
+  },
+  component: ContactView
 };
 
 /**
@@ -46,17 +46,17 @@ const viewContactState = {
 * by 'contacts.contact') with the edit contact template/controller
 */
 const editContactState = {
-	name: 'contacts.contact.edit',
-	url: '/edit',
-	views: {
-		// Relatively target the grand-parent-state's $default (unnamed) ui-view
-		// This could also have been written using ui-view@state addressing: $default@contacts
-		// Or, this could also have been written using absolute ui-view addressing: !$default.$default.$default
-		'^.^.$default': {
-			//bindings: { pristineContact: "contact" },
-			component: EditContact
-		}
-	}
+  name: 'contacts.contact.edit',
+  url: '/edit',
+  views: {
+    // Relatively target the grand-parent-state's $default (unnamed) ui-view
+    // This could also have been written using ui-view@state addressing: $default@contacts
+    // Or, this could also have been written using absolute ui-view addressing: !$default.$default.$default
+    '^.^.$default': {
+      //bindings: { pristineContact: "contact" },
+      component: EditContact
+    }
+  }
 };
 
 /**
@@ -65,9 +65,9 @@ const editContactState = {
 * The contact data to edit is injected into the component from the parent state's resolve.
 */
 const newContactState = {
-	name: 'contacts.new',
-	url: '/new',
-	component: EditContact
+  name: 'contacts.new',
+  url: '/new',
+  component: EditContact
 };
 
 export default [contactsState, viewContactState, editContactState, newContactState];

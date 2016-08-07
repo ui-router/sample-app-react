@@ -12,12 +12,12 @@ import 'font-awesome/css/font-awesome.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 // import routing
-import './bootstrap';
+import './router.config';
 
 ReactDOM.render(
-	<div>
-		<UIView/>
-		<Dialog/>
-	</div>,
-	document.getElementById('root')
+  <div>
+    <UIView/>
+    <Dialog/>
+  </div>,
+  document.getElementById('root')
 );

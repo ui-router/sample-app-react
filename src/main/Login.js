@@ -15,55 +15,55 @@ import UIRouterReact from 'ui-router-react';
  * Then it sends the user back to the `returnTo` state, which is provided as a resolve data.
  */
 class Login extends React.Component {
-	constructor (props) {
-		super(props);
-		this.usernames = AuthService.usernames;
-		this.state = {
-			username: AppConfig.emailAddress || '',
-			password: 'password',
-			authenticating: false,
-			errorMessage: ''
-		}
-	}
-	handleChangeCredentials = (credentials) => {
-		this.setState(credentials);
-	}
-	handleLogin = (credentials) => {
-		let {transition} = this.props;
-		let {returnTo} = this.props.resolves;
-		const done = () => this.setState({authenticating:false});
-		const showError = (errorMessage) => this.setState({errorMessage});
-		const returnToOriginalState = () => transition.router.stateService.go(returnTo.state, returnTo.params, { reload: true });
+  constructor (props) {
+    super(props);
+    this.usernames = AuthService.usernames;
+    this.state = {
+      username: AppConfig.emailAddress || '',
+      password: 'password',
+      authenticating: false,
+      errorMessage: ''
+    }
+  }
+  handleChangeCredentials = (credentials) => {
+    this.setState(credentials);
+  }
+  handleLogin = (credentials) => {
+    let {transition} = this.props;
+    let {returnTo} = this.props.resolves;
+    const done = () => this.setState({authenticating:false});
+    const showError = (errorMessage) => this.setState({errorMessage});
+    const returnToOriginalState = () => transition.router.stateService.go(returnTo.state, returnTo.params, { reload: true });
 
-		this.setState({authenticating:true});
-		AuthService.authenticate(credentials.username, credentials.password)
-			.then(returnToOriginalState)
-			.catch((error) => {
-				done();
-				showError(error);
-			});
-	}
-	render () {
-		let {errorMessage, authenticating, username, password} = this.state;
-		return (
-			<div className="container">
-				<div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-					<h3>Log In</h3>
-					<p>(This login screen is for demonstration only... just pick a username, enter 'password' and click <b>"Log in"</b>)</p>
-					<hr/>
-					<LoginForm
-						usernameOptions={this.usernames}
-						username={username}
-						password={password}
-						error={errorMessage}
-						loading={authenticating}
-						onChangeValues={this.handleChangeCredentials}
-						onSubmit={this.handleLogin}
-					/>
-				</div>
-			</div>
-		);
-	}
+    this.setState({authenticating:true});
+    AuthService.authenticate(credentials.username, credentials.password)
+      .then(returnToOriginalState)
+      .catch((error) => {
+        done();
+        showError(error);
+      });
+  }
+  render () {
+    let {errorMessage, authenticating, username, password} = this.state;
+    return (
+      <div className="container">
+        <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+          <h3>Log In</h3>
+          <p>(This login screen is for demonstration only... just pick a username, enter 'password' and click <b>"Log in"</b>)</p>
+          <hr/>
+          <LoginForm
+            usernameOptions={this.usernames}
+            username={username}
+            password={password}
+            error={errorMessage}
+            loading={authenticating}
+            onChangeValues={this.handleChangeCredentials}
+            onSubmit={this.handleLogin}
+          />
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Login;

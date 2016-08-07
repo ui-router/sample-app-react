@@ -9,18 +9,18 @@ import AuthService from './authService';
  */
 
 const hook = {
-	// Matches if the destination state's data property has a truthy 'requiresAuth' property
-	criteria: {
-		to: (state) => state.data && state.data.requiresAuth
-	},
-	// Function that returns a redirect for the current transition to the login state
-	// if the user is not currently authenticated (according to the AuthService)
-	callback: (transition) => {
-		let $state = transition.router.stateService;
-		if (!AuthService.isAuthenticated()) {
-			return $state.target('login', undefined, { location: false });
-		}
-	}
+  // Matches if the destination state's data property has a truthy 'requiresAuth' property
+  criteria: {
+    to: (state) => state.data && state.data.requiresAuth
+  },
+  // Function that returns a redirect for the current transition to the login state
+  // if the user is not currently authenticated (according to the AuthService)
+  callback: (transition) => {
+    let $state = transition.router.stateService;
+    if (!AuthService.isAuthenticated()) {
+      return $state.target('login', undefined, { location: false });
+    }
+  }
 }
 
 export default hook;

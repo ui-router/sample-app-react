@@ -11,26 +11,26 @@ import NavHeader from './components/NavHeader';
  * It has a `UIView` viewport for nested states to fill in.
  */
 class App extends Component {
-	constructor (props) {
-		super(props);
-	}
+  constructor (props) {
+    super(props);
+  }
 
-	handleLogout = () => {
-		let {transition} = this.props;
-		AuthService.logout();
-		transition.router.stateService.go('welcome', {}, { reload: true });
-	}
+  handleLogout = () => {
+    let {transition} = this.props;
+    AuthService.logout();
+    transition.router.stateService.go('welcome', {}, { reload: true });
+  }
 
-	render () {
-		return (
-			<div>
-				<div className="navheader">
-					<NavHeader onLogout={this.handleLogout}/>
-				</div>
-				<UIView/>
-			</div>
-		);
-	}
+  render () {
+    return (
+      <div>
+        <div className="navheader">
+          <NavHeader onLogout={this.handleLogout}/>
+        </div>
+        <UIView/>
+      </div>
+    );
+  }
 }
 
 export default App;
