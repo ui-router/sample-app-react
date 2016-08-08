@@ -22,7 +22,7 @@ class ContactView extends Component {
     // This button has an ui-sref to the mymessages.compose state. The ui-sref provides the mymessages.compose
     // state with an non-url parameter, which is used as the initial message model
     let composeButton = (
-      <UISref to={'mymessages.compose'} params={{message: {to: contact.mail}}}>
+      <UISref to={'mymessages.compose'} params={{message: {to: contact.email}}}>
         <button className="btn btn-primary">
           <i className="fa fa-envelope" /><span>Message</span>
         </button>
