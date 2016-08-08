@@ -13,6 +13,13 @@ import DialogService from '../global/dialogService';
 * A Send button sends the message
 */
 class Compose extends Component {
+  static propTypes = {
+    resolves: PropTypes.shape({
+      $stateParams: PropTypes.shape({
+        message: PropTypes.object
+      })
+    })
+  }
   /**
   * Create our message's model using the current user's email address as 'message.from'
   * Then extend it with all the properties from (non-url) state parameter 'message'.

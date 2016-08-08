@@ -6,6 +6,15 @@ import MessageTable from './components/MessageTable';
  * This component renders a list of messages using the `MessageTable` component
  */
 class MessageList extends Component {
+  static propTypes = {
+    resolves: PropTypes.shape({
+      messages: PropTypes.arrayOf(PropTypes.object),
+      folder: PropTypes.shape({
+        columns: PropTypes.arrayOf(PropTypes.string)
+      })
+    })
+  }
+
   render () {
     let {folder, messages} = this.props.resolves;
     return (

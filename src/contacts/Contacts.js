@@ -9,9 +9,16 @@ import ContactList from './components/ContactList';
  * On the right is the ui-view viewport where contact details appear.
  */
 class Contacts extends Component {
+  static propTypes = {
+    resolves: PropTypes.shape({
+      contacts: PropTypes.arrayOf(PropTypes.object)
+    })
+  }
+
   constructor (props) {
     super(props);
   }
+  
   render () {
     let {contacts} = this.props.resolves;
     return (

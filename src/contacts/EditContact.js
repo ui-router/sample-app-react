@@ -23,6 +23,12 @@ import DialogService from '../global/dialogService';
 *   the `reload: true` option re-fetches the contacts resolve data from the server
 */
 class EditContact extends Component {
+  static propTypes = {
+    resolves: PropTypes.shape({
+      contact: PropTypes.object
+    })
+  }
+
   constructor (props) {
     super(props);
     this.canExit = false;

@@ -10,6 +10,12 @@ import ContactDetail from './components/ContactDetail';
 */
 
 class ContactView extends Component {
+  static propTypes = {
+    resolves: PropTypes.shape({
+      contact: PropTypes.object
+    })
+  }
+
   render () {
     let {contact} = this.props.resolves;
 

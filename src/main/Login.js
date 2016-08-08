@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 
 import AuthService from '../global/authService';
 import AppConfig from '../global/appConfig';
@@ -14,7 +14,16 @@ import UIRouterReact from 'ui-router-react';
  * The `login` method validates the credentials.
  * Then it sends the user back to the `returnTo` state, which is provided as a resolve data.
  */
-class Login extends React.Component {
+class Login extends Component {
+  static propTypes = {
+    resolves: PropTypes.shape({
+      returnTo: PropTypes.shape({
+        state: PropTypes.object,
+        params: PropTypes.object
+      })
+    })
+  }
+
   constructor (props) {
     super(props);
     this.usernames = AuthService.usernames;

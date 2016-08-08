@@ -26,6 +26,16 @@ ${message.body}`;
 * For instance, a "draft" message can be edited, but can't be replied to.
 */
 class Message extends Component {
+  static propTypes = {
+    resolves: PropTypes.shape({
+      message: PropTypes.object,
+      nextMessageGetter: PropTypes.func,
+      folder: PropTypes.shape({
+        actions: PropTypes.arrayOf(PropTypes.string)
+      })
+    })
+  }
+
   constructor (props) {
     super(props);
     // Apply the available actions for the message, depending on the folder the message belongs to.

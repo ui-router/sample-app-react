@@ -9,6 +9,12 @@ import {UIView, UISref, UISrefActive} from 'ui-router-react';
  * - messagecontent: filled with the contents of a single message.
  */
 class MyMessages extends Component {
+  static propTypes = {
+    resolves: PropTypes.shape({
+      folders: PropTypes.arrayOf(PropTypes.object)
+    })
+  }
+
   render () {
     let folders = this.props.resolves.folders.map(folder => (
       // Highlight the selected folder:
