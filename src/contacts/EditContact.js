@@ -6,6 +6,10 @@ import ContactForm from './components/ContactForm';
 import {ContactsStorage} from '../global/dataSources';
 import DialogService from '../global/dialogService';
 /**
+* The EditContact component
+*
+* This component is used by both `contacts.contact.edit` and `contacts.new` states.
+*
 * The component makes a copy of the contact data for editing by assigning it to the component state.
 * The new copy and original (pristine) copy are used to determine if the contact is "dirty" or not.
 * If the user navigates to some other state while the contact is "dirty", the `uiCanExit` component
@@ -19,7 +23,9 @@ import DialogService from '../global/dialogService';
 *
 * The Save Contact button is wired to the `save` method which:
 * - saves the REST resource (PUT or POST, depending)
-* - navigates back to the read-only view of the contact using relative addressing `^`
+* - navigates back to the parent state using relative addressing `^`.
+*   when editing an existing contact, this returns to the `contacts.contact` "view contact" state
+*   when creating a new contact, this returns to the `contacts` list.
 *   the `reload: true` option re-fetches the contacts resolve data from the server
 */
 class EditContact extends Component {
@@ -50,7 +56,7 @@ class EditContact extends Component {
   }
 
   save = () => {
-    // Save the contact, then go to the grandparent state ('contacts')
+    // Save the contact, then go to the parent state (either 'contacts' or 'contacts.contact')
     const {stateService} = this.props.transition.router;
     ContactsStorage.save(this.state.contact)
       .then(() => this.canExit = true)
