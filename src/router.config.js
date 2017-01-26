@@ -1,4 +1,4 @@
-import UIRouterReact, {trace} from 'ui-router-react';
+import {UIRouterReact, servicesPlugin, pushStateLocationPlugin} from 'ui-router-react';
 import {visualizer} from 'ui-router-visualizer';
 
 import appStates from './main/states';
@@ -8,13 +8,15 @@ import myMessagesStates from './mymessages/states';
 
 // Create a new instance of the Router
 const Router = new UIRouterReact();
+Router.plugin(servicesPlugin);
+Router.plugin(pushStateLocationPlugin);
 
 // Register states
 const allStates = [].concat(appStates, prefStates, contactsStates, myMessagesStates);
 allStates.forEach(state => Router.stateRegistry.register(state));
 
 // Global config for router
-Router.urlRouterProvider.otherwise(() => "/welcome");
+Router.urlRouter.otherwise(() => "/welcome");
 
 // Register the "requires auth" hook with the TransitionsService
 import reqAuthHook from './global/requiresAuth.hook';
@@ -25,3 +27,5 @@ Router.start();
 
 // Setup the state visualizer
 visualizer(Router);
+
+export default Router;

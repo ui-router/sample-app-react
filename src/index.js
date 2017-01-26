@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {UIView} from 'ui-router-react';
+import {UIView, UIRouter} from 'ui-router-react';
 import Dialog from './global/components/Dialog';
 
 // polyfill fetch func
@@ -12,11 +12,13 @@ import 'font-awesome/css/font-awesome.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 // import routing
-import './router.config';
+import Router from './router.config';
 
 ReactDOM.render(
   <div>
-    <UIView/>
+    <UIRouter router={Router}>
+      <UIView/>
+    </UIRouter>
     <Dialog/>
   </div>,
   document.getElementById('root')
