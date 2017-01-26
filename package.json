@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Architecture overview demo for React UI-Router",
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 3000 --config webpack.config.js --history-api-fallback --content-base ./",
-    "build": "rimraf docs && mkdirp docs && cp index.html docs/index.html && NODE_ENV=production webpack"
+    "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 3000 --config webpack.config.js --history-api-fallback --content-base ./",
+    "build": "rimraf docs && mkdirp docs && cp index.html docs/index.html && cross-env NODE_ENV=production webpack"
   },
   "author": "",
   "license": "MIT",
@@ -14,8 +14,8 @@
     "lodash": "^4.14.0",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
-    "ui-router-react": "^0.2.3",
-    "ui-router-visualizer": "^2.0.5",
+    "ui-router-react": "^0.4.0",
+    "ui-router-visualizer": "^2.0.11",
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
@@ -29,6 +29,7 @@
     "babel-preset-es2016": "^6.11.3",
     "babel-preset-react": "^6.11.1",
     "copy-webpack-plugin": "^3.0.1",
+    "cross-env": "^3.1.4",
     "css-loader": "^0.23.1",
     "file-loader": "^0.9.0",
     "postcss-loader": "^0.9.1",
