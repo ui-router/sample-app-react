@@ -11,4 +11,4 @@ const prefsState = {
   data: { requiresAuth: true }
 };
 
-export default [prefsState];
+export const states = [prefsState];

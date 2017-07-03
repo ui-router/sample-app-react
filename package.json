@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@uirouter/react": "^0.5.0",
+    "@uirouter/react": "^0.5.1",
     "@uirouter/visualizer": "^4.0.0",
     "lodash": "^4.14.0",
     "react": "^15.2.1",

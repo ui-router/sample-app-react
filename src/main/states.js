@@ -81,4 +81,29 @@ function returnTo ($transition$) {
   return $state.target('home');
 }
 
-export default [appState, welcomeState, homeState, loginState];
+// Future State (Placeholder) for the contacts module
+export const contactsFutureState = {
+  parent: 'app',
+  name: 'contacts.**',
+  url: '/contacts',
+  lazyLoad: () => System.import('../contacts/states'),
+};
+
+// Future State (Placeholder) for the prefs module
+export const prefsFutureState = {
+  parent: 'app',
+  name: 'prefs.**',
+  url: '/prefs',
+  lazyLoad: () => System.import('../prefs/states'),
+};
+
+// Future State (Placeholder) for the mymessages module
+export const mymessagesFutureState = {
+  parent: 'app',
+  name: 'mymessages.**',
+  url: '/mymessages',
+  lazyLoad: () => System.import('../mymessages/states'),
+};
+
+
+export default [appState, welcomeState, homeState, loginState, contactsFutureState, prefsFutureState, mymessagesFutureState];
