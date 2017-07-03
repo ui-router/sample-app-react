@@ -4,7 +4,6 @@ import AuthService from '../global/authService';
 import AppConfig from '../global/appConfig';
 
 import LoginForm from './components/LoginForm';
-import UIRouterReact from 'ui-router-react';
 /**
  * This component renders a faux authentication UI
  *
@@ -17,10 +16,7 @@ import UIRouterReact from 'ui-router-react';
 class Login extends Component {
   static propTypes = {
     resolves: PropTypes.shape({
-      returnTo: PropTypes.shape({
-        state: PropTypes.object,
-        params: PropTypes.object
-      })
+      returnTo: PropTypes.object,
     })
   }
 
@@ -42,7 +38,7 @@ class Login extends Component {
     let {returnTo} = this.props.resolves;
     const done = () => this.setState({authenticating:false});
     const showError = (errorMessage) => this.setState({errorMessage});
-    const returnToOriginalState = () => transition.router.stateService.go(returnTo.state, returnTo.params, { reload: true });
+    const returnToOriginalState = () => transition.router.stateService.go(returnTo.state(), returnTo.params(), { reload: true });
 
     this.setState({authenticating:true});
     AuthService.authenticate(credentials.username, credentials.password)

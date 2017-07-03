@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {UISref} from 'ui-router-react';
+import {UISref} from '@uirouter/react';
 
 // This is a home component for authenticated users.
 // It shows giant buttons which activate their respective pages: Messages, Contacts, Preferences

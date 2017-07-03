@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {UIView} from 'ui-router-react';
+import {UIView} from '@uirouter/react';
 
 import ContactList from './components/ContactList';
 /**

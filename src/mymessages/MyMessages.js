@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {UIView, UISref, UISrefActive} from 'ui-router-react';
+import {UIView, UISref, UISrefActive} from '@uirouter/react';
 
 /**
  * The main mymessages component.

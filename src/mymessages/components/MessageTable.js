@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {UISref, UISrefActive} from 'ui-router-react';
+import {UISref, UISrefActive} from '@uirouter/react';
 
 import {orderBy} from '../messageListUIService';
 
