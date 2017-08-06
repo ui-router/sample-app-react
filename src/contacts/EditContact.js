@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {UISref} from 'ui-router-react';
+import {UISref} from '@uirouter/react';
 import {isEqual, cloneDeep} from 'lodash';
 
 import ContactForm from './components/ContactForm';

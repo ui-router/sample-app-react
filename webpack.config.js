@@ -14,13 +14,14 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: ''
   },
+  watch: process.env['WATCH'] === 'true',
   module: {
     loaders: [
       {
         test: /\.js$/,
         include: path.join(__dirname, 'src'),
-        loader: 'babel',
-        query: {
+        loader: 'babel-loader',
+        options: {
           cacheDirectory: true,
           presets: ['es2015', 'es2016', 'react'],
           plugins: [
@@ -33,16 +34,13 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style!css!postcss'
+        loader: 'style-loader!css-loader!postcss-loader'
       },
       {
         test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file',
+        loader: 'file-loader',
       }
     ]
-  },
-  postcss: function() {
-    return [autoprefixer];
   },
   plugins: [
     new CopyWebpackPlugin([

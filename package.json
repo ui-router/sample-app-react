@@ -1,7 +1,7 @@
 {
-  "name": "ui-router-architecture-react",
+  "name": "@uirouter/sample-app-react",
   "version": "1.0.0",
-  "description": "Architecture overview demo for React UI-Router",
+  "description": "Architecture overview demo for UI-Router React",
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 3000 --config webpack.config.js --history-api-fallback --content-base ./",
     "build": "rimraf docs && mkdirp docs && cp index.html docs/index.html && NODE_ENV=production webpack"
@@ -9,13 +9,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "bootstrap": "^3.3.7",
-    "font-awesome": "^4.6.3",
+    "@uirouter/react": "^0.5.0",
+    "@uirouter/visualizer": "^4.0.0",
     "lodash": "^4.14.0",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
-    "ui-router-react": "^0.2.3",
-    "ui-router-visualizer": "^2.0.5",
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
@@ -31,10 +29,11 @@
     "copy-webpack-plugin": "^3.0.1",
     "css-loader": "^0.23.1",
     "file-loader": "^0.9.0",
-    "postcss-loader": "^0.9.1",
+    "postcss-load-config": "^1.2.0",
+    "postcss-loader": "^2.0.6",
     "rimraf": "^2.5.4",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack": "^2.6.0",
+    "webpack-dev-server": "^2.4.5"
   }
 }

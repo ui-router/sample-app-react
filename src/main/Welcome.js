@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {UISref} from 'ui-router-react';
+import {UISref} from '@uirouter/react';
 
 class Welcome extends Component {
   render () {

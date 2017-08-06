@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UIView } from 'ui-router-react';
+import { UIView } from '@uirouter/react';
 
 import AuthService from '../global/authService';
 import NavHeader from './components/NavHeader';
