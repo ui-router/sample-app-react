@@ -70,4 +70,4 @@ const newContactState = {
   component: EditContact
 };
 
-export default [contactsState, viewContactState, editContactState, newContactState];
+export const states = [contactsState, viewContactState, editContactState, newContactState];

@@ -90,4 +90,4 @@ const messageListState = {
   }
 };
 
-export default [composeState, messageState, messageListState, mymessagesState];
+export const states = [composeState, messageState, messageListState, mymessagesState];
