@@ -23,9 +23,11 @@ class ContactList extends Component {
     // When the current state matches the ui-sref's state (and its parameters)
     // UISrefActive applies the 'selected' class to the li element
     let contacts = this.props.contacts.map((contact, index) =>
-      <UISrefActive key={index} class="selected">
-        <li><UISref to={'.contact'} params={{contactId:contact._id}}><a href="asd">{contact.name.first + ' ' + contact.name.last}</a></UISref></li>
-      </UISrefActive>
+      <li key={index}>
+        <UISrefActive class="selected">
+          <UISref to={'.contact'} params={{contactId:contact._id}}><a href="asd">{contact.name.first + ' ' + contact.name.last}</a></UISref>
+        </UISrefActive>
+      </li>
     );
     return (
       <div className={this.props.className}>
