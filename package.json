@@ -14,16 +14,16 @@
   "license": "MIT",
   "dependencies": {
     "@uirouter/react": "^0.5.1",
-    "@uirouter/visualizer": "^4.0.0",
+    "@uirouter/visualizer": "^5.0.6",
     "lodash": "^4.14.0",
-    "react": "^15.2.1",
-    "react-dom": "^15.2.1",
-    "whatwg-fetch": "^1.0.0"
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
-    "autoprefixer": "^6.3.7",
+    "autoprefixer": "^7.2.3",
     "babel-core": "^6.11.4",
-    "babel-loader": "^6.2.4",
+    "babel-loader": "^7.1.2",
     "babel-plugin-syntax-trailing-function-commas": "^6.8.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
@@ -31,17 +31,17 @@
     "babel-preset-es2016": "^6.11.3",
     "babel-preset-react": "^6.11.1",
     "browser-sync": "^2.21.0",
-    "copy-webpack-plugin": "^3.0.1",
-    "css-loader": "^0.23.1",
+    "copy-webpack-plugin": "^4.3.1",
+    "css-loader": "^0.28.7",
     "cypress": "^1.4.0",
-    "file-loader": "^0.9.0",
+    "file-loader": "^1.1.6",
     "npm-run-all": "^4.1.2",
     "postcss-load-config": "^1.2.0",
     "postcss-loader": "^2.0.6",
     "rimraf": "^2.5.4",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.19.1",
     "wait-on": "^2.0.2",
-    "webpack": "^2.6.0",
+    "webpack": "^3.10.0",
     "webpack-dev-server": "^2.4.5"
   }
 }

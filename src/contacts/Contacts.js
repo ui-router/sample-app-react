@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {UIView} from '@uirouter/react';
 
 import ContactList from './components/ContactList';

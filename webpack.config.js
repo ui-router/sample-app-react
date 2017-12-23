@@ -4,7 +4,7 @@ var autoprefixer = require('autoprefixer');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   entry: [
     path.join(__dirname, 'src', 'index.js')
   ],
