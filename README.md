@@ -2,6 +2,8 @@
 
 http://ui-router.github.io/sample-app-react/#/mymessages/inbox/5648b50cc586cac4aed6836f
 
+<img src="https://travis-ci.org/ui-router/sample-app-react.svg?branch=master" alt="travis status">
+
 This sample app is intended to demonstrate a non-trivial ui-router react application.
 
 - Multiple sub-modules
