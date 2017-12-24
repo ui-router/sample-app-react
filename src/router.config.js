@@ -18,6 +18,9 @@ router.urlService.rules.initial({ state: 'welcome' });
 import reqAuthHook from './global/requiresAuth.hook';
 router.transitionService.onBefore(reqAuthHook.criteria, reqAuthHook.callback, {priority: 10});
 
+import googleAnalyticsHook from './util/ga';
+googleAnalyticsHook(router.transitionService);
+
 // Start the router
 router.start();
 
