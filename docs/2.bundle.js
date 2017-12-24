@@ -1,6 +1,6 @@
 webpackJsonp([2],{
 
-/***/ 129:
+/***/ 130:
 /*!*****************************!*\
   !*** ./src/prefs/states.js ***!
   \*****************************/
@@ -16,7 +16,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.states = undefined;
 
-var _Preferences = __webpack_require__(/*! ./Preferences */ 144);
+var _Preferences = __webpack_require__(/*! ./Preferences */ 145);
 
 var _Preferences2 = _interopRequireDefault(_Preferences);
 
@@ -38,7 +38,7 @@ var states = exports.states = [prefsState];
 
 /***/ }),
 
-/***/ 144:
+/***/ 145:
 /*!**********************************!*\
   !*** ./src/prefs/Preferences.js ***!
   \**********************************/

@@ -29859,6 +29859,10 @@ var _requiresAuth = __webpack_require__(/*! ./global/requiresAuth.hook */ 127);
 
 var _requiresAuth2 = _interopRequireDefault(_requiresAuth);
 
+var _ga = __webpack_require__(/*! ./util/ga */ 128);
+
+var _ga2 = _interopRequireDefault(_ga);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Create a new instance of the Router
@@ -29877,6 +29881,8 @@ router.urlService.rules.initial({ state: 'welcome' });
 // Register the "requires auth" hook with the TransitionsService
 
 router.transitionService.onBefore(_requiresAuth2.default.criteria, _requiresAuth2.default.callback, { priority: 10 });
+
+(0, _ga2.default)(router.transitionService);
 
 // Start the router
 router.start();
@@ -37027,7 +37033,7 @@ var contactsFutureState = exports.contactsFutureState = {
   name: 'contacts.**',
   url: '/contacts',
   lazyLoad: function lazyLoad() {
-    return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, /*! ../contacts/states */ 128));
+    return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, /*! ../contacts/states */ 129));
   }
 };
 
@@ -37037,7 +37043,7 @@ var prefsFutureState = exports.prefsFutureState = {
   name: 'prefs.**',
   url: '/prefs',
   lazyLoad: function lazyLoad() {
-    return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, /*! ../prefs/states */ 129));
+    return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, /*! ../prefs/states */ 130));
   }
 };
 
@@ -37047,7 +37053,7 @@ var mymessagesFutureState = exports.mymessagesFutureState = {
   name: 'mymessages.**',
   url: '/mymessages',
   lazyLoad: function lazyLoad() {
-    return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, /*! ../mymessages/states */ 130));
+    return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, /*! ../mymessages/states */ 131));
   }
 };
 
@@ -37988,6 +37994,57 @@ var hook = {
 };
 
 exports.default = hook;
+
+/***/ }),
+/* 128 */
+/*!************************!*\
+  !*** ./src/util/ga.js ***!
+  \************************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = googleAnalyticsHook;
+/** Google analytics */
+(function (i, s, o, g, r, a, m) {
+  i['GoogleAnalyticsObject'] = r;i[r] = i[r] || function () {
+    (i[r].q = i[r].q || []).push(arguments);
+  }, i[r].l = 1 * new Date();a = s.createElement(o), m = s.getElementsByTagName(o)[0];a.async = 1;a.src = g;m.parentNode.insertBefore(a, m);
+})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+window['ga']('create', 'UA-73329341-1', 'auto');
+window['ga']('send', 'pageview');
+
+function googleAnalyticsHook(transitionService) {
+  transitionService.onBefore({}, function (transition) {
+    var path = transition.treeChanges().to.map(function (node) {
+      return node.state.self.url;
+    }).filter(function (x) {
+      return x != null && x !== '^';
+    }).join('');
+
+    var vpv = function vpv(path) {
+      return window['ga']('send', 'pageview', path);
+    };
+
+    var success = function success() {
+      vpv(path);
+    };
+    var error = function error(err) {
+      var errType = err && err.hasOwnProperty("type") ? err.type : '_';
+      path = path.replace(/^\//, "");
+      vpv('/errors/' + errType + '/' + path);
+    };
+
+    transition.promise.then(success, error);
+  });
+}
 
 /***/ })
 /******/ ]);

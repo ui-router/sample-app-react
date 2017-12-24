@@ -1,6 +1,6 @@
 webpackJsonp([1],{
 
-/***/ 128:
+/***/ 129:
 /*!********************************!*\
   !*** ./src/contacts/states.js ***!
   \********************************/
@@ -16,17 +16,17 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.states = undefined;
 
-var _dataSources = __webpack_require__(/*! ../global/dataSources */ 131);
+var _dataSources = __webpack_require__(/*! ../global/dataSources */ 132);
 
-var _Contacts = __webpack_require__(/*! ./Contacts */ 138);
+var _Contacts = __webpack_require__(/*! ./Contacts */ 139);
 
 var _Contacts2 = _interopRequireDefault(_Contacts);
 
-var _ContactView = __webpack_require__(/*! ./ContactView */ 140);
+var _ContactView = __webpack_require__(/*! ./ContactView */ 141);
 
 var _ContactView2 = _interopRequireDefault(_ContactView);
 
-var _EditContact = __webpack_require__(/*! ./EditContact */ 142);
+var _EditContact = __webpack_require__(/*! ./EditContact */ 143);
 
 var _EditContact2 = _interopRequireDefault(_EditContact);
 
@@ -106,7 +106,7 @@ var states = exports.states = [contactsState, viewContactState, editContactState
 
 /***/ }),
 
-/***/ 131:
+/***/ 132:
 /*!***********************************!*\
   !*** ./src/global/dataSources.js ***!
   \***********************************/
@@ -124,7 +124,7 @@ exports.MessagesStorage = exports.FoldersStorage = exports.ContactsStorage = und
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _sessionStorage = __webpack_require__(/*! ../util/sessionStorage */ 133);
+var _sessionStorage = __webpack_require__(/*! ../util/sessionStorage */ 134);
 
 var _appConfig = __webpack_require__(/*! ./appConfig */ 28);
 
@@ -219,7 +219,7 @@ exports.MessagesStorage = MessagesStorage;
 
 /***/ }),
 
-/***/ 132:
+/***/ 133:
 /*!***************************************!*\
   !*** ./node_modules/lodash/lodash.js ***!
   \***************************************/
@@ -17313,11 +17313,11 @@ exports.MessagesStorage = MessagesStorage;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 135), __webpack_require__(/*! ./../webpack/buildin/module.js */ 136)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 136), __webpack_require__(/*! ./../webpack/buildin/module.js */ 137)(module)))
 
 /***/ }),
 
-/***/ 133:
+/***/ 134:
 /*!************************************!*\
   !*** ./src/util/sessionStorage.js ***!
   \************************************/
@@ -17333,7 +17333,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SessionStorage = undefined;
 
-var _util = __webpack_require__(/*! ./util */ 134);
+var _util = __webpack_require__(/*! ./util */ 135);
 
 var _appConfig = __webpack_require__(/*! ../global/appConfig */ 28);
 
@@ -17511,7 +17511,7 @@ var _initialiseProps = function _initialiseProps() {
 
 /***/ }),
 
-/***/ 134:
+/***/ 135:
 /*!**************************!*\
   !*** ./src/util/util.js ***!
   \**************************/
@@ -17548,7 +17548,7 @@ var guid = exports.guid = function guid() {
 
 /***/ }),
 
-/***/ 135:
+/***/ 136:
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
   \***********************************/
@@ -17581,7 +17581,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 136:
+/***/ 137:
 /*!***********************************!*\
   !*** (webpack)/buildin/module.js ***!
   \***********************************/
@@ -17615,7 +17615,7 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ 138:
+/***/ 139:
 /*!**********************************!*\
   !*** ./src/contacts/Contacts.js ***!
   \**********************************/
@@ -17642,7 +17642,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
 
-var _ContactList = __webpack_require__(/*! ./components/ContactList */ 139);
+var _ContactList = __webpack_require__(/*! ./components/ContactList */ 140);
 
 var _ContactList2 = _interopRequireDefault(_ContactList);
 
@@ -17703,7 +17703,7 @@ exports.default = Contacts;
 
 /***/ }),
 
-/***/ 139:
+/***/ 140:
 /*!************************************************!*\
   !*** ./src/contacts/components/ContactList.js ***!
   \************************************************/
@@ -17828,7 +17828,7 @@ exports.default = ContactList;
 
 /***/ }),
 
-/***/ 140:
+/***/ 141:
 /*!*************************************!*\
   !*** ./src/contacts/ContactView.js ***!
   \*************************************/
@@ -17855,7 +17855,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
 
-var _ContactDetail = __webpack_require__(/*! ./components/ContactDetail */ 141);
+var _ContactDetail = __webpack_require__(/*! ./components/ContactDetail */ 142);
 
 var _ContactDetail2 = _interopRequireDefault(_ContactDetail);
 
@@ -17945,7 +17945,7 @@ exports.default = ContactView;
 
 /***/ }),
 
-/***/ 141:
+/***/ 142:
 /*!**************************************************!*\
   !*** ./src/contacts/components/ContactDetail.js ***!
   \**************************************************/
@@ -18098,7 +18098,7 @@ exports.default = ContactDetail;
 
 /***/ }),
 
-/***/ 142:
+/***/ 143:
 /*!*************************************!*\
   !*** ./src/contacts/EditContact.js ***!
   \*************************************/
@@ -18125,13 +18125,13 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
 
-var _lodash = __webpack_require__(/*! lodash */ 132);
+var _lodash = __webpack_require__(/*! lodash */ 133);
 
-var _ContactForm = __webpack_require__(/*! ./components/ContactForm */ 143);
+var _ContactForm = __webpack_require__(/*! ./components/ContactForm */ 144);
 
 var _ContactForm2 = _interopRequireDefault(_ContactForm);
 
-var _dataSources = __webpack_require__(/*! ../global/dataSources */ 131);
+var _dataSources = __webpack_require__(/*! ../global/dataSources */ 132);
 
 var _dialogService = __webpack_require__(/*! ../global/dialogService */ 67);
 
@@ -18284,7 +18284,7 @@ exports.default = EditContact;
 
 /***/ }),
 
-/***/ 143:
+/***/ 144:
 /*!************************************************!*\
   !*** ./src/contacts/components/ContactForm.js ***!
   \************************************************/
@@ -18311,7 +18311,7 @@ var _propTypes = __webpack_require__(/*! prop-types */ 7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _lodash = __webpack_require__(/*! lodash */ 132);
+var _lodash = __webpack_require__(/*! lodash */ 133);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

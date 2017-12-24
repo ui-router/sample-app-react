@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 130:
+/***/ 131:
 /*!**********************************!*\
   !*** ./src/mymessages/states.js ***!
   \**********************************/
@@ -16,25 +16,25 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.states = undefined;
 
-var _dataSources = __webpack_require__(/*! ../global/dataSources */ 131);
+var _dataSources = __webpack_require__(/*! ../global/dataSources */ 132);
 
-var _messageListUIService = __webpack_require__(/*! ./messageListUIService */ 137);
+var _messageListUIService = __webpack_require__(/*! ./messageListUIService */ 138);
 
 var _messageListUIService2 = _interopRequireDefault(_messageListUIService);
 
-var _Compose = __webpack_require__(/*! ./Compose */ 145);
+var _Compose = __webpack_require__(/*! ./Compose */ 146);
 
 var _Compose2 = _interopRequireDefault(_Compose);
 
-var _MyMessages = __webpack_require__(/*! ./MyMessages */ 146);
+var _MyMessages = __webpack_require__(/*! ./MyMessages */ 147);
 
 var _MyMessages2 = _interopRequireDefault(_MyMessages);
 
-var _Message = __webpack_require__(/*! ./Message */ 147);
+var _Message = __webpack_require__(/*! ./Message */ 148);
 
 var _Message2 = _interopRequireDefault(_Message);
 
-var _MessageList = __webpack_require__(/*! ./MessageList */ 148);
+var _MessageList = __webpack_require__(/*! ./MessageList */ 149);
 
 var _MessageList2 = _interopRequireDefault(_MessageList);
 
@@ -137,7 +137,7 @@ var states = exports.states = [composeState, messageState, messageListState, mym
 
 /***/ }),
 
-/***/ 131:
+/***/ 132:
 /*!***********************************!*\
   !*** ./src/global/dataSources.js ***!
   \***********************************/
@@ -155,7 +155,7 @@ exports.MessagesStorage = exports.FoldersStorage = exports.ContactsStorage = und
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _sessionStorage = __webpack_require__(/*! ../util/sessionStorage */ 133);
+var _sessionStorage = __webpack_require__(/*! ../util/sessionStorage */ 134);
 
 var _appConfig = __webpack_require__(/*! ./appConfig */ 28);
 
@@ -250,7 +250,7 @@ exports.MessagesStorage = MessagesStorage;
 
 /***/ }),
 
-/***/ 132:
+/***/ 133:
 /*!***************************************!*\
   !*** ./node_modules/lodash/lodash.js ***!
   \***************************************/
@@ -17344,11 +17344,11 @@ exports.MessagesStorage = MessagesStorage;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 135), __webpack_require__(/*! ./../webpack/buildin/module.js */ 136)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 136), __webpack_require__(/*! ./../webpack/buildin/module.js */ 137)(module)))
 
 /***/ }),
 
-/***/ 133:
+/***/ 134:
 /*!************************************!*\
   !*** ./src/util/sessionStorage.js ***!
   \************************************/
@@ -17364,7 +17364,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SessionStorage = undefined;
 
-var _util = __webpack_require__(/*! ./util */ 134);
+var _util = __webpack_require__(/*! ./util */ 135);
 
 var _appConfig = __webpack_require__(/*! ../global/appConfig */ 28);
 
@@ -17542,7 +17542,7 @@ var _initialiseProps = function _initialiseProps() {
 
 /***/ }),
 
-/***/ 134:
+/***/ 135:
 /*!**************************!*\
   !*** ./src/util/util.js ***!
   \**************************/
@@ -17579,7 +17579,7 @@ var guid = exports.guid = function guid() {
 
 /***/ }),
 
-/***/ 135:
+/***/ 136:
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
   \***********************************/
@@ -17612,7 +17612,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 136:
+/***/ 137:
 /*!***********************************!*\
   !*** (webpack)/buildin/module.js ***!
   \***********************************/
@@ -17646,7 +17646,7 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ 137:
+/***/ 138:
 /*!************************************************!*\
   !*** ./src/mymessages/messageListUIService.js ***!
   \************************************************/
@@ -17714,7 +17714,7 @@ exports.default = instance;
 
 /***/ }),
 
-/***/ 145:
+/***/ 146:
 /*!***********************************!*\
   !*** ./src/mymessages/Compose.js ***!
   \***********************************/
@@ -17741,9 +17741,9 @@ var _propTypes = __webpack_require__(/*! prop-types */ 7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _lodash = __webpack_require__(/*! lodash */ 132);
+var _lodash = __webpack_require__(/*! lodash */ 133);
 
-var _dataSources = __webpack_require__(/*! ../global/dataSources */ 131);
+var _dataSources = __webpack_require__(/*! ../global/dataSources */ 132);
 
 var _appConfig = __webpack_require__(/*! ../global/appConfig */ 28);
 
@@ -17943,7 +17943,7 @@ exports.default = Compose;
 
 /***/ }),
 
-/***/ 146:
+/***/ 147:
 /*!**************************************!*\
   !*** ./src/mymessages/MyMessages.js ***!
   \**************************************/
@@ -18056,7 +18056,7 @@ exports.default = MyMessages;
 
 /***/ }),
 
-/***/ 147:
+/***/ 148:
 /*!***********************************!*\
   !*** ./src/mymessages/Message.js ***!
   \***********************************/
@@ -18081,7 +18081,7 @@ var _propTypes = __webpack_require__(/*! prop-types */ 7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _dataSources = __webpack_require__(/*! ../global/dataSources */ 131);
+var _dataSources = __webpack_require__(/*! ../global/dataSources */ 132);
 
 var _dialogService = __webpack_require__(/*! ../global/dialogService */ 67);
 
@@ -18311,7 +18311,7 @@ exports.default = Message;
 
 /***/ }),
 
-/***/ 148:
+/***/ 149:
 /*!***************************************!*\
   !*** ./src/mymessages/MessageList.js ***!
   \***************************************/
@@ -18336,7 +18336,7 @@ var _propTypes = __webpack_require__(/*! prop-types */ 7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _MessageTable = __webpack_require__(/*! ./components/MessageTable */ 149);
+var _MessageTable = __webpack_require__(/*! ./components/MessageTable */ 150);
 
 var _MessageTable2 = _interopRequireDefault(_MessageTable);
 
@@ -18394,7 +18394,7 @@ exports.default = MessageList;
 
 /***/ }),
 
-/***/ 149:
+/***/ 150:
 /*!***************************************************!*\
   !*** ./src/mymessages/components/MessageTable.js ***!
   \***************************************************/
@@ -18421,13 +18421,13 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
 
-var _messageListUIService = __webpack_require__(/*! ../messageListUIService */ 137);
+var _messageListUIService = __webpack_require__(/*! ../messageListUIService */ 138);
 
 var _appConfig = __webpack_require__(/*! ../../global/appConfig */ 28);
 
 var _appConfig2 = _interopRequireDefault(_appConfig);
 
-var _SortMessages = __webpack_require__(/*! ./SortMessages */ 150);
+var _SortMessages = __webpack_require__(/*! ./SortMessages */ 151);
 
 var _SortMessages2 = _interopRequireDefault(_SortMessages);
 
@@ -18548,7 +18548,7 @@ exports.default = MessageTable;
 
 /***/ }),
 
-/***/ 150:
+/***/ 151:
 /*!***************************************************!*\
   !*** ./src/mymessages/components/SortMessages.js ***!
   \***************************************************/
