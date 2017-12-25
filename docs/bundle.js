@@ -38022,28 +38022,31 @@ window['ga']('create', 'UA-73329341-1', 'auto');
 window['ga']('send', 'pageview');
 
 function googleAnalyticsHook(transitionService) {
-  transitionService.onBefore({}, function (transition) {
-    var path = transition.treeChanges().to.map(function (node) {
-      return node.state.self.url;
-    }).filter(function (x) {
-      return x != null && x !== '^';
-    }).join('');
+  var vpv = function vpv(vpath) {
+    return window['ga']('send', 'pageview', vpath);
+  };
 
-    var vpv = function vpv(path) {
-      return window['ga']('send', 'pageview', path);
-    };
+  var path = function path(trans) {
+    var formattedRoute = trans.$to().url.format(trans.params());
+    var withSitePrefix = location.pathname + formattedRoute;
+    return '/' + withSitePrefix.split('/').filter(function (x) {
+      return x;
+    }).join('/');
+  };
 
-    var success = function success() {
-      vpv(path);
-    };
-    var error = function error(err) {
-      var errType = err && err.hasOwnProperty("type") ? err.type : '_';
-      path = path.replace(/^\//, "");
-      vpv('/errors/' + errType + '/' + path);
-    };
+  var error = function error(trans) {
+    var err = trans.error();
+    var type = err && err.hasOwnProperty('type') ? err.type : '_';
+    var message = err && err.hasOwnProperty('message') ? err.message : '_';
+    vpv(path(trans) + ';errorType=' + type + ';errorMessage=' + message);
+  };
 
-    transition.promise.then(success, error);
-  });
+  transitionService.onSuccess({}, function (trans) {
+    return vpv(path(trans));
+  }, { priority: -10000 });
+  transitionService.onError({}, function (trans) {
+    return error(trans);
+  }, { priority: -10000 });
 }
 
 /***/ })
