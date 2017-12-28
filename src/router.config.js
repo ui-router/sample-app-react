@@ -1,5 +1,5 @@
 import {UIRouterReact, servicesPlugin, hashLocationPlugin} from '@uirouter/react';
-import {visualizer} from '@uirouter/visualizer';
+import {Visualizer} from '@uirouter/visualizer';
 
 import appStates from './main/states';
 
@@ -7,6 +7,7 @@ import appStates from './main/states';
 export const router = new UIRouterReact();
 router.plugin(servicesPlugin);
 router.plugin(hashLocationPlugin);
+router.plugin(Visualizer);
 
 // Register the initial (eagerly loaded) states
 appStates.forEach(state => router.stateRegistry.register(state));
@@ -20,9 +21,3 @@ router.transitionService.onBefore(reqAuthHook.criteria, reqAuthHook.callback, {p
 
 import googleAnalyticsHook from './util/ga';
 googleAnalyticsHook(router.transitionService);
-
-// Start the router
-router.start();
-
-// Setup the state visualizer
-visualizer(router);

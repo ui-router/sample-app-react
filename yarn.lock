@@ -73,16 +73,17 @@
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-4.0.0.tgz#9a93ffa4ee1329e85166278a5ed99f81dc4c8362"
 
-"@uirouter/core@=5.0.5":
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.5.tgz#4fafae8b89e1bee321b0ed32e69ab66547c055c6"
+"@uirouter/core@5.0.11":
+  version "5.0.11"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.11.tgz#bec461fcda767d79c98f6647cc9313ef9e5de03a"
 
-"@uirouter/react@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-0.5.1.tgz#3c490a12342929d27a8571e2a3e7c2e51e893d82"
+"@uirouter/react@0.5.5":
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-0.5.5.tgz#b69ff0620d0c571bf198b2f80446c9db3974fed0"
   dependencies:
-    "@uirouter/core" "=5.0.5"
+    "@uirouter/core" "5.0.11"
     classnames "^2.2.5"
+    prop-types "^15.5.8"
 
 "@uirouter/visualizer@^5.0.6":
   version "5.0.6"
@@ -4586,7 +4587,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.6.0:
+prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
