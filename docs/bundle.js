@@ -142,7 +142,7 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 68);
+/******/ 	return __webpack_require__(__webpack_require__.s = 69);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -155,7 +155,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function(global) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Random utility functions used in the UI-Router code
@@ -169,11 +169,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var predicates_1 = __webpack_require__(/*! ./predicates */ 1);
 var hof_1 = __webpack_require__(/*! ./hof */ 2);
 var coreservices_1 = __webpack_require__(/*! ./coreservices */ 3);
-var w = typeof window === 'undefined' ? {} : window;
-var angular = w.angular || {};
+exports.root = (typeof self === 'object' && self.self === self && self) ||
+    (typeof global === 'object' && global.global === global && global) || this;
+var angular = exports.root.angular || {};
 exports.fromJson = angular.fromJson || JSON.parse.bind(JSON);
 exports.toJson = angular.toJson || JSON.stringify.bind(JSON);
-exports.copy = angular.copy || _copy;
 exports.forEach = angular.forEach || _forEach;
 exports.extend = Object.assign || _extend;
 exports.equals = angular.equals || _equals;
@@ -259,33 +259,6 @@ exports.createProxyFunctions = createProxyFunctions;
  */
 exports.inherit = function (parent, extra) {
     return exports.extend(Object.create(parent), extra);
-};
-/**
- * Given an arguments object, converts the arguments at index idx and above to an array.
- * This is similar to es6 rest parameters.
- *
- * Optionally, the argument at index idx may itself already be an array.
- *
- * For example,
- * given either:
- *        arguments = [ obj, "foo", "bar" ]
- * or:
- *        arguments = [ obj, ["foo", "bar"] ]
- * then:
- *        restArgs(arguments, 1) == ["foo", "bar"]
- *
- * This allows functions like pick() to be implemented such that it allows either a bunch
- * of string arguments (like es6 rest parameters), or a single array of strings:
- *
- * given:
- *        var obj = { foo: 1, bar: 2, baz: 3 };
- * then:
- *        pick(obj, "foo", "bar");   // returns { foo: 1, bar: 2 }
- *        pick(obj, ["foo", "bar"]); // returns { foo: 1, bar: 2 }
- */
-var restArgs = function (args, idx) {
-    if (idx === void 0) { idx = 0; }
-    return Array.prototype.concat.apply(Array.prototype, Array.prototype.slice.call(args, idx));
 };
 /** Given an array, returns true if the object is found in the array, (using indexOf) */
 exports.inArray = hof_1.curry(_inArray);
@@ -667,17 +640,15 @@ function tail(arr) {
 exports.tail = tail;
 /**
  * shallow copy from src to dest
- *
- * note: This is a shallow copy, while angular.copy is a deep copy.
- * ui-router uses `copy` only to make copies of state parameters.
  */
-function _copy(src, dest) {
+function copy(src, dest) {
     if (dest)
         Object.keys(dest).forEach(function (key) { return delete dest[key]; });
     if (!dest)
         dest = {};
     return exports.extend(dest, src);
 }
+exports.copy = copy;
 /** Naive forEach implementation works with Objects or Arrays */
 function _forEach(obj, cb, _this) {
     if (predicates_1.isArray(obj))
@@ -736,64 +707,6 @@ function _arraysEq(a1, a2) {
         return false;
     return arrayTuples(a1, a2).reduce(function (b, t) { return b && _equals(t[0], t[1]); }, true);
 }
-/**
- * Create a sort function
- *
- * Creates a sort function which sorts by a numeric property.
- *
- * The `propFn` should return the property as a number which can be sorted.
- *
- * #### Example:
- * This example returns the `priority` prop.
- * ```js
- * var sortfn = sortBy(obj => obj.priority)
- * // equivalent to:
- * var longhandSortFn = (a, b) => a.priority - b.priority;
- * ```
- *
- * #### Example:
- * This example uses [[prop]]
- * ```js
- * var sortfn = sortBy(prop('priority'))
- * ```
- *
- * The `checkFn` can be used to exclude objects from sorting.
- *
- * #### Example:
- * This example only sorts objects with type === 'FOO'
- * ```js
- * var sortfn = sortBy(prop('priority'), propEq('type', 'FOO'))
- * ```
- *
- * @param propFn a function that returns the property (as a number)
- * @param checkFn a predicate
- *
- * @return a sort function like: `(a, b) => (checkFn(a) && checkFn(b)) ? propFn(a) - propFn(b) : 0`
- */
-exports.sortBy = function (propFn, checkFn) {
-    if (checkFn === void 0) { checkFn = hof_1.val(true); }
-    return function (a, b) {
-        return (checkFn(a) && checkFn(b)) ? propFn(a) - propFn(b) : 0;
-    };
-};
-/**
- * Composes a list of sort functions
- *
- * Creates a sort function composed of multiple sort functions.
- * Each sort function is invoked in series.
- * The first sort function to return non-zero "wins".
- *
- * @param sortFns list of sort functions
- */
-exports.composeSort = function () {
-    var sortFns = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        sortFns[_i] = arguments[_i];
-    }
-    return function composedSort(a, b) {
-        return sortFns.reduce(function (prev, fn) { return prev || fn(a, b); }, 0);
-    };
-};
 // issue #2676
 exports.silenceUncaughtInPromise = function (promise) {
     return promise.catch(function (e) { return 0; }) && promise;
@@ -802,6 +715,7 @@ exports.silentRejection = function (error) {
     return exports.silenceUncaughtInPromise(coreservices_1.services.$q.reject(error));
 };
 //# sourceMappingURL=common.js.map
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../webpack/buildin/global.js */ 68)))
 
 /***/ }),
 /* 1 */
@@ -824,7 +738,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 /** */
 var hof_1 = __webpack_require__(/*! ./hof */ 2);
-var stateObject_1 = __webpack_require__(/*! ../state/stateObject */ 31);
+var stateObject_1 = __webpack_require__(/*! ../state/stateObject */ 30);
 var toStr = Object.prototype.toString;
 var tis = function (t) { return function (x) { return typeof (x) === t; }; };
 exports.isUndefined = tis('undefined');
@@ -1154,12 +1068,38 @@ exports.services = services;
 if (false) {
   module.exports = require('./cjs/react.production.min.js');
 } else {
-  module.exports = __webpack_require__(/*! ./cjs/react.development.js */ 70);
+  module.exports = __webpack_require__(/*! ./cjs/react.development.js */ 71);
 }
 
 
 /***/ }),
 /* 5 */
+/*!*********************************************************!*\
+  !*** ./node_modules/@uirouter/core/lib/common/index.js ***!
+  \*********************************************************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+/** @module common */ /** for typedoc */
+__export(__webpack_require__(/*! ./common */ 0));
+__export(__webpack_require__(/*! ./coreservices */ 3));
+__export(__webpack_require__(/*! ./glob */ 20));
+__export(__webpack_require__(/*! ./hof */ 2));
+__export(__webpack_require__(/*! ./predicates */ 1));
+__export(__webpack_require__(/*! ./queue */ 31));
+__export(__webpack_require__(/*! ./strings */ 6));
+__export(__webpack_require__(/*! ./trace */ 7));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 6 */
 /*!***********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/common/strings.js ***!
   \***********************************************************/
@@ -1181,7 +1121,7 @@ var predicates_1 = __webpack_require__(/*! ./predicates */ 1);
 var rejectFactory_1 = __webpack_require__(/*! ../transition/rejectFactory */ 15);
 var common_1 = __webpack_require__(/*! ./common */ 0);
 var hof_1 = __webpack_require__(/*! ./hof */ 2);
-var transition_1 = __webpack_require__(/*! ../transition/transition */ 22);
+var transition_1 = __webpack_require__(/*! ../transition/transition */ 21);
 var resolvable_1 = __webpack_require__(/*! ../resolve/resolvable */ 17);
 /**
  * Returns a string shortened to a maximum length
@@ -1282,6 +1222,12 @@ exports.beforeAfterSubstr = function (char) { return function (str) {
         return [str, ""];
     return [str.substr(0, idx), str.substr(idx + 1)];
 }; };
+exports.hostRegex = new RegExp('^(?:[a-z]+:)?//[^/]+/');
+exports.stripFile = function (str) { return str.replace(/\/[^/]*$/, ''); };
+exports.splitHash = exports.beforeAfterSubstr("#");
+exports.splitQuery = exports.beforeAfterSubstr("?");
+exports.splitEqual = exports.beforeAfterSubstr("=");
+exports.trimHashVal = function (str) { return str ? str.replace(/^#/, "") : ""; };
 /**
  * Splits on a delimiter, but returns the delimiters in the array
  *
@@ -1322,7 +1268,7 @@ exports.joinNeighborsR = joinNeighborsR;
 //# sourceMappingURL=strings.js.map
 
 /***/ }),
-/* 6 */
+/* 7 */
 /*!*********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/common/trace.js ***!
   \*********************************************************/
@@ -1370,7 +1316,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */ /** for typedoc */
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var strings_1 = __webpack_require__(/*! ./strings */ 5);
+var strings_1 = __webpack_require__(/*! ./strings */ 6);
 /** @hidden */
 function uiViewString(uiview) {
     if (!uiview)
@@ -1388,6 +1334,10 @@ var viewConfigString = function (viewConfig) {
 function normalizedCat(input) {
     return predicates_1.isNumber(input) ? Category[input] : Category[Category[input]];
 }
+/** @hidden */
+var consoleLog = Function.prototype.bind.call(console.log, console);
+/** @hidden */
+var consoletable = predicates_1.isFunction(console.table) ? console.table.bind(console) : consoleLog.bind(console);
 /**
  * Trace categories Enum
  *
@@ -1415,7 +1365,7 @@ var Category;
 /**
  * Prints UI-Router Transition trace information to the console.
  */
-var Trace = (function () {
+var Trace = /** @class */ (function () {
     /** @hidden */
     function Trace() {
         /** @hidden */
@@ -1537,7 +1487,7 @@ var Trace = (function () {
             var view = config && config.viewDecl.$context.name + ": " + config.viewDecl.$name + " (" + config.viewDecl.$type + ")";
             return { 'ui-view fqn': uiView, 'state: view name': view };
         }).sort(function (a, b) { return a['ui-view fqn'].localeCompare(b['ui-view fqn']); });
-        console.table(mapping);
+        consoletable(mapping);
     };
     /** @internalapi called by ui-router code */
     Trace.prototype.traceViewServiceEvent = function (event, viewConfig) {
@@ -1568,7 +1518,7 @@ exports.trace = trace;
 //# sourceMappingURL=trace.js.map
 
 /***/ }),
-/* 7 */
+/* 8 */
 /*!******************************************!*\
   !*** ./node_modules/prop-types/index.js ***!
   \******************************************/
@@ -1598,7 +1548,7 @@ if (true) {
   // By explicitly using `prop-types` you are opting into new development behavior.
   // http://fb.me/prop-types-in-prod
   var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(/*! ./factoryWithTypeCheckers */ 106)(isValidElement, throwOnDirectAccess);
+  module.exports = __webpack_require__(/*! ./factoryWithTypeCheckers */ 107)(isValidElement, throwOnDirectAccess);
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
@@ -1607,7 +1557,7 @@ if (true) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /*!***************************************************!*\
   !*** ./node_modules/@uirouter/react/lib/index.js ***!
   \***************************************************/
@@ -1632,17 +1582,17 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! @uirouter/core */ 9));
+__export(__webpack_require__(/*! @uirouter/core */ 10));
 __export(__webpack_require__(/*! ./reactViews */ 64));
 __export(__webpack_require__(/*! ./components/components */ 65));
-var core_1 = __webpack_require__(/*! ./core */ 110);
+var core_1 = __webpack_require__(/*! ./core */ 111);
 exports.UIRouterReact = core_1.UIRouterReact;
 var components_1 = __webpack_require__(/*! ./components/components */ 65);
 exports.UIRouter = components_1.UIRouter;
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 9 */
+/* 10 */
 /*!**************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/index.js ***!
   \**************************************************/
@@ -1660,22 +1610,49 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ./common/index */ 14));
-__export(__webpack_require__(/*! ./params/index */ 85));
-__export(__webpack_require__(/*! ./path/index */ 86));
-__export(__webpack_require__(/*! ./resolve/index */ 87));
-__export(__webpack_require__(/*! ./state/index */ 88));
-__export(__webpack_require__(/*! ./transition/index */ 98));
-__export(__webpack_require__(/*! ./url/index */ 99));
-__export(__webpack_require__(/*! ./view/index */ 100));
+__export(__webpack_require__(/*! ./common/index */ 5));
+__export(__webpack_require__(/*! ./params/index */ 86));
+__export(__webpack_require__(/*! ./path/index */ 87));
+__export(__webpack_require__(/*! ./resolve/index */ 88));
+__export(__webpack_require__(/*! ./state/index */ 89));
+__export(__webpack_require__(/*! ./transition/index */ 99));
+__export(__webpack_require__(/*! ./url/index */ 100));
+__export(__webpack_require__(/*! ./view/index */ 101));
 __export(__webpack_require__(/*! ./globals */ 53));
 __export(__webpack_require__(/*! ./router */ 48));
-__export(__webpack_require__(/*! ./vanilla */ 101));
-__export(__webpack_require__(/*! ./interface */ 104));
+__export(__webpack_require__(/*! ./vanilla */ 102));
+__export(__webpack_require__(/*! ./interface */ 105));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 10 */
+/* 11 */
+/*!*****************************************************************!*\
+  !*** ./node_modules/@uirouter/core/lib/transition/interface.js ***!
+  \*****************************************************************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TransitionHookPhase;
+(function (TransitionHookPhase) {
+    TransitionHookPhase[TransitionHookPhase["CREATE"] = 0] = "CREATE";
+    TransitionHookPhase[TransitionHookPhase["BEFORE"] = 1] = "BEFORE";
+    TransitionHookPhase[TransitionHookPhase["RUN"] = 2] = "RUN";
+    TransitionHookPhase[TransitionHookPhase["SUCCESS"] = 3] = "SUCCESS";
+    TransitionHookPhase[TransitionHookPhase["ERROR"] = 4] = "ERROR";
+})(TransitionHookPhase = exports.TransitionHookPhase || (exports.TransitionHookPhase = {}));
+var TransitionHookScope;
+(function (TransitionHookScope) {
+    TransitionHookScope[TransitionHookScope["TRANSITION"] = 0] = "TRANSITION";
+    TransitionHookScope[TransitionHookScope["STATE"] = 1] = "STATE";
+})(TransitionHookScope = exports.TransitionHookScope || (exports.TransitionHookScope = {}));
+//# sourceMappingURL=interface.js.map
+
+/***/ }),
+/* 12 */
 /*!**************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/state/targetState.js ***!
   \**************************************************************/
@@ -1690,8 +1667,9 @@ __export(__webpack_require__(/*! ./interface */ 104));
  * @module state
  */ /** for typedoc */
 Object.defineProperty(exports, "__esModule", { value: true });
-var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
+var strings_1 = __webpack_require__(/*! ../common/strings */ 6);
+var common_1 = __webpack_require__(/*! ../common */ 5);
 /**
  * Encapsulate the target (destination) state/params/options of a [[Transition]].
  *
@@ -1721,27 +1699,28 @@ var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
  * A `TargetState` may be valid (the state being targeted exists in the registry)
  * or invalid (the state being targeted is not registered).
  */
-var TargetState = (function () {
+var TargetState = /** @class */ (function () {
     /**
      * The TargetState constructor
      *
      * Note: Do not construct a `TargetState` manually.
      * To create a `TargetState`, use the [[StateService.target]] factory method.
      *
+     * @param _stateRegistry The StateRegistry to use to look up the _definition
      * @param _identifier An identifier for a state.
      *    Either a fully-qualified state name, or the object used to define the state.
-     * @param _definition The internal state representation, if exists.
      * @param _params Parameters for the target state
      * @param _options Transition options.
      *
      * @internalapi
      */
-    function TargetState(_identifier, _definition, _params, _options) {
-        if (_options === void 0) { _options = {}; }
+    function TargetState(_stateRegistry, _identifier, _params, _options) {
+        this._stateRegistry = _stateRegistry;
         this._identifier = _identifier;
-        this._definition = _definition;
-        this._options = _options;
-        this._params = _params || {};
+        this._identifier = _identifier;
+        this._params = common_1.extend({}, _params || {});
+        this._options = common_1.extend({}, _options || {});
+        this._definition = _stateRegistry.matcher.find(_identifier, this._options.relative);
     }
     /** The name of the state this object targets */
     TargetState.prototype.name = function () {
@@ -1788,7 +1767,40 @@ var TargetState = (function () {
             return "State '" + this.name() + "' has an invalid definition";
     };
     TargetState.prototype.toString = function () {
-        return "'" + this.name() + "'" + common_1.toJson(this.params());
+        return "'" + this.name() + "'" + strings_1.stringify(this.params());
+    };
+    /**
+     * Returns a copy of this TargetState which targets a different state.
+     * The new TargetState has the same parameter values and transition options.
+     *
+     * @param state The new state that should be targeted
+     */
+    TargetState.prototype.withState = function (state) {
+        return new TargetState(this._stateRegistry, state, this._params, this._options);
+    };
+    /**
+     * Returns a copy of this TargetState, using the specified parameter values.
+     *
+     * @param params the new parameter values to use
+     * @param replace When false (default) the new parameter values will be merged with the current values.
+     *                When true the parameter values will be used instead of the current values.
+     */
+    TargetState.prototype.withParams = function (params, replace) {
+        if (replace === void 0) { replace = false; }
+        var newParams = replace ? params : common_1.extend({}, this._params, params);
+        return new TargetState(this._stateRegistry, this._identifier, newParams, this._options);
+    };
+    /**
+     * Returns a copy of this TargetState, using the specified Transition Options.
+     *
+     * @param options the new options to use
+     * @param replace When false (default) the new options will be merged with the current options.
+     *                When true the options will be used instead of the current options.
+     */
+    TargetState.prototype.withOptions = function (options, replace) {
+        if (replace === void 0) { replace = false; }
+        var newOpts = replace ? options : common_1.extend({}, this._options, options);
+        return new TargetState(this._stateRegistry, this._identifier, this._params, newOpts);
     };
     /** Returns true if the object has a state property that might be a state or state name */
     TargetState.isDef = function (obj) {
@@ -1800,34 +1812,7 @@ exports.TargetState = TargetState;
 //# sourceMappingURL=targetState.js.map
 
 /***/ }),
-/* 11 */
-/*!*****************************************************************!*\
-  !*** ./node_modules/@uirouter/core/lib/transition/interface.js ***!
-  \*****************************************************************/
-/*! dynamic exports provided */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var TransitionHookPhase;
-(function (TransitionHookPhase) {
-    TransitionHookPhase[TransitionHookPhase["CREATE"] = 0] = "CREATE";
-    TransitionHookPhase[TransitionHookPhase["BEFORE"] = 1] = "BEFORE";
-    TransitionHookPhase[TransitionHookPhase["RUN"] = 2] = "RUN";
-    TransitionHookPhase[TransitionHookPhase["SUCCESS"] = 3] = "SUCCESS";
-    TransitionHookPhase[TransitionHookPhase["ERROR"] = 4] = "ERROR";
-})(TransitionHookPhase = exports.TransitionHookPhase || (exports.TransitionHookPhase = {}));
-var TransitionHookScope;
-(function (TransitionHookScope) {
-    TransitionHookScope[TransitionHookScope["TRANSITION"] = 0] = "TRANSITION";
-    TransitionHookScope[TransitionHookScope["STATE"] = 1] = "STATE";
-})(TransitionHookScope = exports.TransitionHookScope || (exports.TransitionHookScope = {}));
-//# sourceMappingURL=interface.js.map
-
-/***/ }),
-/* 12 */
+/* 13 */
 /*!*********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/params/param.js ***!
   \*********************************************************/
@@ -1846,7 +1831,7 @@ var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
-var paramType_1 = __webpack_require__(/*! ./paramType */ 35);
+var paramType_1 = __webpack_require__(/*! ./paramType */ 34);
 /** @hidden */ var hasOwn = Object.prototype.hasOwnProperty;
 /** @hidden */ var isShorthand = function (cfg) {
     return ["value", "type", "squash", "array", "dynamic"].filter(hasOwn.bind(cfg || {})).length === 0;
@@ -1912,7 +1897,7 @@ function getReplace(config, arrayMode, isOptional, squash) {
     return common_1.filter(defaultPolicy, function (item) { return configuredKeys.indexOf(item.from) === -1; }).concat(replace);
 }
 /** @internalapi */
-var Param = (function () {
+var Param = /** @class */ (function () {
     function Param(id, type, config, location, urlMatcherFactory) {
         config = unwrapShorthand(config);
         type = getType(config, type, location, id, urlMatcherFactory.paramTypes);
@@ -2036,7 +2021,7 @@ exports.Param = Param;
 //# sourceMappingURL=param.js.map
 
 /***/ }),
-/* 13 */
+/* 14 */
 /*!************************************************!*\
   !*** ./node_modules/fbjs/lib/emptyFunction.js ***!
   \************************************************/
@@ -2083,32 +2068,6 @@ emptyFunction.thatReturnsArgument = function (arg) {
 module.exports = emptyFunction;
 
 /***/ }),
-/* 14 */
-/*!*********************************************************!*\
-  !*** ./node_modules/@uirouter/core/lib/common/index.js ***!
-  \*********************************************************/
-/*! dynamic exports provided */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-/** @module common */ /** for typedoc */
-__export(__webpack_require__(/*! ./common */ 0));
-__export(__webpack_require__(/*! ./coreservices */ 3));
-__export(__webpack_require__(/*! ./glob */ 21));
-__export(__webpack_require__(/*! ./hof */ 2));
-__export(__webpack_require__(/*! ./predicates */ 1));
-__export(__webpack_require__(/*! ./queue */ 32));
-__export(__webpack_require__(/*! ./strings */ 5));
-__export(__webpack_require__(/*! ./trace */ 6));
-//# sourceMappingURL=index.js.map
-
-/***/ }),
 /* 15 */
 /*!*********************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/transition/rejectFactory.js ***!
@@ -2125,7 +2084,7 @@ __export(__webpack_require__(/*! ./trace */ 6));
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
-var strings_1 = __webpack_require__(/*! ../common/strings */ 5);
+var strings_1 = __webpack_require__(/*! ../common/strings */ 6);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var RejectType;
 (function (RejectType) {
@@ -2136,7 +2095,7 @@ var RejectType;
     RejectType[RejectType["ERROR"] = 6] = "ERROR";
 })(RejectType = exports.RejectType || (exports.RejectType = {}));
 /** @hidden */ var id = 0;
-var Rejection = (function () {
+var Rejection = /** @class */ (function () {
     function Rejection(type, message, detail) {
         this.$id = id++;
         this.type = type;
@@ -2227,13 +2186,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** for typedoc */
 var interface_1 = __webpack_require__(/*! ./interface */ 11);
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
-var strings_1 = __webpack_require__(/*! ../common/strings */ 5);
+var strings_1 = __webpack_require__(/*! ../common/strings */ 6);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
-var trace_1 = __webpack_require__(/*! ../common/trace */ 6);
+var trace_1 = __webpack_require__(/*! ../common/trace */ 7);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
 var rejectFactory_1 = __webpack_require__(/*! ./rejectFactory */ 15);
-var targetState_1 = __webpack_require__(/*! ../state/targetState */ 10);
+var targetState_1 = __webpack_require__(/*! ../state/targetState */ 12);
 var defaultOptions = {
     current: common_1.noop,
     transition: null,
@@ -2241,7 +2200,7 @@ var defaultOptions = {
     bind: null,
 };
 /** @hidden */
-var TransitionHook = (function () {
+var TransitionHook = /** @class */ (function () {
     function TransitionHook(transition, stateContext, registeredHook, options) {
         var _this = this;
         this.transition = transition;
@@ -2292,6 +2251,11 @@ var TransitionHook = (function () {
         catch (err) {
             // If callback throws (synchronously)
             return handleError(rejectFactory_1.Rejection.normalize(err));
+        }
+        finally {
+            if (hook.invokeLimit && ++hook.invokeCount >= hook.invokeLimit) {
+                hook.deregister();
+            }
         }
     };
     /**
@@ -2457,10 +2421,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */ /** for typedoc */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
-var trace_1 = __webpack_require__(/*! ../common/trace */ 6);
-var strings_1 = __webpack_require__(/*! ../common/strings */ 5);
+var trace_1 = __webpack_require__(/*! ../common/trace */ 7);
+var strings_1 = __webpack_require__(/*! ../common/strings */ 6);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var common_2 = __webpack_require__(/*! ../common */ 14);
+var common_2 = __webpack_require__(/*! ../common */ 5);
 // TODO: explicitly make this user configurable
 exports.defaultResolvePolicy = {
     when: "LAZY",
@@ -2478,7 +2442,7 @@ exports.defaultResolvePolicy = {
  * Resolvable.get() and Resolvable.resolve() both execute within a context path, which is passed as the first
  * parameter to those fns.
  */
-var Resolvable = (function () {
+var Resolvable = /** @class */ (function () {
     function Resolvable(arg1, resolveFn, deps, policy, data) {
         this.resolved = false;
         this.promise = undefined;
@@ -2586,85 +2550,6 @@ exports.Resolvable = Resolvable;
 
 /***/ }),
 /* 18 */
-/*!**********************************************************!*\
-  !*** ./node_modules/@uirouter/core/lib/vanilla/utils.js ***!
-  \**********************************************************/
-/*! dynamic exports provided */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * @internalapi
- * @module vanilla
- */
-/** */
-var index_1 = __webpack_require__(/*! ../common/index */ 14);
-var common_1 = __webpack_require__(/*! ../common/common */ 0);
-var beforeAfterSubstr = function (char) { return function (str) {
-    if (!str)
-        return ["", ""];
-    var idx = str.indexOf(char);
-    if (idx === -1)
-        return [str, ""];
-    return [str.substr(0, idx), str.substr(idx + 1)];
-}; };
-exports.splitHash = beforeAfterSubstr("#");
-exports.splitQuery = beforeAfterSubstr("?");
-exports.splitEqual = beforeAfterSubstr("=");
-exports.trimHashVal = function (str) { return str ? str.replace(/^#/, "") : ""; };
-exports.keyValsToObjectR = function (accum, _a) {
-    var key = _a[0], val = _a[1];
-    if (!accum.hasOwnProperty(key)) {
-        accum[key] = val;
-    }
-    else if (index_1.isArray(accum[key])) {
-        accum[key].push(val);
-    }
-    else {
-        accum[key] = [accum[key], val];
-    }
-    return accum;
-};
-exports.getParams = function (queryString) {
-    return queryString.split("&").filter(common_1.identity).map(exports.splitEqual).reduce(exports.keyValsToObjectR, {});
-};
-function parseUrl(url) {
-    var orEmptyString = function (x) { return x || ""; };
-    var _a = exports.splitHash(url).map(orEmptyString), beforehash = _a[0], hash = _a[1];
-    var _b = exports.splitQuery(beforehash).map(orEmptyString), path = _b[0], search = _b[1];
-    return { path: path, search: search, hash: hash, url: url };
-}
-exports.parseUrl = parseUrl;
-exports.buildUrl = function (loc) {
-    var path = loc.path();
-    var searchObject = loc.search();
-    var hash = loc.hash();
-    var search = Object.keys(searchObject).map(function (key) {
-        var param = searchObject[key];
-        var vals = index_1.isArray(param) ? param : [param];
-        return vals.map(function (val) { return key + "=" + val; });
-    }).reduce(common_1.unnestR, []).join("&");
-    return path + (search ? "?" + search : "") + (hash ? "#" + hash : "");
-};
-function locationPluginFactory(name, isHtml5, serviceClass, configurationClass) {
-    return function (router) {
-        var service = router.locationService = new serviceClass(router);
-        var configuration = router.locationConfig = new configurationClass(router, isHtml5);
-        function dispose(router) {
-            router.dispose(service);
-            router.dispose(configuration);
-        }
-        return { name: name, service: service, configuration: configuration, dispose: dispose };
-    };
-}
-exports.locationPluginFactory = locationPluginFactory;
-//# sourceMappingURL=utils.js.map
-
-/***/ }),
-/* 19 */
 /*!********************************************!*\
   !*** ./node_modules/fbjs/lib/invariant.js ***!
   \********************************************/
@@ -2728,7 +2613,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 /***/ }),
-/* 20 */
+/* 19 */
 /*!******************************************!*\
   !*** ./node_modules/fbjs/lib/warning.js ***!
   \******************************************/
@@ -2747,7 +2632,7 @@ module.exports = invariant;
 
 
 
-var emptyFunction = __webpack_require__(/*! ./emptyFunction */ 13);
+var emptyFunction = __webpack_require__(/*! ./emptyFunction */ 14);
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -2801,7 +2686,7 @@ if (true) {
 module.exports = warning;
 
 /***/ }),
-/* 21 */
+/* 20 */
 /*!********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/common/glob.js ***!
   \********************************************************/
@@ -2864,7 +2749,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * | `'A.**.X'`  | `'A.X'` , `'A.B.X'` , `'A.B.C.X'`             | `'A'` , `'A.B.C'`                 |
  *
  */
-var Glob = (function () {
+var Glob = /** @class */ (function () {
     function Glob(text) {
         this.text = text;
         this.glob = text.split('.');
@@ -2895,7 +2780,7 @@ exports.Glob = Glob;
 //# sourceMappingURL=glob.js.map
 
 /***/ }),
-/* 22 */
+/* 21 */
 /*!******************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/transition/transition.js ***!
   \******************************************************************/
@@ -2911,20 +2796,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module transition
  */
 /** for typedoc */
-var trace_1 = __webpack_require__(/*! ../common/trace */ 6);
+var trace_1 = __webpack_require__(/*! ../common/trace */ 7);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
+var strings_1 = __webpack_require__(/*! ../common/strings */ 6);
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var interface_1 = __webpack_require__(/*! ./interface */ 11); // has or is using
 var transitionHook_1 = __webpack_require__(/*! ./transitionHook */ 16);
-var hookRegistry_1 = __webpack_require__(/*! ./hookRegistry */ 33);
+var hookRegistry_1 = __webpack_require__(/*! ./hookRegistry */ 32);
 var hookBuilder_1 = __webpack_require__(/*! ./hookBuilder */ 39);
-var pathFactory_1 = __webpack_require__(/*! ../path/pathFactory */ 23);
-var targetState_1 = __webpack_require__(/*! ../state/targetState */ 10);
-var param_1 = __webpack_require__(/*! ../params/param */ 12);
+var pathFactory_1 = __webpack_require__(/*! ../path/pathFactory */ 22);
+var param_1 = __webpack_require__(/*! ../params/param */ 13);
 var resolvable_1 = __webpack_require__(/*! ../resolve/resolvable */ 17);
-var resolveContext_1 = __webpack_require__(/*! ../resolve/resolveContext */ 24);
+var resolveContext_1 = __webpack_require__(/*! ../resolve/resolveContext */ 23);
 /** @hidden */
 var stateSelf = hof_1.prop("self");
 /**
@@ -2935,7 +2820,7 @@ var stateSelf = hof_1.prop("self");
  * This object contains all contextual information about the to/from states, parameters, resolves.
  * It has information about all states being entered and exited as a result of the transition.
  */
-var Transition = (function () {
+var Transition = /** @class */ (function () {
     /**
      * Creates a new Transition object.
      *
@@ -3331,7 +3216,7 @@ var Transition = (function () {
             redirectOpts.location = 'replace';
         }
         var newOptions = common_1.extend({}, this.options(), targetState.options(), redirectOpts);
-        targetState = new targetState_1.TargetState(targetState.identifier(), targetState.$state(), targetState.params(), newOptions);
+        targetState = targetState.withOptions(newOptions, true);
         var newTransition = this.router.transitionService.create(this._treeChanges.from, targetState);
         var originalEnteringNodes = this._treeChanges.entering;
         var redirectEnteringNodes = newTransition._treeChanges.entering;
@@ -3525,7 +3410,7 @@ var Transition = (function () {
             return (params["#"] !== null && params["#"] !== undefined) ? params : common_1.omit(params, ["#"]);
         };
         // (X) means the to state is invalid.
-        var id = this.$id, from = predicates_1.isObject(fromStateOrName) ? fromStateOrName.name : fromStateOrName, fromParams = common_1.toJson(avoidEmptyHash(this._treeChanges.from.map(hof_1.prop('paramValues')).reduce(common_1.mergeR, {}))), toValid = this.valid() ? "" : "(X) ", to = predicates_1.isObject(toStateOrName) ? toStateOrName.name : toStateOrName, toParams = common_1.toJson(avoidEmptyHash(this.params()));
+        var id = this.$id, from = predicates_1.isObject(fromStateOrName) ? fromStateOrName.name : fromStateOrName, fromParams = strings_1.stringify(avoidEmptyHash(this._treeChanges.from.map(hof_1.prop('paramValues')).reduce(common_1.mergeR, {}))), toValid = this.valid() ? "" : "(X) ", to = predicates_1.isObject(toStateOrName) ? toStateOrName.name : toStateOrName, toParams = strings_1.stringify(avoidEmptyHash(this.params()));
         return "Transition#" + id + "( '" + from + "'" + fromParams + " -> " + toValid + "'" + to + "'" + toParams + " )";
     };
     /** @hidden */
@@ -3536,7 +3421,7 @@ exports.Transition = Transition;
 //# sourceMappingURL=transition.js.map
 
 /***/ }),
-/* 23 */
+/* 22 */
 /*!*************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/path/pathFactory.js ***!
   \*************************************************************/
@@ -3550,18 +3435,18 @@ exports.Transition = Transition;
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
-var targetState_1 = __webpack_require__(/*! ../state/targetState */ 10);
-var pathNode_1 = __webpack_require__(/*! ./pathNode */ 34);
+var targetState_1 = __webpack_require__(/*! ../state/targetState */ 12);
+var pathNode_1 = __webpack_require__(/*! ./pathNode */ 33);
 /**
  * This class contains functions which convert TargetStates, Nodes and paths from one type to another.
  */
-var PathUtils = (function () {
+var PathUtils = /** @class */ (function () {
     function PathUtils() {
     }
     /** Given a PathNode[], create an TargetState */
-    PathUtils.makeTargetState = function (path) {
+    PathUtils.makeTargetState = function (registry, path) {
         var state = common_1.tail(path).state;
-        return new targetState_1.TargetState(state, state, path.map(hof_1.prop("paramValues")).reduce(common_1.mergeR, {}));
+        return new targetState_1.TargetState(registry, state, path.map(hof_1.prop("paramValues")).reduce(common_1.mergeR, {}), {});
     };
     PathUtils.buildPath = function (targetState) {
         var toParams = targetState.params();
@@ -3720,7 +3605,7 @@ exports.PathUtils = PathUtils;
 //# sourceMappingURL=pathFactory.js.map
 
 /***/ }),
-/* 24 */
+/* 23 */
 /*!*******************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/resolve/resolveContext.js ***!
   \*******************************************************************/
@@ -3735,15 +3620,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** for typedoc */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
-var trace_1 = __webpack_require__(/*! ../common/trace */ 6);
+var trace_1 = __webpack_require__(/*! ../common/trace */ 7);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
 var interface_1 = __webpack_require__(/*! ./interface */ 40);
 var resolvable_1 = __webpack_require__(/*! ./resolvable */ 17);
-var pathFactory_1 = __webpack_require__(/*! ../path/pathFactory */ 23);
-var strings_1 = __webpack_require__(/*! ../common/strings */ 5);
-var when = interface_1.resolvePolicies.when;
-var ALL_WHENS = [when.EAGER, when.LAZY];
-var EAGER_WHENS = [when.EAGER];
+var pathFactory_1 = __webpack_require__(/*! ../path/pathFactory */ 22);
+var strings_1 = __webpack_require__(/*! ../common/strings */ 6);
+var common_2 = __webpack_require__(/*! ../common */ 5);
+var whens = interface_1.resolvePolicies.when;
+var ALL_WHENS = [whens.EAGER, whens.LAZY];
+var EAGER_WHENS = [whens.EAGER];
 exports.NATIVE_INJECTOR_TOKEN = "Native Injector";
 /**
  * Encapsulates Dependency Injection for a path of nodes
@@ -3755,7 +3641,7 @@ exports.NATIVE_INJECTOR_TOKEN = "Native Injector";
  *
  * The ResolveContext closes over the [[PathNode]]s, and provides DI for the last node in the path.
  */
-var ResolveContext = (function () {
+var ResolveContext = /** @class */ (function () {
     function ResolveContext(_path) {
         this._path = _path;
     }
@@ -3882,14 +3768,14 @@ var ResolveContext = (function () {
         // subpath stopping at resolvable's node, or the whole path (if the resolvable isn't in the path)
         var subPath = pathFactory_1.PathUtils.subPath(this._path, function (x) { return x === node; }) || this._path;
         var availableResolvables = subPath
-            .reduce(function (acc, node) { return acc.concat(node.resolvables); }, []) //all of subpath's resolvables
+            .reduce(function (acc, _node) { return acc.concat(_node.resolvables); }, []) //all of subpath's resolvables
             .filter(function (res) { return res !== resolvable; }); // filter out the `resolvable` argument
         var getDependency = function (token) {
             var matching = availableResolvables.filter(function (r) { return r.token === token; });
             if (matching.length)
                 return common_1.tail(matching);
             var fromInjector = _this.injector().getNative(token);
-            if (!fromInjector) {
+            if (common_2.isUndefined(fromInjector)) {
                 throw new Error("Could not find Dependency Injection token: " + strings_1.stringify(token));
             }
             return new resolvable_1.Resolvable(token, function () { return fromInjector; }, [], fromInjector);
@@ -3899,7 +3785,7 @@ var ResolveContext = (function () {
     return ResolveContext;
 }());
 exports.ResolveContext = ResolveContext;
-var UIInjectorImpl = (function () {
+var UIInjectorImpl = /** @class */ (function () {
     function UIInjectorImpl(context) {
         this.context = context;
         this.native = this.get(exports.NATIVE_INJECTOR_TOKEN) || coreservices_1.services.$injector;
@@ -3915,7 +3801,7 @@ var UIInjectorImpl = (function () {
             }
             return resolvable.data;
         }
-        return this.native && this.native.get(token);
+        return this.getNative(token);
     };
     UIInjectorImpl.prototype.getAsync = function (token) {
         var resolvable = this.context.getResolvable(token);
@@ -3931,7 +3817,7 @@ var UIInjectorImpl = (function () {
 //# sourceMappingURL=resolveContext.js.map
 
 /***/ }),
-/* 25 */
+/* 24 */
 /*!***********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/url/urlMatcher.js ***!
   \***********************************************************/
@@ -3950,8 +3836,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var param_1 = __webpack_require__(/*! ../params/param */ 12);
-var strings_1 = __webpack_require__(/*! ../common/strings */ 5);
+var param_1 = __webpack_require__(/*! ../params/param */ 13);
+var strings_1 = __webpack_require__(/*! ../common/strings */ 6);
 /** @hidden */
 function quoteRegExp(string, param) {
     var surroundPattern = ['', ''], result = string.replace(/[\\\[\]\^$*+?.()|{}]/g, "\\$&");
@@ -4028,7 +3914,7 @@ var splitOnSlash = strings_1.splitOnDelim('/');
  *   in the built-in  `date` ParamType matches `2014-11-12`) and provides a Date object in $stateParams.start
  *
  */
-var UrlMatcher = (function () {
+var UrlMatcher = /** @class */ (function () {
     /**
      * @param pattern The pattern to compile into a matcher.
      * @param paramTypes The [[ParamTypes]] registry
@@ -4429,7 +4315,19 @@ var UrlMatcher = (function () {
                         return 3;
                 });
         };
-        var cmp, i, pairs = common_1.arrayTuples(weights(a), weights(b));
+        /**
+         * Pads shorter array in-place (mutates)
+         */
+        var padArrays = function (l, r, padVal) {
+            var len = Math.max(l.length, r.length);
+            while (l.length < len)
+                l.push(padVal);
+            while (r.length < len)
+                r.push(padVal);
+        };
+        var weightsA = weights(a), weightsB = weights(b);
+        padArrays(weightsA, weightsB, 0);
+        var cmp, i, pairs = common_1.arrayTuples(weightsA, weightsB);
         for (i = 0; i < pairs.length; i++) {
             cmp = pairs[i][0] - pairs[i][1];
             if (cmp !== 0)
@@ -4445,7 +4343,7 @@ exports.UrlMatcher = UrlMatcher;
 //# sourceMappingURL=urlMatcher.js.map
 
 /***/ }),
-/* 26 */
+/* 25 */
 /*!************************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/vanilla/baseLocationService.js ***!
   \************************************************************************/
@@ -4460,11 +4358,10 @@ exports.UrlMatcher = UrlMatcher;
  * @module vanilla
  */ /** */
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = __webpack_require__(/*! ./utils */ 18);
-var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var common_1 = __webpack_require__(/*! ../common/common */ 0);
+var common_1 = __webpack_require__(/*! ../common */ 5);
+var utils_1 = __webpack_require__(/*! ./utils */ 36);
 /** A base `LocationServices` */
-var BaseLocationServices = (function () {
+var BaseLocationServices = /** @class */ (function () {
     function BaseLocationServices(router, fireAfterUpdate) {
         var _this = this;
         this.fireAfterUpdate = fireAfterUpdate;
@@ -4473,16 +4370,15 @@ var BaseLocationServices = (function () {
         this.hash = function () { return utils_1.parseUrl(_this._get()).hash; };
         this.path = function () { return utils_1.parseUrl(_this._get()).path; };
         this.search = function () { return utils_1.getParams(utils_1.parseUrl(_this._get()).search); };
-        this._location = window && window.location;
-        this._history = window && window.history;
+        this._location = common_1.root.location;
+        this._history = common_1.root.history;
     }
     BaseLocationServices.prototype.url = function (url, replace) {
         if (replace === void 0) { replace = true; }
-        if (predicates_1.isDefined(url) && url !== this._get()) {
+        if (common_1.isDefined(url) && url !== this._get()) {
             this._set(null, null, url, replace);
             if (this.fireAfterUpdate) {
-                var evt_1 = common_1.extend(new Event("locationchange"), { url: url });
-                this._listeners.forEach(function (cb) { return cb(evt_1); });
+                this._listeners.forEach(function (cb) { return cb({ url: url }); });
             }
         }
         return utils_1.buildUrl(this);
@@ -4501,7 +4397,7 @@ exports.BaseLocationServices = BaseLocationServices;
 //# sourceMappingURL=baseLocationService.js.map
 
 /***/ }),
-/* 27 */
+/* 26 */
 /*!***********************************!*\
   !*** ./src/global/authService.js ***!
   \***********************************/
@@ -4518,7 +4414,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _appConfig = __webpack_require__(/*! ./appConfig */ 28);
+var _appConfig = __webpack_require__(/*! ./appConfig */ 27);
 
 var _appConfig2 = _interopRequireDefault(_appConfig);
 
@@ -4590,7 +4486,7 @@ var instance = new AuthService();
 exports.default = instance;
 
 /***/ }),
-/* 28 */
+/* 27 */
 /*!*********************************!*\
   !*** ./src/global/appConfig.js ***!
   \*********************************/
@@ -4647,7 +4543,7 @@ var instance = new AppConfig();
 exports.default = instance;
 
 /***/ }),
-/* 29 */
+/* 28 */
 /*!*********************************************!*\
   !*** ./node_modules/object-assign/index.js ***!
   \*********************************************/
@@ -4749,7 +4645,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /*!***************************************************!*\
   !*** ./node_modules/prop-types/checkPropTypes.js ***!
   \***************************************************/
@@ -4768,8 +4664,8 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 if (true) {
-  var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 19);
-  var warning = __webpack_require__(/*! fbjs/lib/warning */ 20);
+  var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 18);
+  var warning = __webpack_require__(/*! fbjs/lib/warning */ 19);
   var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ 38);
   var loggedTypeFailures = {};
 }
@@ -4820,7 +4716,7 @@ module.exports = checkPropTypes;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /*!**************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/state/stateObject.js ***!
   \**************************************************************/
@@ -4833,7 +4729,7 @@ module.exports = checkPropTypes;
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
-var glob_1 = __webpack_require__(/*! ../common/glob */ 21);
+var glob_1 = __webpack_require__(/*! ../common/glob */ 20);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 /**
  * Internal representation of a UI-Router state.
@@ -4845,7 +4741,7 @@ var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
  * This class prototypally inherits from the corresponding [[StateDeclaration]].
  * Each of its own properties (i.e., `hasOwnProperty`) are built using builders from the [[StateBuilder]].
  */
-var StateObject = (function () {
+var StateObject = /** @class */ (function () {
     /** @deprecated use State.create() */
     function StateObject(config) {
         return StateObject.create(config || {});
@@ -4945,7 +4841,7 @@ exports.StateObject = StateObject;
 //# sourceMappingURL=stateObject.js.map
 
 /***/ }),
-/* 32 */
+/* 31 */
 /*!*********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/common/queue.js ***!
   \*********************************************************/
@@ -4959,7 +4855,7 @@ exports.StateObject = StateObject;
  * @module common
  */ /** for typedoc */
 Object.defineProperty(exports, "__esModule", { value: true });
-var Queue = (function () {
+var Queue = /** @class */ (function () {
     function Queue(_items, _limit) {
         if (_items === void 0) { _items = []; }
         if (_limit === void 0) { _limit = null; }
@@ -5002,7 +4898,7 @@ exports.Queue = Queue;
 //# sourceMappingURL=queue.js.map
 
 /***/ }),
-/* 33 */
+/* 32 */
 /*!********************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/transition/hookRegistry.js ***!
   \********************************************************************/
@@ -5020,7 +4916,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var interface_1 = __webpack_require__(/*! ./interface */ 11); // has or is using
-var glob_1 = __webpack_require__(/*! ../common/glob */ 21);
+var glob_1 = __webpack_require__(/*! ../common/glob */ 20);
 /**
  * Determines if the given state matches the matchCriteria
  *
@@ -5054,16 +4950,19 @@ exports.matchState = matchState;
  * @internalapi
  * The registration data for a registered transition hook
  */
-var RegisteredHook = (function () {
-    function RegisteredHook(tranSvc, eventType, callback, matchCriteria, options) {
+var RegisteredHook = /** @class */ (function () {
+    function RegisteredHook(tranSvc, eventType, callback, matchCriteria, removeHookFromRegistry, options) {
         if (options === void 0) { options = {}; }
         this.tranSvc = tranSvc;
         this.eventType = eventType;
         this.callback = callback;
         this.matchCriteria = matchCriteria;
+        this.removeHookFromRegistry = removeHookFromRegistry;
+        this.invokeCount = 0;
+        this._deregistered = false;
         this.priority = options.priority || 0;
         this.bind = options.bind || null;
-        this._deregistered = false;
+        this.invokeLimit = options.invokeLimit;
     }
     /**
      * Gets the matching [[PathNode]]s
@@ -5144,6 +5043,10 @@ var RegisteredHook = (function () {
         var allMatched = common_1.values(matches).every(common_1.identity);
         return allMatched ? matches : null;
     };
+    RegisteredHook.prototype.deregister = function () {
+        this.removeHookFromRegistry(this);
+        this._deregistered = true;
+    };
     return RegisteredHook;
 }());
 exports.RegisteredHook = RegisteredHook;
@@ -5152,16 +5055,14 @@ function makeEvent(registry, transitionService, eventType) {
     // Create the object which holds the registered transition hooks.
     var _registeredHooks = registry._registeredHooks = (registry._registeredHooks || {});
     var hooks = _registeredHooks[eventType.name] = [];
+    var removeHookFn = common_1.removeFrom(hooks);
     // Create hook registration function on the IHookRegistry for the event
     registry[eventType.name] = hookRegistrationFn;
     function hookRegistrationFn(matchObject, callback, options) {
         if (options === void 0) { options = {}; }
-        var registeredHook = new RegisteredHook(transitionService, eventType, callback, matchObject, options);
+        var registeredHook = new RegisteredHook(transitionService, eventType, callback, matchObject, removeHookFn, options);
         hooks.push(registeredHook);
-        return function deregisterEventHook() {
-            registeredHook._deregistered = true;
-            common_1.removeFrom(hooks)(registeredHook);
-        };
+        return registeredHook.deregister.bind(registeredHook);
     }
     return hookRegistrationFn;
 }
@@ -5169,7 +5070,7 @@ exports.makeEvent = makeEvent;
 //# sourceMappingURL=hookRegistry.js.map
 
 /***/ }),
-/* 34 */
+/* 33 */
 /*!**********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/path/pathNode.js ***!
   \**********************************************************/
@@ -5183,7 +5084,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module path */ /** for typedoc */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
-var param_1 = __webpack_require__(/*! ../params/param */ 12);
+var param_1 = __webpack_require__(/*! ../params/param */ 13);
 /**
  * @internalapi
  *
@@ -5193,7 +5094,7 @@ var param_1 = __webpack_require__(/*! ../params/param */ 12);
  * Each PathNode corresponds to a state being entered, exited, or retained.
  * The stateful information includes parameter values and resolve data.
  */
-var PathNode = (function () {
+var PathNode = /** @class */ (function () {
     function PathNode(stateOrNode) {
         if (stateOrNode instanceof PathNode) {
             var node = stateOrNode;
@@ -5257,7 +5158,7 @@ exports.PathNode = PathNode;
 //# sourceMappingURL=pathNode.js.map
 
 /***/ }),
-/* 35 */
+/* 34 */
 /*!*************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/params/paramType.js ***!
   \*************************************************************/
@@ -5299,7 +5200,7 @@ var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
  * ```
  * @internalapi
  */
-var ParamType = (function () {
+var ParamType = /** @class */ (function () {
     /**
      * @param def  A configuration object which contains the custom type definition.  The object's
      *        properties will override the default methods and/or pattern in `ParamType`'s public interface.
@@ -5410,7 +5311,7 @@ function ArrayType(type, mode) {
 //# sourceMappingURL=paramType.js.map
 
 /***/ }),
-/* 36 */
+/* 35 */
 /*!*************************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/transition/transitionService.js ***!
   \*************************************************************************/
@@ -5427,23 +5328,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 /** for typedoc */
 var interface_1 = __webpack_require__(/*! ./interface */ 11);
-var transition_1 = __webpack_require__(/*! ./transition */ 22);
-var hookRegistry_1 = __webpack_require__(/*! ./hookRegistry */ 33);
-var coreResolvables_1 = __webpack_require__(/*! ../hooks/coreResolvables */ 89);
-var redirectTo_1 = __webpack_require__(/*! ../hooks/redirectTo */ 90);
-var onEnterExitRetain_1 = __webpack_require__(/*! ../hooks/onEnterExitRetain */ 91);
-var resolve_1 = __webpack_require__(/*! ../hooks/resolve */ 92);
-var views_1 = __webpack_require__(/*! ../hooks/views */ 93);
-var updateGlobals_1 = __webpack_require__(/*! ../hooks/updateGlobals */ 94);
-var url_1 = __webpack_require__(/*! ../hooks/url */ 95);
+var transition_1 = __webpack_require__(/*! ./transition */ 21);
+var hookRegistry_1 = __webpack_require__(/*! ./hookRegistry */ 32);
+var coreResolvables_1 = __webpack_require__(/*! ../hooks/coreResolvables */ 90);
+var redirectTo_1 = __webpack_require__(/*! ../hooks/redirectTo */ 91);
+var onEnterExitRetain_1 = __webpack_require__(/*! ../hooks/onEnterExitRetain */ 92);
+var resolve_1 = __webpack_require__(/*! ../hooks/resolve */ 93);
+var views_1 = __webpack_require__(/*! ../hooks/views */ 94);
+var updateGlobals_1 = __webpack_require__(/*! ../hooks/updateGlobals */ 95);
+var url_1 = __webpack_require__(/*! ../hooks/url */ 96);
 var lazyLoad_1 = __webpack_require__(/*! ../hooks/lazyLoad */ 55);
 var transitionEventType_1 = __webpack_require__(/*! ./transitionEventType */ 56);
 var transitionHook_1 = __webpack_require__(/*! ./transitionHook */ 16);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
-var ignoredTransition_1 = __webpack_require__(/*! ../hooks/ignoredTransition */ 96);
-var invalidTransition_1 = __webpack_require__(/*! ../hooks/invalidTransition */ 97);
+var ignoredTransition_1 = __webpack_require__(/*! ../hooks/ignoredTransition */ 97);
+var invalidTransition_1 = __webpack_require__(/*! ../hooks/invalidTransition */ 98);
 /**
  * The default [[Transition]] options.
  *
@@ -5470,7 +5371,7 @@ exports.defaultTransOpts = {
  *
  * At bootstrap, [[UIRouter]] creates a single instance (singleton) of this class.
  */
-var TransitionService = (function () {
+var TransitionService = /** @class */ (function () {
     /** @hidden */
     function TransitionService(_router) {
         /** @hidden */
@@ -5660,6 +5561,72 @@ exports.TransitionService = TransitionService;
 //# sourceMappingURL=transitionService.js.map
 
 /***/ }),
+/* 36 */
+/*!**********************************************************!*\
+  !*** ./node_modules/@uirouter/core/lib/vanilla/utils.js ***!
+  \**********************************************************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @internalapi
+ * @module vanilla
+ */
+/** */
+var common_1 = __webpack_require__(/*! ../common */ 5);
+exports.keyValsToObjectR = function (accum, _a) {
+    var key = _a[0], val = _a[1];
+    if (!accum.hasOwnProperty(key)) {
+        accum[key] = val;
+    }
+    else if (common_1.isArray(accum[key])) {
+        accum[key].push(val);
+    }
+    else {
+        accum[key] = [accum[key], val];
+    }
+    return accum;
+};
+exports.getParams = function (queryString) {
+    return queryString.split("&").filter(common_1.identity).map(common_1.splitEqual).reduce(exports.keyValsToObjectR, {});
+};
+function parseUrl(url) {
+    var orEmptyString = function (x) { return x || ""; };
+    var _a = common_1.splitHash(url).map(orEmptyString), beforehash = _a[0], hash = _a[1];
+    var _b = common_1.splitQuery(beforehash).map(orEmptyString), path = _b[0], search = _b[1];
+    return { path: path, search: search, hash: hash, url: url };
+}
+exports.parseUrl = parseUrl;
+exports.buildUrl = function (loc) {
+    var path = loc.path();
+    var searchObject = loc.search();
+    var hash = loc.hash();
+    var search = Object.keys(searchObject).map(function (key) {
+        var param = searchObject[key];
+        var vals = common_1.isArray(param) ? param : [param];
+        return vals.map(function (val) { return key + "=" + val; });
+    }).reduce(common_1.unnestR, []).join("&");
+    return path + (search ? "?" + search : "") + (hash ? "#" + hash : "");
+};
+function locationPluginFactory(name, isHtml5, serviceClass, configurationClass) {
+    return function (router) {
+        var service = router.locationService = new serviceClass(router);
+        var configuration = router.locationConfig = new configurationClass(router, isHtml5);
+        function dispose(router) {
+            router.dispose(service);
+            router.dispose(configuration);
+        }
+        return { name: name, service: service, configuration: configuration, dispose: dispose };
+    };
+}
+exports.locationPluginFactory = locationPluginFactory;
+//# sourceMappingURL=utils.js.map
+
+/***/ }),
 /* 37 */
 /*!**********************************************!*\
   !*** ./node_modules/fbjs/lib/emptyObject.js ***!
@@ -5745,7 +5712,7 @@ var transitionHook_1 = __webpack_require__(/*! ./transitionHook */ 16);
  * in the Transition class, so we must also provide the Transition's _treeChanges)
  *
  */
-var HookBuilder = (function () {
+var HookBuilder = /** @class */ (function () {
     function HookBuilder(transition) {
         this.transition = transition;
     }
@@ -5888,7 +5855,7 @@ var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
-var paramType_1 = __webpack_require__(/*! ./paramType */ 35);
+var paramType_1 = __webpack_require__(/*! ./paramType */ 34);
 /**
  * A registry for parameter types.
  *
@@ -5906,7 +5873,7 @@ var paramType_1 = __webpack_require__(/*! ./paramType */ 35);
  * - [[json]]
  * - [[any]]
  */
-var ParamTypes = (function () {
+var ParamTypes = /** @class */ (function () {
     /** @internalapi */
     function ParamTypes() {
         /** @hidden */
@@ -5991,14 +5958,14 @@ function initDefaultTypes() {
             encode: function (val) { return val && 1 || 0; },
             decode: function (val) { return parseInt(val, 10) !== 0; },
             is: hof_1.is(Boolean),
-            pattern: /0|1/
+            pattern: /0|1/,
         }),
         date: makeDefaultType({
             encode: function (val) {
                 return !this.is(val) ? undefined : [
                     val.getFullYear(),
                     ('0' + (val.getMonth() + 1)).slice(-2),
-                    ('0' + val.getDate()).slice(-2)
+                    ('0' + val.getDate()).slice(-2),
                 ].join("-");
             },
             decode: function (val) {
@@ -6013,14 +5980,14 @@ function initDefaultTypes() {
                     .reduce(function (acc, fn) { return acc && l[fn]() === r[fn](); }, true);
             },
             pattern: /[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])/,
-            capture: /([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/
+            capture: /([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/,
         }),
         json: makeDefaultType({
             encode: common_1.toJson,
             decode: common_1.fromJson,
             is: hof_1.is(Object),
             equals: common_1.equals,
-            pattern: /[^/]*/
+            pattern: /[^/]*/,
         }),
         // does not encode/decode
         any: makeDefaultType({
@@ -6053,7 +6020,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 /** @internalapi */
-var StateParams = (function () {
+var StateParams = /** @class */ (function () {
     function StateParams(params) {
         if (params === void 0) { params = {}; }
         common_1.extend(this, params);
@@ -6104,7 +6071,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module state */ /** for typedoc */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var strings_1 = __webpack_require__(/*! ../common/strings */ 5);
+var strings_1 = __webpack_require__(/*! ../common/strings */ 6);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var resolvable_1 = __webpack_require__(/*! ../resolve/resolvable */ 17);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
@@ -6165,7 +6132,7 @@ var getParamsBuilder = function (paramFactory) {
     };
 };
 function pathBuilder(state) {
-    return state.parent ? state.parent.path.concat(state) : [state];
+    return state.parent ? state.parent.path.concat(state) : /*root*/ [state];
 }
 function includesBuilder(state) {
     var includes = state.parent ? common_1.extend({}, state.parent.includes) : {};
@@ -6273,7 +6240,7 @@ exports.resolvablesBuilder = resolvablesBuilder;
  * Custom properties or API may be added to the internal [[StateObject]] object by registering a decorator function
  * using the [[builder]] method.
  */
-var StateBuilder = (function () {
+var StateBuilder = /** @class */ (function () {
     function StateBuilder(matcher, urlMatcherFactory) {
         this.matcher = matcher;
         var self = this;
@@ -6395,7 +6362,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module state */ /** for typedoc */
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
-var StateMatcher = (function () {
+var StateMatcher = /** @class */ (function () {
     function StateMatcher(_states) {
         this._states = _states;
     }
@@ -6469,10 +6436,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module state */ /** for typedoc */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var stateObject_1 = __webpack_require__(/*! ./stateObject */ 31);
+var stateObject_1 = __webpack_require__(/*! ./stateObject */ 30);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 /** @internalapi */
-var StateQueueManager = (function () {
+var StateQueueManager = /** @class */ (function () {
     function StateQueueManager($registry, $urlRouter, states, builder, listeners) {
         this.$registry = $registry;
         this.$urlRouter = $urlRouter;
@@ -6578,7 +6545,7 @@ var stateBuilder_1 = __webpack_require__(/*! ./stateBuilder */ 43);
 var stateQueueManager_1 = __webpack_require__(/*! ./stateQueueManager */ 45);
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
-var StateRegistry = (function () {
+var StateRegistry = /** @class */ (function () {
     /** @internalapi */
     function StateRegistry(_router) {
         this._router = _router;
@@ -6743,16 +6710,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var queue_1 = __webpack_require__(/*! ../common/queue */ 32);
+var queue_1 = __webpack_require__(/*! ../common/queue */ 31);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
-var pathFactory_1 = __webpack_require__(/*! ../path/pathFactory */ 23);
-var pathNode_1 = __webpack_require__(/*! ../path/pathNode */ 34);
-var transitionService_1 = __webpack_require__(/*! ../transition/transitionService */ 36);
+var pathFactory_1 = __webpack_require__(/*! ../path/pathFactory */ 22);
+var pathNode_1 = __webpack_require__(/*! ../path/pathNode */ 33);
+var transitionService_1 = __webpack_require__(/*! ../transition/transitionService */ 35);
 var rejectFactory_1 = __webpack_require__(/*! ../transition/rejectFactory */ 15);
-var targetState_1 = __webpack_require__(/*! ./targetState */ 10);
-var param_1 = __webpack_require__(/*! ../params/param */ 12);
-var glob_1 = __webpack_require__(/*! ../common/glob */ 21);
-var resolveContext_1 = __webpack_require__(/*! ../resolve/resolveContext */ 24);
+var targetState_1 = __webpack_require__(/*! ./targetState */ 12);
+var param_1 = __webpack_require__(/*! ../params/param */ 13);
+var glob_1 = __webpack_require__(/*! ../common/glob */ 20);
+var resolveContext_1 = __webpack_require__(/*! ../resolve/resolveContext */ 23);
 var lazyLoad_1 = __webpack_require__(/*! ../hooks/lazyLoad */ 55);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 /**
@@ -6761,7 +6728,7 @@ var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
  * This class provides services related to ui-router states.
  * An instance of this class is located on the global [[UIRouter]] object.
  */
-var StateService = (function () {
+var StateService = /** @class */ (function () {
     /** @internalapi */
     function StateService(router) {
         this.router = router;
@@ -6844,7 +6811,7 @@ var StateService = (function () {
      */
     StateService.prototype._handleInvalidTargetState = function (fromPath, toState) {
         var _this = this;
-        var fromState = pathFactory_1.PathUtils.makeTargetState(fromPath);
+        var fromState = pathFactory_1.PathUtils.makeTargetState(this.router.stateRegistry, fromPath);
         var globals = this.router.globals;
         var latestThing = function () { return globals.transitionHistory.peekTail(); };
         var latest = latestThing();
@@ -7018,8 +6985,7 @@ var StateService = (function () {
         options.reloadState = options.reload === true ? reg.root() : reg.matcher.find(options.reload, options.relative);
         if (options.reload && !options.reloadState)
             throw new Error("No such reload state '" + (predicates_1.isString(options.reload) ? options.reload : options.reload.name) + "'");
-        var stateDefinition = reg.matcher.find(identifier, options.relative);
-        return new targetState_1.TargetState(identifier, stateDefinition, params, options);
+        return new targetState_1.TargetState(this.router.stateRegistry, identifier, params, options);
     };
     ;
     StateService.prototype.getCurrentPath = function () {
@@ -7299,7 +7265,7 @@ var StateService = (function () {
         if (!state || !state.lazyLoad)
             throw new Error("Can not lazy load " + stateOrName);
         var currentPath = this.getCurrentPath();
-        var target = pathFactory_1.PathUtils.makeTargetState(currentPath);
+        var target = pathFactory_1.PathUtils.makeTargetState(this.router.stateRegistry, currentPath);
         transition = transition || this.router.transitionService.create(currentPath, target);
         return lazyLoad_1.lazyLoadState(transition, state);
     };
@@ -7326,7 +7292,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */ /** */
 var urlMatcherFactory_1 = __webpack_require__(/*! ./url/urlMatcherFactory */ 49);
 var urlRouter_1 = __webpack_require__(/*! ./url/urlRouter */ 50);
-var transitionService_1 = __webpack_require__(/*! ./transition/transitionService */ 36);
+var transitionService_1 = __webpack_require__(/*! ./transition/transitionService */ 35);
 var view_1 = __webpack_require__(/*! ./view/view */ 52);
 var stateRegistry_1 = __webpack_require__(/*! ./state/stateRegistry */ 46);
 var stateService_1 = __webpack_require__(/*! ./state/stateService */ 47);
@@ -7334,7 +7300,7 @@ var globals_1 = __webpack_require__(/*! ./globals */ 53);
 var common_1 = __webpack_require__(/*! ./common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ./common/predicates */ 1);
 var urlService_1 = __webpack_require__(/*! ./url/urlService */ 54);
-var trace_1 = __webpack_require__(/*! ./common/trace */ 6);
+var trace_1 = __webpack_require__(/*! ./common/trace */ 7);
 /** @hidden */
 var _routerInstance = 0;
 /**
@@ -7352,7 +7318,7 @@ var _routerInstance = 0;
  * If you are bootstrapping UIRouter manually, tell it to monitor the URL by calling
  * [[UrlService.listen]] then [[UrlService.sync]].
  */
-var UIRouter = (function () {
+var UIRouter = /** @class */ (function () {
     /**
      * Creates a new `UIRouter` object
      *
@@ -7521,16 +7487,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */ /** for typedoc */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var urlMatcher_1 = __webpack_require__(/*! ./urlMatcher */ 25);
-var param_1 = __webpack_require__(/*! ../params/param */ 12);
+var urlMatcher_1 = __webpack_require__(/*! ./urlMatcher */ 24);
+var param_1 = __webpack_require__(/*! ../params/param */ 13);
 var paramTypes_1 = __webpack_require__(/*! ../params/paramTypes */ 41);
 /**
  * Factory for [[UrlMatcher]] instances.
  *
  * The factory is available to ng1 services as
- * `$urlMatcherFactor` or ng1 providers as `$urlMatcherFactoryProvider`.
+ * `$urlMatcherFactory` or ng1 providers as `$urlMatcherFactoryProvider`.
  */
-var UrlMatcherFactory = (function () {
+var UrlMatcherFactory = /** @class */ (function () {
     function UrlMatcherFactory() {
         var _this = this;
         /** @hidden */ this.paramTypes = new paramTypes_1.ParamTypes();
@@ -7660,22 +7626,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** for typedoc */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var urlMatcher_1 = __webpack_require__(/*! ./urlMatcher */ 25);
+var urlMatcher_1 = __webpack_require__(/*! ./urlMatcher */ 24);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var urlRule_1 = __webpack_require__(/*! ./urlRule */ 51);
-var targetState_1 = __webpack_require__(/*! ../state/targetState */ 10);
+var targetState_1 = __webpack_require__(/*! ../state/targetState */ 12);
+var common_2 = __webpack_require__(/*! ../common */ 5);
 /** @hidden */
 function appendBasePath(url, isHtml5, absolute, baseHref) {
     if (baseHref === '/')
         return url;
     if (isHtml5)
-        return baseHref.slice(0, -1) + url;
+        return common_2.stripFile(baseHref) + url;
     if (absolute)
         return baseHref.slice(1) + url;
     return url;
 }
 /** @hidden */
-var getMatcher = hof_1.prop("urlMatcher");
+var prioritySort = function (a, b) {
+    return (b.priority || 0) - (a.priority || 0);
+};
+/** @hidden */
+var typeSort = function (a, b) {
+    var weights = { "STATE": 4, "URLMATCHER": 4, "REGEXP": 3, "RAW": 2, "OTHER": 1 };
+    return (weights[a.type] || 0) - (weights[b.type] || 0);
+};
+/** @hidden */
+var urlMatcherSort = function (a, b) {
+    return !a.urlMatcher || !b.urlMatcher ? 0 : urlMatcher_1.UrlMatcher.compare(a.urlMatcher, b.urlMatcher);
+};
+/** @hidden */
+var idSort = function (a, b) {
+    // Identically sorted STATE and URLMATCHER best rule will be chosen by `matchPriority` after each rule matches the URL
+    var useMatchPriority = { STATE: true, URLMATCHER: true };
+    var equal = useMatchPriority[a.type] && useMatchPriority[b.type];
+    return equal ? 0 : (a.$id || 0) - (b.$id || 0);
+};
 /**
  * Default rule priority sorting function.
  *
@@ -7684,12 +7669,25 @@ var getMatcher = hof_1.prop("urlMatcher");
  * - Explicit priority (set rule priority using [[UrlRulesApi.when]])
  * - Rule type (STATE: 4, URLMATCHER: 4, REGEXP: 3, RAW: 2, OTHER: 1)
  * - `UrlMatcher` specificity ([[UrlMatcher.compare]]): works for STATE and URLMATCHER types to pick the most specific rule.
- * - Registration order (for rule types other than STATE and URLMATCHER)
+ * - Rule registration order (for rule types other than STATE and URLMATCHER)
+ *   - Equally sorted State and UrlMatcher rules will each match the URL.
+ *     Then, the *best* match is chosen based on how many parameter values were matched.
  *
  * @coreapi
  */
 var defaultRuleSortFn;
-defaultRuleSortFn = common_1.composeSort(common_1.sortBy(hof_1.pipe(hof_1.prop("priority"), function (x) { return -x; })), common_1.sortBy(hof_1.pipe(hof_1.prop("type"), function (type) { return ({ "STATE": 4, "URLMATCHER": 4, "REGEXP": 3, "RAW": 2, "OTHER": 1 })[type]; })), function (a, b) { return (getMatcher(a) && getMatcher(b)) ? urlMatcher_1.UrlMatcher.compare(getMatcher(a), getMatcher(b)) : 0; }, common_1.sortBy(hof_1.prop("$id"), common_1.inArray(["REGEXP", "RAW", "OTHER"])));
+defaultRuleSortFn = function (a, b) {
+    var cmp = prioritySort(a, b);
+    if (cmp !== 0)
+        return cmp;
+    cmp = typeSort(a, b);
+    if (cmp !== 0)
+        return cmp;
+    cmp = urlMatcherSort(a, b);
+    if (cmp !== 0)
+        return cmp;
+    return idSort(a, b);
+};
 /**
  * Updates URL and responds to URL changes
  *
@@ -7701,7 +7699,7 @@ defaultRuleSortFn = common_1.composeSort(common_1.sortBy(hof_1.pipe(hof_1.prop("
  * This class updates the URL when the state changes.
  * It also responds to changes in the URL.
  */
-var UrlRouter = (function () {
+var UrlRouter = /** @class */ (function () {
     /** @hidden */
     function UrlRouter(router) {
         /** @hidden */ this._sortFn = defaultRuleSortFn;
@@ -7721,11 +7719,21 @@ var UrlRouter = (function () {
     };
     /** @inheritdoc */
     UrlRouter.prototype.sort = function (compareFn) {
-        this._rules.sort(this._sortFn = compareFn || this._sortFn);
+        this._rules = this.stableSort(this._rules, this._sortFn = compareFn || this._sortFn);
         this._sorted = true;
     };
     UrlRouter.prototype.ensureSorted = function () {
         this._sorted || this.sort();
+    };
+    UrlRouter.prototype.stableSort = function (arr, compareFn) {
+        var arrOfWrapper = arr.map(function (elem, idx) { return ({ elem: elem, idx: idx }); });
+        arrOfWrapper.sort(function (wrapperA, wrapperB) {
+            var cmpDiff = compareFn(wrapperA.elem, wrapperB.elem);
+            return cmpDiff === 0
+                ? wrapperA.idx - wrapperB.idx
+                : cmpDiff;
+        });
+        return arrOfWrapper.map(function (wrapper) { return wrapper.elem; });
     };
     /**
      * Given a URL, check all rules and return the best [[MatchResult]]
@@ -7941,7 +7949,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @coreapi
  * @module url
  */ /** */
-var urlMatcher_1 = __webpack_require__(/*! ./urlMatcher */ 25);
+var urlMatcher_1 = __webpack_require__(/*! ./urlMatcher */ 24);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
@@ -7956,7 +7964,7 @@ var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
  * - [[StateObject]]
  * @internalapi
  */
-var UrlRuleFactory = (function () {
+var UrlRuleFactory = /** @class */ (function () {
     function UrlRuleFactory(router) {
         this.router = router;
     }
@@ -8132,7 +8140,7 @@ exports.UrlRuleFactory = UrlRuleFactory;
  * The value from the `match` function is passed through to the `handler`.
  * @internalapi
  */
-var BaseUrlRule = (function () {
+var BaseUrlRule = /** @class */ (function () {
     function BaseUrlRule(match, handler) {
         var _this = this;
         this.match = match;
@@ -8164,7 +8172,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
-var trace_1 = __webpack_require__(/*! ../common/trace */ 6);
+var trace_1 = __webpack_require__(/*! ../common/trace */ 7);
 /**
  * The View service
  *
@@ -8181,7 +8189,7 @@ var trace_1 = __webpack_require__(/*! ../common/trace */ 6);
  * are configured with the matching [[ViewConfig]](s)
  *
  */
-var ViewService = (function () {
+var ViewService = /** @class */ (function () {
     function ViewService() {
         var _this = this;
         this._uiViews = [];
@@ -8458,14 +8466,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module core
  */ /** */
 var stateParams_1 = __webpack_require__(/*! ./params/stateParams */ 42);
-var queue_1 = __webpack_require__(/*! ./common/queue */ 32);
+var queue_1 = __webpack_require__(/*! ./common/queue */ 31);
 /**
  * Global router state
  *
  * This is where we hold the global mutable state such as current state, current
  * params, current transition, etc.
  */
-var UIRouterGlobals = (function () {
+var UIRouterGlobals = /** @class */ (function () {
     function UIRouterGlobals() {
         /**
          * Current parameter values
@@ -8520,7 +8528,7 @@ var makeStub = function (keys) {
 /**
  * API for URL management
  */
-var UrlService = (function () {
+var UrlService = /** @class */ (function () {
     /** @hidden */
     function UrlService(router, lateBind) {
         if (lateBind === void 0) { lateBind = true; }
@@ -8708,7 +8716,7 @@ var transitionHook_1 = __webpack_require__(/*! ./transitionHook */ 16);
  *
  * @interalapi
  */
-var TransitionEventType = (function () {
+var TransitionEventType = /** @class */ (function () {
     function TransitionEventType(name, hookPhase, hookOrder, criteriaMatchPath, reverseSort, getResultHandler, getErrorHandler, synchronous) {
         if (reverseSort === void 0) { reverseSort = false; }
         if (getResultHandler === void 0) { getResultHandler = transitionHook_1.TransitionHook.HANDLE_RESULT; }
@@ -8745,7 +8753,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var index_1 = __webpack_require__(/*! ../common/index */ 14);
+var index_1 = __webpack_require__(/*! ../common/index */ 5);
 /**
  * An angular1-like promise api
  *
@@ -8811,7 +8819,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var index_1 = __webpack_require__(/*! ../common/index */ 14);
+var index_1 = __webpack_require__(/*! ../common/index */ 5);
 // globally available injectables
 var globals = {};
 var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -8932,25 +8940,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var utils_1 = __webpack_require__(/*! ./utils */ 18);
-var baseLocationService_1 = __webpack_require__(/*! ./baseLocationService */ 26);
+var common_1 = __webpack_require__(/*! ../common */ 5);
+var baseLocationService_1 = __webpack_require__(/*! ./baseLocationService */ 25);
 /** A `LocationServices` that uses the browser hash "#" to get/set the current location */
-var HashLocationService = (function (_super) {
+var HashLocationService = /** @class */ (function (_super) {
     __extends(HashLocationService, _super);
     function HashLocationService(router) {
         var _this = _super.call(this, router, false) || this;
-        window.addEventListener('hashchange', _this._listener, false);
+        common_1.root.addEventListener('hashchange', _this._listener, false);
         return _this;
     }
     HashLocationService.prototype._get = function () {
-        return utils_1.trimHashVal(this._location.hash);
+        return common_1.trimHashVal(this._location.hash);
     };
     HashLocationService.prototype._set = function (state, title, url, replace) {
         this._location.hash = url;
     };
     HashLocationService.prototype.dispose = function (router) {
         _super.prototype.dispose.call(this, router);
-        window.removeEventListener('hashchange', this._listener);
+        common_1.root.removeEventListener('hashchange', this._listener);
     };
     return HashLocationService;
 }(baseLocationService_1.BaseLocationServices));
@@ -8984,9 +8992,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-var baseLocationService_1 = __webpack_require__(/*! ./baseLocationService */ 26);
+var baseLocationService_1 = __webpack_require__(/*! ./baseLocationService */ 25);
 /** A `LocationServices` that gets/sets the current location from an in-memory object */
-var MemoryLocationService = (function (_super) {
+var MemoryLocationService = /** @class */ (function (_super) {
     __extends(MemoryLocationService, _super);
     function MemoryLocationService(router) {
         return _super.call(this, router, true) || this;
@@ -9024,41 +9032,58 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = __webpack_require__(/*! ./utils */ 18);
-var baseLocationService_1 = __webpack_require__(/*! ./baseLocationService */ 26);
+var baseLocationService_1 = __webpack_require__(/*! ./baseLocationService */ 25);
+var common_1 = __webpack_require__(/*! ../common */ 5);
 /**
  * A `LocationServices` that gets/sets the current location using the browser's `location` and `history` apis
  *
  * Uses `history.pushState` and `history.replaceState`
  */
-var PushStateLocationService = (function (_super) {
+var PushStateLocationService = /** @class */ (function (_super) {
     __extends(PushStateLocationService, _super);
     function PushStateLocationService(router) {
         var _this = _super.call(this, router, true) || this;
         _this._config = router.urlService.config;
-        window.addEventListener("popstate", _this._listener, false);
+        common_1.root.addEventListener('popstate', _this._listener, false);
         return _this;
     }
     ;
+    /**
+     * Gets the base prefix without:
+     * - trailing slash
+     * - trailing filename
+     * - protocol and hostname
+     *
+     * If <base href='/base/index.html'>, this returns '/base'.
+     * If <base href='http://localhost:8080/base/index.html'>, this returns '/base'.
+     *
+     * See: https://html.spec.whatwg.org/dev/semantics.html#the-base-element
+     */
+    PushStateLocationService.prototype._getBasePrefix = function () {
+        return common_1.stripFile(this._config.baseHref());
+    };
     PushStateLocationService.prototype._get = function () {
         var _a = this._location, pathname = _a.pathname, hash = _a.hash, search = _a.search;
-        search = utils_1.splitQuery(search)[1]; // strip ? if found
-        hash = utils_1.splitHash(hash)[1]; // strip # if found
-        return pathname + (search ? "?" + search : "") + (hash ? "$" + search : "");
+        search = common_1.splitQuery(search)[1]; // strip ? if found
+        hash = common_1.splitHash(hash)[1]; // strip # if found
+        var basePrefix = this._getBasePrefix();
+        var exactMatch = pathname === this._config.baseHref();
+        var startsWith = pathname.startsWith(basePrefix);
+        pathname = exactMatch ? '/' : startsWith ? pathname.substring(basePrefix.length) : pathname;
+        return pathname + (search ? '?' + search : '') + (hash ? '#' + hash : '');
     };
     PushStateLocationService.prototype._set = function (state, title, url, replace) {
-        var _a = this, _config = _a._config, _history = _a._history;
-        var fullUrl = _config.baseHref() + url;
+        var fullUrl = this._getBasePrefix() + url;
         if (replace) {
-            _history.replaceState(state, title, fullUrl);
+            this._history.replaceState(state, title, fullUrl);
         }
         else {
-            _history.pushState(state, title, fullUrl);
+            this._history.pushState(state, title, fullUrl);
         }
     };
     PushStateLocationService.prototype.dispose = function (router) {
         _super.prototype.dispose.call(this, router);
-        window.removeEventListener("popstate", this._listener);
+        common_1.root.removeEventListener('popstate', this._listener);
     };
     return PushStateLocationService;
 }(baseLocationService_1.BaseLocationServices));
@@ -9080,7 +9105,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
 /** A `LocationConfig` mock that gets/sets all config from an in-memory object */
-var MemoryLocationConfig = (function () {
+var MemoryLocationConfig = /** @class */ (function () {
     function MemoryLocationConfig() {
         var _this = this;
         this._baseHref = '';
@@ -9120,7 +9145,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** */
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 /** A `LocationConfig` that delegates to the browser's `location` object */
-var BrowserLocationConfig = (function () {
+var BrowserLocationConfig = /** @class */ (function () {
     function BrowserLocationConfig(router, _isHtml5) {
         if (_isHtml5 === void 0) { _isHtml5 = false; }
         this._isHtml5 = _isHtml5;
@@ -9137,7 +9162,7 @@ var BrowserLocationConfig = (function () {
         return location.protocol.replace(/:/g, '');
     };
     BrowserLocationConfig.prototype.host = function () {
-        return location.host;
+        return location.hostname;
     };
     BrowserLocationConfig.prototype.html5Mode = function () {
         return this._isHtml5;
@@ -9147,11 +9172,12 @@ var BrowserLocationConfig = (function () {
     };
     ;
     BrowserLocationConfig.prototype.baseHref = function (href) {
-        return predicates_1.isDefined(href) ? this._baseHref = href : this._baseHref || this.applyDocumentBaseHref();
+        return predicates_1.isDefined(href) ? this._baseHref = href :
+            predicates_1.isDefined(this._baseHref) ? this._baseHref : this.applyDocumentBaseHref();
     };
     BrowserLocationConfig.prototype.applyDocumentBaseHref = function () {
-        var baseTags = document.getElementsByTagName("base");
-        return this._baseHref = baseTags.length ? baseTags[0].href.substr(location.origin.length) : "";
+        var baseTag = document.getElementsByTagName("base")[0];
+        return this._baseHref = baseTag ? baseTag.href.substr(location.origin.length) : "";
     };
     BrowserLocationConfig.prototype.dispose = function () { };
     return BrowserLocationConfig;
@@ -9175,7 +9201,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @reactapi
  * @module react
  */ /** */
-var core_1 = __webpack_require__(/*! @uirouter/core */ 9);
+var core_1 = __webpack_require__(/*! @uirouter/core */ 10);
 /**
  * This is a [[StateBuilder.builder]] function for react `views`.
  *
@@ -9190,7 +9216,7 @@ var core_1 = __webpack_require__(/*! @uirouter/core */ 9);
 function reactViewsBuilder(state) {
     var views = {}, viewsDefinitionObject;
     if (!state.views) {
-        viewsDefinitionObject = { "$default": core_1.pick(state, ["component"]) };
+        viewsDefinitionObject = { $default: core_1.pick(state, ['component']) };
     }
     else {
         viewsDefinitionObject = core_1.map(state.views, function (val, key) {
@@ -9200,10 +9226,10 @@ function reactViewsBuilder(state) {
         });
     }
     core_1.forEach(viewsDefinitionObject, function (config, name) {
-        name = name || "$default"; // Account for views: { "": { template... } }
+        name = name || '$default'; // Account for views: { "": { template... } }
         if (Object.keys(config).length == 0)
             return;
-        config.$type = "react";
+        config.$type = 'react';
         config.$context = state;
         config.$name = name;
         var normalized = core_1.ViewService.normalizeUIViewTarget(config.$context, config.$name);
@@ -9217,7 +9243,7 @@ exports.reactViewsBuilder = reactViewsBuilder;
 /** @internalapi */
 var id = 0;
 /** @internalapi */
-var ReactViewConfig = (function () {
+var ReactViewConfig = /** @class */ (function () {
     function ReactViewConfig(path, viewDecl) {
         this.path = path;
         this.viewDecl = viewDecl;
@@ -9260,10 +9286,10 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ./UIRouter */ 105));
-__export(__webpack_require__(/*! ./UIView */ 107));
-__export(__webpack_require__(/*! ./UISref */ 108));
-__export(__webpack_require__(/*! ./UISrefActive */ 109));
+__export(__webpack_require__(/*! ./UIRouter */ 106));
+__export(__webpack_require__(/*! ./UIView */ 108));
+__export(__webpack_require__(/*! ./UISref */ 109));
+__export(__webpack_require__(/*! ./UISrefActive */ 110));
 //# sourceMappingURL=components.js.map
 
 /***/ }),
@@ -9373,6 +9399,38 @@ exports.default = instance;
 
 /***/ }),
 /* 68 */
+/*!***********************************!*\
+  !*** (webpack)/buildin/global.js ***!
+  \***********************************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 69 */
 /*!****************************!*\
   !*** multi ./src/index.js ***!
   \****************************/
@@ -9380,11 +9438,11 @@ exports.default = instance;
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/cthielen/projects/uirouter/sample-app-react/src/index.js */69);
+module.exports = __webpack_require__(/*! /Users/cthielen/projects/uirouter/sample-app-react/src/index.js */70);
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
@@ -9399,21 +9457,21 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(/*! react-dom */ 71);
+var _reactDom = __webpack_require__(/*! react-dom */ 72);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
-var _Dialog = __webpack_require__(/*! ./global/components/Dialog */ 111);
+var _Dialog = __webpack_require__(/*! ./global/components/Dialog */ 112);
 
 var _Dialog2 = _interopRequireDefault(_Dialog);
 
-__webpack_require__(/*! whatwg-fetch */ 112);
+__webpack_require__(/*! whatwg-fetch */ 113);
 
-__webpack_require__(/*! ./styles/index.css */ 113);
+__webpack_require__(/*! ./styles/index.css */ 114);
 
-var _router = __webpack_require__(/*! ./router.config */ 118);
+var _router = __webpack_require__(/*! ./router.config */ 119);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9435,7 +9493,7 @@ _reactDom2.default.render(_react2.default.createElement(
 // polyfill fetch func
 
 /***/ }),
-/* 70 */
+/* 71 */
 /*!*****************************************************!*\
   !*** ./node_modules/react/cjs/react.development.js ***!
   \*****************************************************/
@@ -9461,12 +9519,12 @@ if (true) {
   (function() {
 'use strict';
 
-var _assign = __webpack_require__(/*! object-assign */ 29);
+var _assign = __webpack_require__(/*! object-assign */ 28);
 var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ 37);
-var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 19);
-var warning = __webpack_require__(/*! fbjs/lib/warning */ 20);
-var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ 13);
-var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ 30);
+var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 18);
+var warning = __webpack_require__(/*! fbjs/lib/warning */ 19);
+var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ 14);
+var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ 29);
 
 // TODO: this is special because it gets imported during build.
 
@@ -10804,7 +10862,7 @@ module.exports = react;
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /*!*****************************************!*\
   !*** ./node_modules/react-dom/index.js ***!
   \*****************************************/
@@ -10849,12 +10907,12 @@ if (false) {
   checkDCE();
   module.exports = require('./cjs/react-dom.production.min.js');
 } else {
-  module.exports = __webpack_require__(/*! ./cjs/react-dom.development.js */ 72);
+  module.exports = __webpack_require__(/*! ./cjs/react-dom.development.js */ 73);
 }
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /*!*************************************************************!*\
   !*** ./node_modules/react-dom/cjs/react-dom.development.js ***!
   \*************************************************************/
@@ -10881,20 +10939,20 @@ if (true) {
 'use strict';
 
 var React = __webpack_require__(/*! react */ 4);
-var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 19);
-var warning = __webpack_require__(/*! fbjs/lib/warning */ 20);
-var ExecutionEnvironment = __webpack_require__(/*! fbjs/lib/ExecutionEnvironment */ 73);
-var _assign = __webpack_require__(/*! object-assign */ 29);
-var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ 13);
-var EventListener = __webpack_require__(/*! fbjs/lib/EventListener */ 74);
-var getActiveElement = __webpack_require__(/*! fbjs/lib/getActiveElement */ 75);
-var shallowEqual = __webpack_require__(/*! fbjs/lib/shallowEqual */ 76);
-var containsNode = __webpack_require__(/*! fbjs/lib/containsNode */ 77);
-var focusNode = __webpack_require__(/*! fbjs/lib/focusNode */ 80);
+var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 18);
+var warning = __webpack_require__(/*! fbjs/lib/warning */ 19);
+var ExecutionEnvironment = __webpack_require__(/*! fbjs/lib/ExecutionEnvironment */ 74);
+var _assign = __webpack_require__(/*! object-assign */ 28);
+var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ 14);
+var EventListener = __webpack_require__(/*! fbjs/lib/EventListener */ 75);
+var getActiveElement = __webpack_require__(/*! fbjs/lib/getActiveElement */ 76);
+var shallowEqual = __webpack_require__(/*! fbjs/lib/shallowEqual */ 77);
+var containsNode = __webpack_require__(/*! fbjs/lib/containsNode */ 78);
+var focusNode = __webpack_require__(/*! fbjs/lib/focusNode */ 81);
 var emptyObject = __webpack_require__(/*! fbjs/lib/emptyObject */ 37);
-var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ 30);
-var hyphenateStyleName = __webpack_require__(/*! fbjs/lib/hyphenateStyleName */ 81);
-var camelizeStyleName = __webpack_require__(/*! fbjs/lib/camelizeStyleName */ 83);
+var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ 29);
+var hyphenateStyleName = __webpack_require__(/*! fbjs/lib/hyphenateStyleName */ 82);
+var camelizeStyleName = __webpack_require__(/*! fbjs/lib/camelizeStyleName */ 84);
 
 /**
  * WARNING: DO NOT manually require this module.
@@ -26260,7 +26318,7 @@ module.exports = reactDom;
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /*!*******************************************************!*\
   !*** ./node_modules/fbjs/lib/ExecutionEnvironment.js ***!
   \*******************************************************/
@@ -26304,7 +26362,7 @@ var ExecutionEnvironment = {
 module.exports = ExecutionEnvironment;
 
 /***/ }),
-/* 74 */
+/* 75 */
 /*!************************************************!*\
   !*** ./node_modules/fbjs/lib/EventListener.js ***!
   \************************************************/
@@ -26324,7 +26382,7 @@ module.exports = ExecutionEnvironment;
  * @typechecks
  */
 
-var emptyFunction = __webpack_require__(/*! ./emptyFunction */ 13);
+var emptyFunction = __webpack_require__(/*! ./emptyFunction */ 14);
 
 /**
  * Upstream version of event listener. Does not take into account specific
@@ -26389,7 +26447,7 @@ var EventListener = {
 module.exports = EventListener;
 
 /***/ }),
-/* 75 */
+/* 76 */
 /*!***************************************************!*\
   !*** ./node_modules/fbjs/lib/getActiveElement.js ***!
   \***************************************************/
@@ -26436,7 +26494,7 @@ function getActiveElement(doc) /*?DOMElement*/{
 module.exports = getActiveElement;
 
 /***/ }),
-/* 76 */
+/* 77 */
 /*!***********************************************!*\
   !*** ./node_modules/fbjs/lib/shallowEqual.js ***!
   \***********************************************/
@@ -26512,7 +26570,7 @@ function shallowEqual(objA, objB) {
 module.exports = shallowEqual;
 
 /***/ }),
-/* 77 */
+/* 78 */
 /*!***********************************************!*\
   !*** ./node_modules/fbjs/lib/containsNode.js ***!
   \***********************************************/
@@ -26532,7 +26590,7 @@ module.exports = shallowEqual;
  * 
  */
 
-var isTextNode = __webpack_require__(/*! ./isTextNode */ 78);
+var isTextNode = __webpack_require__(/*! ./isTextNode */ 79);
 
 /*eslint-disable no-bitwise */
 
@@ -26560,7 +26618,7 @@ function containsNode(outerNode, innerNode) {
 module.exports = containsNode;
 
 /***/ }),
-/* 78 */
+/* 79 */
 /*!*********************************************!*\
   !*** ./node_modules/fbjs/lib/isTextNode.js ***!
   \*********************************************/
@@ -26580,7 +26638,7 @@ module.exports = containsNode;
  * @typechecks
  */
 
-var isNode = __webpack_require__(/*! ./isNode */ 79);
+var isNode = __webpack_require__(/*! ./isNode */ 80);
 
 /**
  * @param {*} object The object to check.
@@ -26593,7 +26651,7 @@ function isTextNode(object) {
 module.exports = isTextNode;
 
 /***/ }),
-/* 79 */
+/* 80 */
 /*!*****************************************!*\
   !*** ./node_modules/fbjs/lib/isNode.js ***!
   \*****************************************/
@@ -26626,7 +26684,7 @@ function isNode(object) {
 module.exports = isNode;
 
 /***/ }),
-/* 80 */
+/* 81 */
 /*!********************************************!*\
   !*** ./node_modules/fbjs/lib/focusNode.js ***!
   \********************************************/
@@ -26661,7 +26719,7 @@ function focusNode(node) {
 module.exports = focusNode;
 
 /***/ }),
-/* 81 */
+/* 82 */
 /*!*****************************************************!*\
   !*** ./node_modules/fbjs/lib/hyphenateStyleName.js ***!
   \*****************************************************/
@@ -26681,7 +26739,7 @@ module.exports = focusNode;
 
 
 
-var hyphenate = __webpack_require__(/*! ./hyphenate */ 82);
+var hyphenate = __webpack_require__(/*! ./hyphenate */ 83);
 
 var msPattern = /^ms-/;
 
@@ -26708,7 +26766,7 @@ function hyphenateStyleName(string) {
 module.exports = hyphenateStyleName;
 
 /***/ }),
-/* 82 */
+/* 83 */
 /*!********************************************!*\
   !*** ./node_modules/fbjs/lib/hyphenate.js ***!
   \********************************************/
@@ -26749,7 +26807,7 @@ function hyphenate(string) {
 module.exports = hyphenate;
 
 /***/ }),
-/* 83 */
+/* 84 */
 /*!****************************************************!*\
   !*** ./node_modules/fbjs/lib/camelizeStyleName.js ***!
   \****************************************************/
@@ -26769,7 +26827,7 @@ module.exports = hyphenate;
 
 
 
-var camelize = __webpack_require__(/*! ./camelize */ 84);
+var camelize = __webpack_require__(/*! ./camelize */ 85);
 
 var msPattern = /^-ms-/;
 
@@ -26797,7 +26855,7 @@ function camelizeStyleName(string) {
 module.exports = camelizeStyleName;
 
 /***/ }),
-/* 84 */
+/* 85 */
 /*!*******************************************!*\
   !*** ./node_modules/fbjs/lib/camelize.js ***!
   \*******************************************/
@@ -26837,7 +26895,7 @@ function camelize(string) {
 module.exports = camelize;
 
 /***/ }),
-/* 85 */
+/* 86 */
 /*!*********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/params/index.js ***!
   \*********************************************************/
@@ -26851,14 +26909,14 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ./param */ 12));
+__export(__webpack_require__(/*! ./param */ 13));
 __export(__webpack_require__(/*! ./paramTypes */ 41));
 __export(__webpack_require__(/*! ./stateParams */ 42));
-__export(__webpack_require__(/*! ./paramType */ 35));
+__export(__webpack_require__(/*! ./paramType */ 34));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 86 */
+/* 87 */
 /*!*******************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/path/index.js ***!
   \*******************************************************/
@@ -26873,12 +26931,12 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @module path */ /** for typedoc */
-__export(__webpack_require__(/*! ./pathNode */ 34));
-__export(__webpack_require__(/*! ./pathFactory */ 23));
+__export(__webpack_require__(/*! ./pathNode */ 33));
+__export(__webpack_require__(/*! ./pathFactory */ 22));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 87 */
+/* 88 */
 /*!**********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/resolve/index.js ***!
   \**********************************************************/
@@ -26895,11 +26953,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module resolve */ /** for typedoc */
 __export(__webpack_require__(/*! ./interface */ 40));
 __export(__webpack_require__(/*! ./resolvable */ 17));
-__export(__webpack_require__(/*! ./resolveContext */ 24));
+__export(__webpack_require__(/*! ./resolveContext */ 23));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 88 */
+/* 89 */
 /*!********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/state/index.js ***!
   \********************************************************/
@@ -26914,16 +26972,16 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(/*! ./stateBuilder */ 43));
-__export(__webpack_require__(/*! ./stateObject */ 31));
+__export(__webpack_require__(/*! ./stateObject */ 30));
 __export(__webpack_require__(/*! ./stateMatcher */ 44));
 __export(__webpack_require__(/*! ./stateQueueManager */ 45));
 __export(__webpack_require__(/*! ./stateRegistry */ 46));
 __export(__webpack_require__(/*! ./stateService */ 47));
-__export(__webpack_require__(/*! ./targetState */ 10));
+__export(__webpack_require__(/*! ./targetState */ 12));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 89 */
+/* 90 */
 /*!******************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/coreResolvables.js ***!
   \******************************************************************/
@@ -26935,7 +26993,7 @@ __export(__webpack_require__(/*! ./targetState */ 10));
 
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @module hooks */ /** */
-var transition_1 = __webpack_require__(/*! ../transition/transition */ 22);
+var transition_1 = __webpack_require__(/*! ../transition/transition */ 21);
 var router_1 = __webpack_require__(/*! ../router */ 48);
 function addCoreResolvables(trans) {
     trans.addResolvable({ token: router_1.UIRouter, deps: [], resolveFn: function () { return trans.router; }, data: trans.router }, "");
@@ -26952,7 +27010,7 @@ exports.registerAddCoreResolvables = function (transitionService) {
 //# sourceMappingURL=coreResolvables.js.map
 
 /***/ }),
-/* 90 */
+/* 91 */
 /*!*************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/redirectTo.js ***!
   \*************************************************************/
@@ -26966,7 +27024,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module hooks */ /** */
 var predicates_1 = __webpack_require__(/*! ../common/predicates */ 1);
 var coreservices_1 = __webpack_require__(/*! ../common/coreservices */ 3);
-var targetState_1 = __webpack_require__(/*! ../state/targetState */ 10);
+var targetState_1 = __webpack_require__(/*! ../state/targetState */ 12);
 /**
  * A [[TransitionHookFn]] that redirects to a different state or params
  *
@@ -27000,7 +27058,7 @@ exports.registerRedirectToHook = function (transitionService) {
 //# sourceMappingURL=redirectTo.js.map
 
 /***/ }),
-/* 91 */
+/* 92 */
 /*!********************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/onEnterExitRetain.js ***!
   \********************************************************************/
@@ -27068,7 +27126,7 @@ exports.registerOnEnterHook = function (transitionService) {
 //# sourceMappingURL=onEnterExitRetain.js.map
 
 /***/ }),
-/* 92 */
+/* 93 */
 /*!**********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/resolve.js ***!
   \**********************************************************/
@@ -27082,7 +27140,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @module hooks */
 /** for typedoc */
 var common_1 = __webpack_require__(/*! ../common/common */ 0);
-var resolveContext_1 = __webpack_require__(/*! ../resolve/resolveContext */ 24);
+var resolveContext_1 = __webpack_require__(/*! ../resolve/resolveContext */ 23);
 var hof_1 = __webpack_require__(/*! ../common/hof */ 2);
 /**
  * A [[TransitionHookFn]] which resolves all EAGER Resolvables in the To Path
@@ -27122,7 +27180,7 @@ exports.registerLazyResolveState = function (transitionService) {
 //# sourceMappingURL=resolve.js.map
 
 /***/ }),
-/* 93 */
+/* 94 */
 /*!********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/views.js ***!
   \********************************************************/
@@ -27180,7 +27238,7 @@ exports.registerActivateViews = function (transitionService) {
 //# sourceMappingURL=views.js.map
 
 /***/ }),
-/* 94 */
+/* 95 */
 /*!****************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/updateGlobals.js ***!
   \****************************************************************/
@@ -27226,7 +27284,7 @@ exports.registerUpdateGlobalState = function (transitionService) {
 //# sourceMappingURL=updateGlobals.js.map
 
 /***/ }),
-/* 95 */
+/* 96 */
 /*!******************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/url.js ***!
   \******************************************************/
@@ -27262,7 +27320,7 @@ exports.registerUpdateUrl = function (transitionService) {
 //# sourceMappingURL=url.js.map
 
 /***/ }),
-/* 96 */
+/* 97 */
 /*!********************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/ignoredTransition.js ***!
   \********************************************************************/
@@ -27274,7 +27332,7 @@ exports.registerUpdateUrl = function (transitionService) {
 
 /** @module hooks */ /** */
 Object.defineProperty(exports, "__esModule", { value: true });
-var trace_1 = __webpack_require__(/*! ../common/trace */ 6);
+var trace_1 = __webpack_require__(/*! ../common/trace */ 7);
 var rejectFactory_1 = __webpack_require__(/*! ../transition/rejectFactory */ 15);
 /**
  * A [[TransitionHookFn]] that skips a transition if it should be ignored
@@ -27304,7 +27362,7 @@ exports.registerIgnoredTransitionHook = function (transitionService) {
 //# sourceMappingURL=ignoredTransition.js.map
 
 /***/ }),
-/* 97 */
+/* 98 */
 /*!********************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/hooks/invalidTransition.js ***!
   \********************************************************************/
@@ -27334,7 +27392,7 @@ exports.registerInvalidTransitionHook = function (transitionService) {
 //# sourceMappingURL=invalidTransition.js.map
 
 /***/ }),
-/* 98 */
+/* 99 */
 /*!*************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/transition/index.js ***!
   \*************************************************************/
@@ -27364,16 +27422,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */ /** for typedoc */
 __export(__webpack_require__(/*! ./interface */ 11));
 __export(__webpack_require__(/*! ./hookBuilder */ 39));
-__export(__webpack_require__(/*! ./hookRegistry */ 33));
+__export(__webpack_require__(/*! ./hookRegistry */ 32));
 __export(__webpack_require__(/*! ./rejectFactory */ 15));
-__export(__webpack_require__(/*! ./transition */ 22));
+__export(__webpack_require__(/*! ./transition */ 21));
 __export(__webpack_require__(/*! ./transitionHook */ 16));
 __export(__webpack_require__(/*! ./transitionEventType */ 56));
-__export(__webpack_require__(/*! ./transitionService */ 36));
+__export(__webpack_require__(/*! ./transitionService */ 35));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 99 */
+/* 100 */
 /*!******************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/url/index.js ***!
   \******************************************************/
@@ -27387,7 +27445,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ./urlMatcher */ 25));
+__export(__webpack_require__(/*! ./urlMatcher */ 24));
 __export(__webpack_require__(/*! ./urlMatcherFactory */ 49));
 __export(__webpack_require__(/*! ./urlRouter */ 50));
 __export(__webpack_require__(/*! ./urlRule */ 51));
@@ -27395,7 +27453,7 @@ __export(__webpack_require__(/*! ./urlService */ 54));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 100 */
+/* 101 */
 /*!*******************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/view/index.js ***!
   \*******************************************************/
@@ -27413,7 +27471,7 @@ __export(__webpack_require__(/*! ./view */ 52));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 101 */
+/* 102 */
 /*!****************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/vanilla.js ***!
   \****************************************************/
@@ -27432,11 +27490,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @module vanilla
  */
 /** */
-__export(__webpack_require__(/*! ./vanilla/index */ 102));
+__export(__webpack_require__(/*! ./vanilla/index */ 103));
 //# sourceMappingURL=vanilla.js.map
 
 /***/ }),
-/* 102 */
+/* 103 */
 /*!**********************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/vanilla/index.js ***!
   \**********************************************************/
@@ -27452,18 +27510,18 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(/*! ./q */ 57));
 __export(__webpack_require__(/*! ./injector */ 58));
-__export(__webpack_require__(/*! ./baseLocationService */ 26));
+__export(__webpack_require__(/*! ./baseLocationService */ 25));
 __export(__webpack_require__(/*! ./hashLocationService */ 59));
 __export(__webpack_require__(/*! ./memoryLocationService */ 60));
 __export(__webpack_require__(/*! ./pushStateLocationService */ 61));
 __export(__webpack_require__(/*! ./memoryLocationConfig */ 62));
 __export(__webpack_require__(/*! ./browserLocationConfig */ 63));
-__export(__webpack_require__(/*! ./utils */ 18));
-__export(__webpack_require__(/*! ./plugins */ 103));
+__export(__webpack_require__(/*! ./utils */ 36));
+__export(__webpack_require__(/*! ./plugins */ 104));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 103 */
+/* 104 */
 /*!************************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/vanilla/plugins.js ***!
   \************************************************************/
@@ -27481,7 +27539,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** */
 var browserLocationConfig_1 = __webpack_require__(/*! ./browserLocationConfig */ 63);
 var hashLocationService_1 = __webpack_require__(/*! ./hashLocationService */ 59);
-var utils_1 = __webpack_require__(/*! ./utils */ 18);
+var utils_1 = __webpack_require__(/*! ./utils */ 36);
 var pushStateLocationService_1 = __webpack_require__(/*! ./pushStateLocationService */ 61);
 var memoryLocationService_1 = __webpack_require__(/*! ./memoryLocationService */ 60);
 var memoryLocationConfig_1 = __webpack_require__(/*! ./memoryLocationConfig */ 62);
@@ -27503,7 +27561,7 @@ exports.memoryLocationPlugin = utils_1.locationPluginFactory("vanilla.memoryLoca
 //# sourceMappingURL=plugins.js.map
 
 /***/ }),
-/* 104 */
+/* 105 */
 /*!******************************************************!*\
   !*** ./node_modules/@uirouter/core/lib/interface.js ***!
   \******************************************************/
@@ -27525,7 +27583,7 @@ exports.memoryLocationPlugin = utils_1.locationPluginFactory("vanilla.memoryLoca
  */ /** for typedoc */
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @internalapi */
-var UIRouterPluginBase = (function () {
+var UIRouterPluginBase = /** @class */ (function () {
     function UIRouterPluginBase() {
     }
     UIRouterPluginBase.prototype.dispose = function (router) { };
@@ -27535,7 +27593,7 @@ exports.UIRouterPluginBase = UIRouterPluginBase;
 //# sourceMappingURL=interface.js.map
 
 /***/ }),
-/* 105 */
+/* 106 */
 /*!*****************************************************************!*\
   !*** ./node_modules/@uirouter/react/lib/components/UIRouter.js ***!
   \*****************************************************************/
@@ -27557,12 +27615,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __webpack_require__(/*! react */ 4);
-var PropTypes = __webpack_require__(/*! prop-types */ 7);
-var index_1 = __webpack_require__(/*! ../index */ 8);
-var core_1 = __webpack_require__(/*! @uirouter/core */ 9);
+var PropTypes = __webpack_require__(/*! prop-types */ 8);
+var core_1 = __webpack_require__(/*! @uirouter/core */ 10);
+var index_1 = __webpack_require__(/*! ../index */ 9);
 /** @hidden */
 var InstanceOrPluginsMissingError = new Error("Router instance or plugins missing.\nYou must either provide a location plugin via the plugins prop:\n\n<UIRouter plugins={[pushStateLocationPlugin]} states={[\u00B7\u00B7\u00B7]}>\n  <UIView />\n</UIRouter>\n\nor initialize the router yourself and pass the instance via props:\n\nconst router = new UIRouterReact();\nrouter.plugin(pushStateLocationPlugin);\n\u00B7\u00B7\u00B7\n<UIRouter router={router}>\n  <UIView />\n</UIRouter>\n");
-var UIRouter = (function (_super) {
+var UIRouter = /** @class */ (function (_super) {
     __extends(UIRouter, _super);
     function UIRouter(props, context) {
         var _this = _super.call(this, props, context) || this;
@@ -27576,7 +27634,8 @@ var UIRouter = (function (_super) {
             props.plugins.forEach(function (plugin) { return _this.router.plugin(plugin); });
             if (props.config)
                 props.config(_this.router);
-            (props.states || []).forEach(function (state) { return _this.router.stateRegistry.register(state); });
+            (props.states || [])
+                .forEach(function (state) { return _this.router.stateRegistry.register(state); });
         }
         else {
             throw InstanceOrPluginsMissingError;
@@ -27598,7 +27657,7 @@ var UIRouter = (function (_super) {
         router: PropTypes.object,
     };
     UIRouter.childContextTypes = {
-        router: PropTypes.object.isRequired
+        router: PropTypes.object.isRequired,
     };
     return UIRouter;
 }(react_1.Component));
@@ -27606,7 +27665,7 @@ exports.UIRouter = UIRouter;
 //# sourceMappingURL=UIRouter.js.map
 
 /***/ }),
-/* 106 */
+/* 107 */
 /*!************************************************************!*\
   !*** ./node_modules/prop-types/factoryWithTypeCheckers.js ***!
   \************************************************************/
@@ -27624,13 +27683,13 @@ exports.UIRouter = UIRouter;
 
 
 
-var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ 13);
-var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 19);
-var warning = __webpack_require__(/*! fbjs/lib/warning */ 20);
-var assign = __webpack_require__(/*! object-assign */ 29);
+var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ 14);
+var invariant = __webpack_require__(/*! fbjs/lib/invariant */ 18);
+var warning = __webpack_require__(/*! fbjs/lib/warning */ 19);
+var assign = __webpack_require__(/*! object-assign */ 28);
 
 var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ 38);
-var checkPropTypes = __webpack_require__(/*! ./checkPropTypes */ 30);
+var checkPropTypes = __webpack_require__(/*! ./checkPropTypes */ 29);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -28160,7 +28219,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /*!***************************************************************!*\
   !*** ./node_modules/@uirouter/react/lib/components/UIView.js ***!
   \***************************************************************/
@@ -28182,18 +28241,18 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __webpack_require__(/*! react */ 4);
-var PropTypes = __webpack_require__(/*! prop-types */ 7);
-var core_1 = __webpack_require__(/*! @uirouter/core */ 9);
+var PropTypes = __webpack_require__(/*! prop-types */ 8);
+var core_1 = __webpack_require__(/*! @uirouter/core */ 10);
 /** @internalapi */
 var id = 0;
-var UIView = (function (_super) {
+var UIView = /** @class */ (function (_super) {
     __extends(UIView, _super);
     function UIView() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.state = {
             loaded: false,
             component: 'div',
-            props: {}
+            props: {},
         };
         return _this;
     }
@@ -28203,11 +28262,18 @@ var UIView = (function (_super) {
         var _b = this.state, component = _b.component, props = _b.props, loaded = _b.loaded;
         // register reference of child component
         // register new hook right after component has been rendered
-        var stateName = this.uiViewAddress && this.uiViewAddress.context && this.uiViewAddress.context.name;
-        props.ref = function (c) {
-            _this.componentInstance = c;
-            _this.registerUiCanExitHook(stateName);
-        };
+        var stateName = this.uiViewAddress &&
+            this.uiViewAddress.context &&
+            this.uiViewAddress.context.name;
+        // only class components can implement the
+        // uiCanExit hook and ref doesn't work on
+        // stateless function components
+        if (typeof component !== 'string' && !!component.prototype.render) {
+            props.ref = function (c) {
+                _this.componentInstance = c;
+                _this.registerUiCanExitHook(stateName);
+            };
+        }
         var child = !loaded && react_1.isValidElement(children)
             ? react_1.cloneElement(children, props)
             : react_1.createElement(component, props);
@@ -28219,7 +28285,7 @@ var UIView = (function (_super) {
     };
     UIView.prototype.getChildContext = function () {
         return {
-            parentUIViewAddress: this.uiViewAddress
+            parentUIViewAddress: this.uiViewAddress,
         };
     };
     UIView.prototype.componentWillMount = function () {
@@ -28230,16 +28296,16 @@ var UIView = (function (_super) {
         // Check the context for the parent UIView's fqn and State
         var parent = this.context['parentUIViewAddress'];
         // Not found in context, this is a root UIView
-        parent = parent || { fqn: "", context: router.stateRegistry.root() };
-        var name = this.props.name || "$default";
+        parent = parent || { fqn: '', context: router.stateRegistry.root() };
+        var name = this.props.name || '$default';
         this.uiViewData = {
             $type: 'react',
             id: ++id,
             name: name,
-            fqn: parent.fqn ? parent.fqn + "." + name : name,
+            fqn: parent.fqn ? parent.fqn + '.' + name : name,
             creationContext: parent.context,
             configUpdated: this.viewConfigUpdated.bind(this),
-            config: undefined
+            config: undefined,
         };
         this.uiViewAddress = { fqn: this.uiViewData.fqn, context: undefined };
         this.deregister = router.viewService.registerUIView(this.uiViewData);
@@ -28261,8 +28327,12 @@ var UIView = (function (_super) {
             this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context: context };
             var ctx = new core_1.ResolveContext(newConfig.path);
             trans = ctx.getResolvable(core_1.Transition).data;
-            var stringTokens = trans.getResolveTokens().filter(function (x) { return typeof x === 'string'; });
-            resolves = stringTokens.map(function (token) { return [token, trans.injector().get(token)]; }).reduce(core_1.applyPairs, {});
+            var stringTokens = trans
+                .getResolveTokens()
+                .filter(function (x) { return typeof x === 'string'; });
+            resolves = stringTokens
+                .map(function (token) { return [token, trans.injector().get(token)]; })
+                .reduce(core_1.applyPairs, {});
         }
         this.uiViewData.config = newConfig;
         var props = { resolves: resolves, transition: trans };
@@ -28276,13 +28346,15 @@ var UIView = (function (_super) {
         this.setState({
             component: newComponent || 'div',
             props: newComponent ? core_1.extend(props, styleProps) : styleProps,
-            loaded: newComponent ? true : false
+            loaded: newComponent ? true : false,
         });
     };
     UIView.prototype.registerUiCanExitHook = function (stateName) {
         typeof this.removeHook === 'function' && this.removeHook();
         var criteria = { exiting: stateName };
-        var callback = this.componentInstance && typeof this.componentInstance.uiCanExit === 'function' && this.componentInstance.uiCanExit;
+        var callback = this.componentInstance &&
+            typeof this.componentInstance.uiCanExit === 'function' &&
+            this.componentInstance.uiCanExit;
         if (stateName && callback) {
             var transitions = this.context['router'].transitionService;
             this.removeHook = transitions.onBefore(criteria, callback, {});
@@ -28292,14 +28364,14 @@ var UIView = (function (_super) {
         name: PropTypes.string,
         className: PropTypes.string,
         style: PropTypes.object,
-        render: PropTypes.func
+        render: PropTypes.func,
     };
     UIView.childContextTypes = {
-        parentUIViewAddress: PropTypes.object
+        parentUIViewAddress: PropTypes.object,
     };
     UIView.contextTypes = {
         router: PropTypes.object,
-        parentUIViewAddress: PropTypes.object
+        parentUIViewAddress: PropTypes.object,
     };
     return UIView;
 }(react_1.Component));
@@ -28307,7 +28379,7 @@ exports.UIView = UIView;
 //# sourceMappingURL=UIView.js.map
 
 /***/ }),
-/* 108 */
+/* 109 */
 /*!***************************************************************!*\
   !*** ./node_modules/@uirouter/react/lib/components/UISref.js ***!
   \***************************************************************/
@@ -28329,17 +28401,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __webpack_require__(/*! react */ 4);
-var PropTypes = __webpack_require__(/*! prop-types */ 7);
+var PropTypes = __webpack_require__(/*! prop-types */ 8);
 var _classNames = __webpack_require__(/*! classnames */ 66);
-var core_1 = __webpack_require__(/*! @uirouter/core */ 9);
+var core_1 = __webpack_require__(/*! @uirouter/core */ 10);
 var classNames = _classNames;
-var UISref = (function (_super) {
+var UISref = /** @class */ (function (_super) {
     __extends(UISref, _super);
     function UISref() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.getOptions = function () {
             var parent = _this.context['parentUIViewAddress'];
-            var parentContext = parent && parent.context || _this.context['router'].stateRegistry.root();
+            var parentContext = (parent && parent.context) || _this.context['router'].stateRegistry.root();
             var defOpts = { relative: parentContext, inherit: true };
             return core_1.extend(defOpts, _this.props.options || {});
         };
@@ -28356,9 +28428,10 @@ var UISref = (function (_super) {
     }
     UISref.prototype.componentWillMount = function () {
         var addStateInfo = this.context['parentUiSrefActiveAddStateInfo'];
-        this.deregister = typeof addStateInfo === 'function'
-            ? addStateInfo(this.props.to, this.props.params)
-            : function () { };
+        this.deregister =
+            typeof addStateInfo === 'function'
+                ? addStateInfo(this.props.to, this.props.params)
+                : function () { };
         var router = this.context['router'];
         if (typeof router === 'undefined') {
             throw new Error("UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?");
@@ -28373,7 +28446,7 @@ var UISref = (function (_super) {
         var props = Object.assign({}, childrenProps, {
             onClick: this.handleClick,
             href: this.context['router'].stateService.href(to, params, options),
-            className: classNames(this.props.className, childrenProps.className)
+            className: classNames(this.props.className, childrenProps.className),
         });
         return react_1.cloneElement(this.props.children, props);
     };
@@ -28382,12 +28455,12 @@ var UISref = (function (_super) {
         to: PropTypes.string.isRequired,
         params: PropTypes.object,
         options: PropTypes.object,
-        className: PropTypes.string
+        className: PropTypes.string,
     };
     UISref.contextTypes = {
         router: PropTypes.object,
         parentUIViewAddress: PropTypes.object,
-        parentUiSrefActiveAddStateInfo: PropTypes.func
+        parentUiSrefActiveAddStateInfo: PropTypes.func,
     };
     return UISref;
 }(react_1.Component));
@@ -28395,7 +28468,7 @@ exports.UISref = UISref;
 //# sourceMappingURL=UISref.js.map
 
 /***/ }),
-/* 109 */
+/* 110 */
 /*!*********************************************************************!*\
   !*** ./node_modules/@uirouter/react/lib/components/UISrefActive.js ***!
   \*********************************************************************/
@@ -28417,32 +28490,35 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __webpack_require__(/*! react */ 4);
-var PropTypes = __webpack_require__(/*! prop-types */ 7);
+var PropTypes = __webpack_require__(/*! prop-types */ 8);
 var _classNames = __webpack_require__(/*! classnames */ 66);
 var classNames = _classNames;
-var UISrefActive = (function (_super) {
+var UISrefActive = /** @class */ (function (_super) {
     __extends(UISrefActive, _super);
     function UISrefActive() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         // keep track of states to watch and their activeClasses
         _this.states = [];
         _this.activeClasses = {};
+        _this.state = {
+            activeClasses: '',
+        };
         _this.addStateInfo = function (stateName, stateParams) {
             var activeClass = _this.props.class;
             var deregister = _this.addState(stateName, stateParams, activeClass);
-            _this.forceUpdate();
+            _this.updateActiveClasses();
             return deregister;
         };
         _this.addState = function (stateName, stateParams, activeClass) {
             var stateService = _this.context['router'].stateService;
             var parent = _this.context['parentUIViewAddress'];
-            var stateContext = parent && parent.context || _this.context['router'].stateRegistry.root();
+            var stateContext = (parent && parent.context) || _this.context['router'].stateRegistry.root();
             var state = stateService.get(stateName, stateContext);
             var stateHash = _this.createStateHash(stateName, stateParams);
             var stateInfo = {
                 state: state || { name: stateName },
                 params: stateParams,
-                hash: stateHash
+                hash: stateHash,
             };
             _this.states.push(stateInfo);
             _this.activeClasses[stateHash] = activeClass;
@@ -28471,13 +28547,22 @@ var UISrefActive = (function (_super) {
                 if (exact && stateService.is(state.name, params))
                     activeClasses.push(_this.activeClasses[hash]);
             });
-            return activeClasses;
+            return classNames(activeClasses);
+        };
+        _this.updateActiveClasses = function () {
+            var activeClasses = _this.state.activeClasses;
+            var newActiveClasses = _this.getActiveClasses();
+            if (activeClasses !== newActiveClasses) {
+                _this.setState({
+                    activeClasses: _this.getActiveClasses(),
+                });
+            }
         };
         return _this;
     }
     UISrefActive.prototype.getChildContext = function () {
         return {
-            parentUiSrefActiveAddStateInfo: this.addStateInfo
+            parentUiSrefActiveAddStateInfo: this.addStateInfo,
         };
     };
     UISrefActive.prototype.componentWillMount = function () {
@@ -28487,29 +28572,29 @@ var UISrefActive = (function (_super) {
             throw new Error("UIRouter instance is undefined. Did you forget to include the <UIRouter> as root component?");
         }
         // register callback for state change
-        this.deregister = this.context['router'].transitionService.onSuccess({}, function () { return _this.forceUpdate(); });
+        this.deregister = this.context['router'].transitionService.onSuccess({}, function () { return _this.updateActiveClasses(); });
     };
     UISrefActive.prototype.componentWillUnmount = function () {
         this.deregister();
     };
     UISrefActive.prototype.render = function () {
-        var activeClasses = this.getActiveClasses();
+        var activeClasses = this.state.activeClasses;
         return activeClasses.length > 0
             ? react_1.cloneElement(this.props.children, Object.assign({}, this.props.children.props, {
-                className: classNames(this.props.children.props.className, activeClasses)
+                className: classNames(this.props.children.props.className, activeClasses),
             }))
             : this.props.children;
     };
     UISrefActive.propTypes = {
         class: PropTypes.string.isRequired,
-        children: PropTypes.element.isRequired
+        children: PropTypes.element.isRequired,
     };
     UISrefActive.contextTypes = {
         router: PropTypes.object,
-        parentUIViewAddress: PropTypes.object
+        parentUIViewAddress: PropTypes.object,
     };
     UISrefActive.childContextTypes = {
-        parentUiSrefActiveAddStateInfo: PropTypes.func
+        parentUiSrefActiveAddStateInfo: PropTypes.func,
     };
     return UISrefActive;
 }(react_1.Component));
@@ -28517,7 +28602,7 @@ exports.UISrefActive = UISrefActive;
 //# sourceMappingURL=UISrefActive.js.map
 
 /***/ }),
-/* 110 */
+/* 111 */
 /*!**************************************************!*\
   !*** ./node_modules/@uirouter/react/lib/core.js ***!
   \**************************************************/
@@ -28542,7 +28627,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @reactapi
  * @module react
  */ /** */
-var core_1 = __webpack_require__(/*! @uirouter/core */ 9);
+var core_1 = __webpack_require__(/*! @uirouter/core */ 10);
 var reactViews_1 = __webpack_require__(/*! ./reactViews */ 64);
 /**
  * React View Config Factory
@@ -28560,6 +28645,8 @@ var reactViews_1 = __webpack_require__(/*! ./reactViews */ 64);
 var viewConfigFactory = function (node, config) {
     return new reactViews_1.ReactViewConfig(node, config);
 };
+/** @hidden */
+var StartMethodCalledMoreThanOnceError = new Error("\n  The Router.start() method has been called more than once.\n\n  The <UIRouter> component calls start() as final step of the initialization and you shouldn't need to call it manually.\n");
 /**
  * The main UIRouter object
  *
@@ -28568,7 +28655,7 @@ var viewConfigFactory = function (node, config) {
  *
  * This class has references to all the other UIRouter services.
  */
-var UIRouterReact = (function (_super) {
+var UIRouterReact = /** @class */ (function (_super) {
     __extends(UIRouterReact, _super);
     /**
      * Creates a new UIRouter instance
@@ -28584,8 +28671,9 @@ var UIRouterReact = (function (_super) {
      */
     function UIRouterReact() {
         var _this = _super.call(this) || this;
+        _this.started = false;
         _this.viewService._pluginapi._viewConfigFactory('react', viewConfigFactory);
-        _this.stateRegistry.decorator("views", reactViews_1.reactViewsBuilder);
+        _this.stateRegistry.decorator('views', reactViews_1.reactViewsBuilder);
         return _this;
     }
     /**
@@ -28595,9 +28683,16 @@ var UIRouterReact = (function (_super) {
      * It also performs the initial state synchronization from the URL.
      */
     UIRouterReact.prototype.start = function () {
-        this.urlMatcherFactory.$get();
-        this.urlRouter.listen();
-        this.urlRouter.sync();
+        // Throw error if user calls `start` more than once
+        if (this.started) {
+            throw StartMethodCalledMoreThanOnceError;
+        }
+        else {
+            this.urlMatcherFactory.$get();
+            this.urlRouter.listen();
+            this.urlRouter.sync();
+            this.started = true;
+        }
     };
     return UIRouterReact;
 }(core_1.UIRouter));
@@ -28605,7 +28700,7 @@ exports.UIRouterReact = UIRouterReact;
 //# sourceMappingURL=core.js.map
 
 /***/ }),
-/* 111 */
+/* 112 */
 /*!*****************************************!*\
   !*** ./src/global/components/Dialog.js ***!
   \*****************************************/
@@ -28740,7 +28835,7 @@ var Dialog = function (_Component) {
 exports.default = Dialog;
 
 /***/ }),
-/* 112 */
+/* 113 */
 /*!********************************************!*\
   !*** ./node_modules/whatwg-fetch/fetch.js ***!
   \********************************************/
@@ -29212,7 +29307,7 @@ exports.default = Dialog;
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /*!******************************!*\
   !*** ./src/styles/index.css ***!
   \******************************/
@@ -29223,7 +29318,7 @@ exports.default = Dialog;
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/postcss-loader/lib!./index.css */ 114);
+var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/postcss-loader/lib!./index.css */ 115);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -29231,7 +29326,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ 116)(content, options);
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ 117)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -29248,7 +29343,7 @@ if(false) {
 }
 
 /***/ }),
-/* 114 */
+/* 115 */
 /*!******************************************************************************************!*\
   !*** ./node_modules/css-loader!./node_modules/postcss-loader/lib!./src/styles/index.css ***!
   \******************************************************************************************/
@@ -29256,7 +29351,7 @@ if(false) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ 115)(undefined);
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ 116)(undefined);
 // imports
 
 
@@ -29267,7 +29362,7 @@ exports.push([module.i, "button.btn i + span {\n  margin-left: 0.75em;\n}\n\n.fl
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /*!*************************************************!*\
   !*** ./node_modules/css-loader/lib/css-base.js ***!
   \*************************************************/
@@ -29354,7 +29449,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
   \****************************************************/
@@ -29415,7 +29510,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(/*! ./urls */ 117);
+var	fixUrls = __webpack_require__(/*! ./urls */ 118);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -29731,7 +29826,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /*!***********************************************!*\
   !*** ./node_modules/style-loader/lib/urls.js ***!
   \***********************************************/
@@ -29831,7 +29926,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /*!******************************!*\
   !*** ./src/router.config.js ***!
   \******************************/
@@ -29847,19 +29942,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.router = undefined;
 
-var _react = __webpack_require__(/*! @uirouter/react */ 8);
+var _react = __webpack_require__(/*! @uirouter/react */ 9);
 
-var _visualizer = __webpack_require__(/*! @uirouter/visualizer */ 119);
+var _visualizer = __webpack_require__(/*! @uirouter/visualizer */ 120);
 
-var _states = __webpack_require__(/*! ./main/states */ 120);
+var _states = __webpack_require__(/*! ./main/states */ 121);
 
 var _states2 = _interopRequireDefault(_states);
 
-var _requiresAuth = __webpack_require__(/*! ./global/requiresAuth.hook */ 127);
+var _requiresAuth = __webpack_require__(/*! ./global/requiresAuth.hook */ 128);
 
 var _requiresAuth2 = _interopRequireDefault(_requiresAuth);
 
-var _ga = __webpack_require__(/*! ./util/ga */ 128);
+var _ga = __webpack_require__(/*! ./util/ga */ 129);
 
 var _ga2 = _interopRequireDefault(_ga);
 
@@ -29869,6 +29964,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = exports.router = new _react.UIRouterReact();
 router.plugin(_react.servicesPlugin);
 router.plugin(_react.hashLocationPlugin);
+router.plugin(_visualizer.Visualizer);
 
 // Register the initial (eagerly loaded) states
 _states2.default.forEach(function (state) {
@@ -29884,14 +29980,8 @@ router.transitionService.onBefore(_requiresAuth2.default.criteria, _requiresAuth
 
 (0, _ga2.default)(router.transitionService);
 
-// Start the router
-router.start();
-
-// Setup the state visualizer
-(0, _visualizer.visualizer)(router);
-
 /***/ }),
-/* 119 */
+/* 120 */
 /*!****************************************************************************!*\
   !*** ./node_modules/@uirouter/visualizer/_bundles/ui-router-visualizer.js ***!
   \****************************************************************************/
@@ -29901,7 +29991,7 @@ router.start();
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(true)
-		module.exports = factory(__webpack_require__(/*! @uirouter/core */ 9));
+		module.exports = factory(__webpack_require__(/*! @uirouter/core */ 10));
 	else if(typeof define === 'function' && define.amd)
 		define("ui-router-visualizer", ["@uirouter/core"], factory);
 	else if(typeof exports === 'object')
@@ -36918,7 +37008,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf
 //# sourceMappingURL=ui-router-visualizer.js.map
 
 /***/ }),
-/* 120 */
+/* 121 */
 /*!****************************!*\
   !*** ./src/main/states.js ***!
   \****************************/
@@ -36934,19 +37024,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.mymessagesFutureState = exports.prefsFutureState = exports.contactsFutureState = undefined;
 
-var _App = __webpack_require__(/*! ../main/App */ 121);
+var _App = __webpack_require__(/*! ../main/App */ 122);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _Welcome = __webpack_require__(/*! ../main/Welcome */ 123);
+var _Welcome = __webpack_require__(/*! ../main/Welcome */ 124);
 
 var _Welcome2 = _interopRequireDefault(_Welcome);
 
-var _Login = __webpack_require__(/*! ../main/Login */ 124);
+var _Login = __webpack_require__(/*! ../main/Login */ 125);
 
 var _Login2 = _interopRequireDefault(_Login);
 
-var _Home = __webpack_require__(/*! ../main/Home */ 126);
+var _Home = __webpack_require__(/*! ../main/Home */ 127);
 
 var _Home2 = _interopRequireDefault(_Home);
 
@@ -37033,7 +37123,7 @@ var contactsFutureState = exports.contactsFutureState = {
   name: 'contacts.**',
   url: '/contacts',
   lazyLoad: function lazyLoad() {
-    return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, /*! ../contacts/states */ 129));
+    return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, /*! ../contacts/states */ 130));
   }
 };
 
@@ -37043,7 +37133,7 @@ var prefsFutureState = exports.prefsFutureState = {
   name: 'prefs.**',
   url: '/prefs',
   lazyLoad: function lazyLoad() {
-    return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, /*! ../prefs/states */ 130));
+    return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, /*! ../prefs/states */ 131));
   }
 };
 
@@ -37053,14 +37143,14 @@ var mymessagesFutureState = exports.mymessagesFutureState = {
   name: 'mymessages.**',
   url: '/mymessages',
   lazyLoad: function lazyLoad() {
-    return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, /*! ../mymessages/states */ 131));
+    return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, /*! ../mymessages/states */ 132));
   }
 };
 
 exports.default = [appState, welcomeState, homeState, loginState, contactsFutureState, prefsFutureState, mymessagesFutureState];
 
 /***/ }),
-/* 121 */
+/* 122 */
 /*!*************************!*\
   !*** ./src/main/App.js ***!
   \*************************/
@@ -37081,13 +37171,13 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
-var _authService = __webpack_require__(/*! ../global/authService */ 27);
+var _authService = __webpack_require__(/*! ../global/authService */ 26);
 
 var _authService2 = _interopRequireDefault(_authService);
 
-var _NavHeader = __webpack_require__(/*! ./components/NavHeader */ 122);
+var _NavHeader = __webpack_require__(/*! ./components/NavHeader */ 123);
 
 var _NavHeader2 = _interopRequireDefault(_NavHeader);
 
@@ -37145,7 +37235,7 @@ var App = function (_Component) {
 exports.default = App;
 
 /***/ }),
-/* 122 */
+/* 123 */
 /*!******************************************!*\
   !*** ./src/main/components/NavHeader.js ***!
   \******************************************/
@@ -37166,17 +37256,17 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
-var _appConfig = __webpack_require__(/*! ../../global/appConfig */ 28);
+var _appConfig = __webpack_require__(/*! ../../global/appConfig */ 27);
 
 var _appConfig2 = _interopRequireDefault(_appConfig);
 
-var _authService = __webpack_require__(/*! ../../global/authService */ 27);
+var _authService = __webpack_require__(/*! ../../global/authService */ 26);
 
 var _authService2 = _interopRequireDefault(_authService);
 
@@ -37321,7 +37411,7 @@ NavHeader.propTypes = {
 exports.default = NavHeader;
 
 /***/ }),
-/* 123 */
+/* 124 */
 /*!*****************************!*\
   !*** ./src/main/Welcome.js ***!
   \*****************************/
@@ -37342,7 +37432,7 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37477,7 +37567,7 @@ var Welcome = function (_Component) {
 exports.default = Welcome;
 
 /***/ }),
-/* 124 */
+/* 125 */
 /*!***************************!*\
   !*** ./src/main/Login.js ***!
   \***************************/
@@ -37498,19 +37588,19 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _authService = __webpack_require__(/*! ../global/authService */ 27);
+var _authService = __webpack_require__(/*! ../global/authService */ 26);
 
 var _authService2 = _interopRequireDefault(_authService);
 
-var _appConfig = __webpack_require__(/*! ../global/appConfig */ 28);
+var _appConfig = __webpack_require__(/*! ../global/appConfig */ 27);
 
 var _appConfig2 = _interopRequireDefault(_appConfig);
 
-var _LoginForm = __webpack_require__(/*! ./components/LoginForm */ 125);
+var _LoginForm = __webpack_require__(/*! ./components/LoginForm */ 126);
 
 var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
@@ -37631,7 +37721,7 @@ Login.propTypes = {
 exports.default = Login;
 
 /***/ }),
-/* 125 */
+/* 126 */
 /*!******************************************!*\
   !*** ./src/main/components/LoginForm.js ***!
   \******************************************/
@@ -37652,7 +37742,7 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -37830,7 +37920,7 @@ ng-disabled="$ctrl.authenticating" ng-click="$ctrl.login($ctrl.credentials)">
 */
 
 /***/ }),
-/* 126 */
+/* 127 */
 /*!**************************!*\
   !*** ./src/main/Home.js ***!
   \**************************/
@@ -37851,7 +37941,7 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37946,7 +38036,7 @@ var Home = function (_Component) {
 exports.default = Home;
 
 /***/ }),
-/* 127 */
+/* 128 */
 /*!*****************************************!*\
   !*** ./src/global/requiresAuth.hook.js ***!
   \*****************************************/
@@ -37961,7 +38051,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _authService = __webpack_require__(/*! ./authService */ 27);
+var _authService = __webpack_require__(/*! ./authService */ 26);
 
 var _authService2 = _interopRequireDefault(_authService);
 
@@ -37996,7 +38086,7 @@ var hook = {
 exports.default = hook;
 
 /***/ }),
-/* 128 */
+/* 129 */
 /*!************************!*\
   !*** ./src/util/ga.js ***!
   \************************/

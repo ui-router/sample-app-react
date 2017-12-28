@@ -1,6 +1,6 @@
 webpackJsonp([2],{
 
-/***/ 130:
+/***/ 131:
 /*!*****************************!*\
   !*** ./src/prefs/states.js ***!
   \*****************************/
@@ -59,7 +59,7 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _appConfig = __webpack_require__(/*! ../global/appConfig */ 28);
+var _appConfig = __webpack_require__(/*! ../global/appConfig */ 27);
 
 var _appConfig2 = _interopRequireDefault(_appConfig);
 

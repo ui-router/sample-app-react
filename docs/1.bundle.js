@@ -1,6 +1,6 @@
 webpackJsonp([1],{
 
-/***/ 129:
+/***/ 130:
 /*!********************************!*\
   !*** ./src/contacts/states.js ***!
   \********************************/
@@ -16,7 +16,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.states = undefined;
 
-var _dataSources = __webpack_require__(/*! ../global/dataSources */ 132);
+var _dataSources = __webpack_require__(/*! ../global/dataSources */ 133);
 
 var _Contacts = __webpack_require__(/*! ./Contacts */ 139);
 
@@ -106,7 +106,7 @@ var states = exports.states = [contactsState, viewContactState, editContactState
 
 /***/ }),
 
-/***/ 132:
+/***/ 133:
 /*!***********************************!*\
   !*** ./src/global/dataSources.js ***!
   \***********************************/
@@ -124,9 +124,9 @@ exports.MessagesStorage = exports.FoldersStorage = exports.ContactsStorage = und
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _sessionStorage = __webpack_require__(/*! ../util/sessionStorage */ 134);
+var _sessionStorage = __webpack_require__(/*! ../util/sessionStorage */ 135);
 
-var _appConfig = __webpack_require__(/*! ./appConfig */ 28);
+var _appConfig = __webpack_require__(/*! ./appConfig */ 27);
 
 var _appConfig2 = _interopRequireDefault(_appConfig);
 
@@ -219,7 +219,7 @@ exports.MessagesStorage = MessagesStorage;
 
 /***/ }),
 
-/***/ 133:
+/***/ 134:
 /*!***************************************!*\
   !*** ./node_modules/lodash/lodash.js ***!
   \***************************************/
@@ -17313,11 +17313,11 @@ exports.MessagesStorage = MessagesStorage;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 136), __webpack_require__(/*! ./../webpack/buildin/module.js */ 137)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 68), __webpack_require__(/*! ./../webpack/buildin/module.js */ 137)(module)))
 
 /***/ }),
 
-/***/ 134:
+/***/ 135:
 /*!************************************!*\
   !*** ./src/util/sessionStorage.js ***!
   \************************************/
@@ -17333,9 +17333,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SessionStorage = undefined;
 
-var _util = __webpack_require__(/*! ./util */ 135);
+var _util = __webpack_require__(/*! ./util */ 136);
 
-var _appConfig = __webpack_require__(/*! ../global/appConfig */ 28);
+var _appConfig = __webpack_require__(/*! ../global/appConfig */ 27);
 
 var _appConfig2 = _interopRequireDefault(_appConfig);
 
@@ -17511,7 +17511,7 @@ var _initialiseProps = function _initialiseProps() {
 
 /***/ }),
 
-/***/ 135:
+/***/ 136:
 /*!**************************!*\
   !*** ./src/util/util.js ***!
   \**************************/
@@ -17545,39 +17545,6 @@ var guidChar = function guidChar(c) {
 var guid = exports.guid = function guid() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".split("").map(guidChar).join("");
 };
-
-/***/ }),
-
-/***/ 136:
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! dynamic exports provided */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
 
 /***/ }),
 
@@ -17636,11 +17603,11 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
 var _ContactList = __webpack_require__(/*! ./components/ContactList */ 140);
 
@@ -17724,11 +17691,11 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17849,11 +17816,11 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
 var _ContactDetail = __webpack_require__(/*! ./components/ContactDetail */ 142);
 
@@ -17966,7 +17933,7 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -18119,19 +18086,19 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _react3 = __webpack_require__(/*! @uirouter/react */ 8);
+var _react3 = __webpack_require__(/*! @uirouter/react */ 9);
 
-var _lodash = __webpack_require__(/*! lodash */ 133);
+var _lodash = __webpack_require__(/*! lodash */ 134);
 
 var _ContactForm = __webpack_require__(/*! ./components/ContactForm */ 144);
 
 var _ContactForm2 = _interopRequireDefault(_ContactForm);
 
-var _dataSources = __webpack_require__(/*! ../global/dataSources */ 132);
+var _dataSources = __webpack_require__(/*! ../global/dataSources */ 133);
 
 var _dialogService = __webpack_require__(/*! ../global/dialogService */ 67);
 
@@ -18307,11 +18274,11 @@ var _react = __webpack_require__(/*! react */ 4);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(/*! prop-types */ 7);
+var _propTypes = __webpack_require__(/*! prop-types */ 8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _lodash = __webpack_require__(/*! lodash */ 133);
+var _lodash = __webpack_require__(/*! lodash */ 134);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
