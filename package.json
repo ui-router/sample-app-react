@@ -6,9 +6,11 @@
     "start": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 3000 --config webpack.config.js --history-api-fallback --content-base ./",
     "build": "rimraf docs && mkdirp docs && cp index.html docs/index.html && NODE_ENV=production webpack",
     "test": "run-s build e2e",
+    "test:ui": "run-s build && run-p -r browser-sync cypress:ui",
     "e2e": "run-p -r browser-sync cypress",
-    "browser-sync": "browser-sync start --port 4000 --server docs --no-open",
     "cypress": "wait-on tcp:4000 && cypress run",
+    "cypress:ui": "wait-on tcp:4000 && cypress open",
+    "browser-sync": "browser-sync start --port 4000 --server docs --no-open",
     "gh-pages": "npm run build && git add docs && git commit -m 'update github pages' docs && git push"
   },
   "author": "",
