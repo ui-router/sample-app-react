@@ -9582,7 +9582,7 @@ module.exports = g;
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/elbo/Code/ui-router/sample-app-react/src/index.js */72);
+module.exports = __webpack_require__(/*! /Users/cthielen/projects/uirouter/sample-app-react/src/index.js */72);
 
 
 /***/ }),
@@ -29422,30 +29422,49 @@ exports.default = Dialog;
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
 
-// load the styles
 var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/postcss-loader/lib!./index.css */ 115);
+
 if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
+
 var transform;
+var insertInto;
+
+
 
 var options = {"hmr":true}
+
 options.transform = transform
-// add the styles to the DOM
+options.insertInto = undefined;
+
 var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ 117)(content, options);
+
 if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
+
 if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/postcss-loader/lib/index.js!./index.css", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/postcss-loader/lib/index.js!./index.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
+	module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/postcss-loader/lib/index.js!./index.css", function() {
+		var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/postcss-loader/lib/index.js!./index.css");
+
+		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+
+		var locals = (function(a, b) {
+			var key, idx = 0;
+
+			for(key in a) {
+				if(!b || a[key] !== b[key]) return false;
+				idx++;
+			}
+
+			for(key in b) idx--;
+
+			return idx === 0;
+		}(content.locals, newContent.locals));
+
+		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
+
+		update(newContent);
+	});
+
 	module.hot.dispose(function() { update(); });
 }
 
@@ -29458,7 +29477,7 @@ if(false) {
 /*! all exports used */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ 116)(undefined);
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ 116)(false);
 // imports
 
 
@@ -29589,14 +29608,26 @@ var isOldIE = memoize(function () {
 	return window && document && document.all && !window.atob;
 });
 
+var getTarget = function (target) {
+  return document.querySelector(target);
+};
+
 var getElement = (function (fn) {
 	var memo = {};
 
-	return function(selector) {
-		if (typeof memo[selector] === "undefined") {
-			var styleTarget = fn.call(this, selector);
+	return function(target) {
+                // If passing function in options, then use it for resolve "head" element.
+                // Useful for Shadow Root style i.e
+                // {
+                //   insertInto: function () { return document.querySelector("#foo").shadowRoot }
+                // }
+                if (typeof target === 'function') {
+                        return target();
+                }
+                if (typeof memo[target] === "undefined") {
+			var styleTarget = getTarget.call(this, target);
 			// Special case to return head of iframe instead of iframe itself
-			if (styleTarget instanceof window.HTMLIFrameElement) {
+			if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
 				try {
 					// This will throw an exception if access to iframe is blocked
 					// due to cross-origin restrictions
@@ -29605,13 +29636,11 @@ var getElement = (function (fn) {
 					styleTarget = null;
 				}
 			}
-			memo[selector] = styleTarget;
+			memo[target] = styleTarget;
 		}
-		return memo[selector]
+		return memo[target]
 	};
-})(function (target) {
-	return document.querySelector(target)
-});
+})();
 
 var singleton = null;
 var	singletonCounter = 0;
@@ -29633,7 +29662,7 @@ module.exports = function(list, options) {
 	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
 
 	// By default, add <style> tags to the <head> element
-	if (!options.insertInto) options.insertInto = "head";
+        if (!options.insertInto) options.insertInto = "head";
 
 	// By default, add <style> tags to the bottom of the target
 	if (!options.insertAt) options.insertAt = "bottom";
@@ -30098,14 +30127,14 @@ router.transitionService.onBefore(_requiresAuth2.default.criteria, _requiresAuth
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(true)
-		module.exports = factory(__webpack_require__(/*! @uirouter/core */ 10));
+		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("ui-router-visualizer", ["@uirouter/core"], factory);
+		define("ui-router-visualizer", [], factory);
 	else if(typeof exports === 'object')
-		exports["ui-router-visualizer"] = factory(require("@uirouter/core"));
+		exports["ui-router-visualizer"] = factory();
 	else
-		root["ui-router-visualizer"] = factory(root["@uirouter/core"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_97__) {
+		root["ui-router-visualizer"] = factory();
+})(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -33580,72 +33609,111 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
 var modal_1 = __webpack_require__(35);
-var resolveData_1 = __webpack_require__(93);
+var ResolveData_1 = __webpack_require__(93);
 var strings_1 = __webpack_require__(15);
-var isObject = function (val) { return typeof val === 'object'; };
-var displayValue = function (object) {
-    if (object === undefined)
-        return "undefined";
-    if (object === null)
-        return "null";
-    if (typeof object === 'string')
-        return '"' + strings_1.maxLength(100, object) + '"';
-    if (Array.isArray(object))
-        return "[Array]";
-    if (isObject(object))
-        return "[Object]";
-    if (typeof object.toString === 'function')
-        return strings_1.maxLength(100, object.toString());
-    return object;
-};
-var defaultClass = {
-    outerdiv: 'param',
-    keyvaldiv: 'keyvalue',
-    section: 'paramslabel deemphasize',
-    _key: 'paramid',
-    value: 'paramvalue'
-};
+var KeyValueRow = /** @class */ (function (_super) {
+    __extends(KeyValueRow, _super);
+    function KeyValueRow() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    KeyValueRow.prototype.render = function () {
+        var _a = this.props, _b = _a.tuple, key = _b.key, val = _b.val, classes = _a.classes, modalTitle = _a.modalTitle;
+        var showModal = function () {
+            return modal_1.Modal.show(modalTitle, key, val, ResolveData_1.ResolveData);
+        };
+        var renderValue = function () {
+            if (val === undefined)
+                return preact_1.h("span", { className: "uirTranVis_code" }, "undefined");
+            if (val === null)
+                return preact_1.h("span", { className: "uirTranVis_code" }, "null");
+            if (typeof val === 'string')
+                return preact_1.h("span", { className: "uirTranVis_code" },
+                    "\"",
+                    strings_1.maxLength(100, val),
+                    "\"");
+            if (typeof val === 'number')
+                return preact_1.h("span", { className: "uirTranVis_code" }, val.toString());
+            if (typeof val === 'boolean')
+                return preact_1.h("span", { className: "uirTranVis_code" }, val.toString());
+            if (Array.isArray(val))
+                return preact_1.h("span", { className: "link", onClick: showModal }, "[Array]");
+            if (typeof val === 'object')
+                return preact_1.h("span", { className: "link", onClick: showModal }, "[Object]");
+            if (typeof val.toString === 'function')
+                return preact_1.h("span", null, strings_1.maxLength(100, val.toString()));
+        };
+        return (preact_1.h("div", { className: classes.div },
+            preact_1.h("div", { className: classes.key },
+                key,
+                ":"),
+            preact_1.h("div", { className: classes.val }, renderValue())));
+    };
+    return KeyValueRow;
+}(preact_1.Component));
+exports.KeyValueRow = KeyValueRow;
 var KeysAndValues = /** @class */ (function (_super) {
     __extends(KeysAndValues, _super);
     function KeysAndValues() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.isEmpty = function () {
-            return !_this.props.data || Object.keys(_this.props.data).length === 0;
-        };
-        _this.class = function (name) {
-            return _this.props.classes && _this.props.classes[name] !== undefined ?
-                _this.props.classes[name] :
-                defaultClass[name];
-        };
+        _this.state = { collapseFalsy: true };
         return _this;
     }
+    KeysAndValues.prototype.makeBuckets = function (definitions, data) {
+        var makeBucket = function (def) { return ({
+            label: def.label,
+            is: function (val) { return val === def.value; },
+            value: def.value,
+            count: 0,
+            data: {},
+        }); };
+        var defaultBucket = {
+            label: 'default',
+            is: function () { return true; },
+            count: 0,
+            data: {},
+        };
+        var buckets = definitions.map(makeBucket).concat(defaultBucket);
+        Object.keys(data).forEach(function (key) {
+            var bucket = buckets.find(function (bucket) { return bucket.is(data[key]); });
+            bucket.data[key] = data[key];
+            bucket.value = data[key];
+            bucket.count++;
+        });
+        return buckets;
+    };
     KeysAndValues.prototype.render = function () {
         var _this = this;
-        var renderValue = function (key, val) {
-            if (isObject(val))
-                return (preact_1.h("span", { className: "link", onClick: function () { return modal_1.Modal.show(_this.props.labels, key, val, resolveData_1.ResolveData); } }, "[Object]"));
-            return (preact_1.h("div", { className: _this.props.classes.value }, displayValue(val)));
-        };
-        if (this.isEmpty())
-            return null;
-        var keys = Object.keys(this.props.data);
-        var defineds = keys.filter(function (key) { return _this.props.data[key] !== undefined; });
-        var undefineds = keys.filter(function (key) { return _this.props.data[key] === undefined; });
-        var renderKeyValues = function (keys) {
-            return keys.map(function (key) {
-                return preact_1.h("div", { key: key, className: _this.class('keyvaldiv') },
-                    preact_1.h("div", { className: _this.class('_key') },
-                        key,
-                        ":"),
-                    preact_1.h("div", { className: _this.class('value') }, renderValue(key, _this.props.data[key])));
-            });
-        };
-        var renderUndefineds = function (keys) { return renderKeyValues([keys.join(', ')]); };
-        return (preact_1.h("div", { className: this.class('outerdiv') },
-            preact_1.h("div", { className: this.class('section') }, this.props.labels.section),
-            renderKeyValues(defineds),
-            undefineds.length > 2 && renderUndefineds(undefineds)));
+        var _a = this.props, data = _a.data, classes = _a.classes, modalTitle = _a.modalTitle;
+        var groupedValues = this.props.groupedValues || KeysAndValues.falsyGroupDefinitions;
+        var enableGroupToggle = this.props.enableGroupToggle || false;
+        var isCollapsed = this.state.collapseFalsy;
+        var buckets = this.makeBuckets(groupedValues, data);
+        var defaultBucket = buckets.find(function (bucket) { return bucket.label === 'default'; });
+        var groupedBuckets = buckets.filter(function (bucket) { return !!bucket.count && bucket !== defaultBucket; });
+        var groupedCount = groupedBuckets.reduce(function (total, bucket) { return total += bucket.count; }, 0);
+        var tuples = Object.keys(defaultBucket.data).map(function (key) { return ({ key: key, val: defaultBucket.data[key] }); });
+        var groupedTuples = groupedBuckets.map(function (bucket) {
+            var key = Object.keys(bucket.data).sort().join(', ');
+            var val = bucket.value;
+            return { key: key, val: val };
+        });
+        var showGroupToggle = enableGroupToggle && groupedCount > 1;
+        return (preact_1.h("div", { className: "uirTranVis_keysAndValues" },
+            tuples.map(function (tuple) { return (preact_1.h(KeyValueRow, { key: tuple.key, tuple: tuple, classes: classes, modalTitle: modalTitle })); }),
+            showGroupToggle && !!groupedTuples.length && (preact_1.h("a", { href: "javascript:void(0)", onClick: function () { return _this.setState({ collapseFalsy: !isCollapsed }); }, className: "uirTranVis_keyValue" },
+                isCollapsed ? 'show' : 'hide',
+                " ",
+                groupedCount,
+                " ",
+                groupedBuckets.map(function (bucket) { return bucket.label; }).join(' or '),
+                " parameter values")),
+            (!showGroupToggle || !this.state.collapseFalsy) && (groupedTuples.map(function (tuple) { return (preact_1.h(KeyValueRow, { key: tuple.key, tuple: tuple, classes: classes, modalTitle: modalTitle })); }))));
     };
+    KeysAndValues.falsyGroupDefinitions = [
+        { value: undefined, label: 'undefined' },
+        { value: null, label: 'null' },
+        { value: '', label: 'empty string' },
+    ];
     return KeysAndValues;
 }(preact_1.Component));
 exports.KeysAndValues = KeysAndValues;
@@ -33684,21 +33752,21 @@ var Modal = /** @class */ (function (_super) {
     Modal.prototype.render = function () {
         var _this = this;
         return (preact_1.h("div", { ref: function (ref) { return _this._ref = ref; } },
-            preact_1.h("div", { className: "uir-modal-backdrop uir-fade", style: { zIndex: 1040 } }),
-            preact_1.h("div", { tabIndex: -1, className: "uir-modal uir-fade", style: { zIndex: 1050, display: "block" } },
-                preact_1.h("div", { className: "uir-modal-dialog modal-lg" },
-                    preact_1.h("div", { className: "uir-modal-content" }, this.props.children)))));
+            preact_1.h("div", { className: "uirTranVis_modal-backdrop uir-fade", style: { zIndex: 1040 } }),
+            preact_1.h("div", { tabIndex: -1, className: "uirTranVis_modal uir-fade", style: { zIndex: 1050, display: "block" } },
+                preact_1.h("div", { className: "uirTranVis_modal-dialog modal-lg" },
+                    preact_1.h("div", { className: "uirTranVis_modal-content" }, this.props.children)))));
     };
-    Modal.show = function (labels, key, value, component) {
-        var modal = document.body.querySelector("#uir-modal");
+    Modal.show = function (modalTitle, id, value, component) {
+        var modal = document.body.querySelector("#uirTranVis_modal");
         if (!modal) {
             modal = document.createElement("div");
-            modal.id = "uir-modal";
+            modal.id = "uirTranVis_modal";
             document.body.appendChild(modal);
         }
         var Nothing = function () { return null; };
         var close = function () { return preact_1.render(preact_1.h(Nothing, null), document.body, modal); };
-        preact_1.render(preact_1.h(component, { close: close, labels: labels, key: key, value: value }), modal);
+        preact_1.render(preact_1.h(component, { close: close, modalTitle: modalTitle, id: id, value: value }), modal);
     };
     return Modal;
 }(preact_1.Component));
@@ -33726,8 +33794,8 @@ var StateVisualizer_1 = __webpack_require__(38);
 exports.StateVisualizer = StateVisualizer_1.StateVisualizer;
 var StateTree_1 = __webpack_require__(18);
 exports.StateTree = StateTree_1.StateTree;
-var transitionVisualizer_1 = __webpack_require__(88);
-exports.TransitionVisualizer = transitionVisualizer_1.TransitionVisualizer;
+var TransitionVisualizer_1 = __webpack_require__(88);
+exports.TransitionVisualizer = TransitionVisualizer_1.TransitionVisualizer;
 var visualizer = function (router) { return new Visualizer(router, {}); };
 exports.visualizer = visualizer;
 function unmountComponent(node) {
@@ -33747,7 +33815,7 @@ var Visualizer = /** @class */ (function () {
             this.stateVisualizerEl = StateVisualizer_1.StateVisualizer.create(router);
         }
         if (options.transition) {
-            this.transitionVisualizerEl = transitionVisualizer_1.TransitionVisualizer.create(router);
+            this.transitionVisualizerEl = TransitionVisualizer_1.TransitionVisualizer.create(router);
         }
     }
     Visualizer.prototype.dispose = function (router) {
@@ -33896,14 +33964,13 @@ var StateVisualizer = /** @class */ (function (_super) {
         if (this.props.minimizeAfter) {
             var doMinimize = function () { return _this.setState({ minimized: true }); };
             this.minimizeTimeout = setTimeout(doMinimize, this.props.minimizeAfter);
-            console.log("timeout:", this.minimizeTimeout);
         }
     };
     StateVisualizer.prototype.render = function () {
         var _this = this;
         var minimized = this.state.minimized;
         return (preact_1.h("div", { ref: function (el) { return _this.el = el; }, onMouseDown: this.cancelAutoMinimize.bind(this), onMouseEnter: this.cancelAutoMinimize.bind(this) },
-            preact_1.h(StateVisWindow_1.StateVisWindow, { minimized: this.state.minimized, ref: function (windowRef) { return _this.windowEl = windowRef.el; }, onResize: function (_a) {
+            preact_1.h(StateVisWindow_1.StateVisWindow, { minimized: this.state.minimized, ref: function (windowRef) { return _this.windowEl = windowRef && windowRef.el || _this.windowEl; }, onResize: function (_a) {
                     var width = _a.width, height = _a.height;
                     return _this.setState({ width: width, height: height });
                 } },
@@ -35807,7 +35874,7 @@ var Controls = /** @class */ (function (_super) {
                 preact_1.h(StateSelector_1.StateSelector, { router: this.props.router }),
                 preact_1.h("div", { style: { marginLeft: 'auto', cursor: 'pointer' }, className: "uirStateVisIcons" },
                     preact_1.h("span", { className: "uirStateVisHover" },
-                        preact_1.h(Help_1.Help, null),
+                        preact_1.h(Help_1.Help, { size: "16px" }),
                         preact_1.h("div", { className: "hoverBlock" },
                             preact_1.h("ul", null,
                                 preact_1.h("li", null, "Click a node to activate that state."),
@@ -35815,16 +35882,16 @@ var Controls = /** @class */ (function (_super) {
                                 preact_1.h("li", null, "Double click a node to auto-collapse that section of the tree when inactive. Collapsed nodes are displayed with a dotted outline and the count of collapsed children."),
                                 preact_1.h("li", null, "Lazy loaded states (including future states) are displayed with a dashed outline.")))),
                     preact_1.h("span", { className: "uirStateVisHover" },
-                        preact_1.h(Gear_1.Gear, null),
+                        preact_1.h(Gear_1.Gear, { size: "16px" }),
                         preact_1.h("div", { className: "hoverBlock" },
                             preact_1.h(LayoutPrefs_1.LayoutPrefs, { onRendererChange: this.props.onRendererChange }))),
                     preact_1.h("span", { className: "uirStateVisHover", onClick: this.props.onMinimize },
-                        preact_1.h(ChevronDown_1.ChevronDown, null),
+                        preact_1.h(ChevronDown_1.ChevronDown, { size: "16px" }),
                         preact_1.h("div", null,
                             preact_1.h("span", { style: { float: 'right' } }, "Minimize")),
                         preact_1.h("div", null, "Minimize")),
                     preact_1.h("span", { className: "uirStateVisHover", onClick: this.props.onClose },
-                        preact_1.h(Close_1.Close, null),
+                        preact_1.h(Close_1.Close, { size: "16px" }),
                         preact_1.h("div", null,
                             preact_1.h("span", { style: { float: 'right' } }, "Close")))))));
     };
@@ -35914,8 +35981,9 @@ exports.LayoutPrefs = LayoutPrefs;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-exports.ChevronDown = function () {
-    return preact_1.h("svg", { width: "1em", height: "1em", viewBox: "0 0 1792 1792", xmlns: "http://www.w3.org/2000/svg" },
+exports.ChevronDown = function (_a) {
+    var size = _a.size;
+    return preact_1.h("svg", { width: size, height: size, viewBox: "0 0 1792 1792", xmlns: "http://www.w3.org/2000/svg" },
         preact_1.h("path", { d: "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z" }));
 };
 
@@ -35928,8 +35996,9 @@ exports.ChevronDown = function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-exports.Close = function () {
-    return preact_1.h("svg", { width: "1em", height: "1em", viewBox: "0 0 1792 1792", xmlns: "http://www.w3.org/2000/svg" },
+exports.Close = function (_a) {
+    var size = _a.size;
+    return preact_1.h("svg", { width: size, height: size, viewBox: "0 0 1792 1792", xmlns: "http://www.w3.org/2000/svg" },
         preact_1.h("path", { d: "M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z" }));
 };
 
@@ -35942,8 +36011,9 @@ exports.Close = function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-exports.Gear = function () {
-    return preact_1.h("svg", { width: "1em", height: "1em", viewBox: "0 0 1792 1792", xmlns: "http://www.w3.org/2000/svg" },
+exports.Gear = function (_a) {
+    var size = _a.size;
+    return preact_1.h("svg", { width: size, height: size, viewBox: "0 0 1792 1792", xmlns: "http://www.w3.org/2000/svg" },
         preact_1.h("path", { d: "M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z" }));
 };
 
@@ -35956,8 +36026,9 @@ exports.Gear = function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-exports.Help = function () {
-    return preact_1.h("svg", { width: "1em", height: "1em", viewBox: "0 0 1792 1792", xmlns: "http://www.w3.org/2000/svg" },
+exports.Help = function (_a) {
+    var size = _a.size;
+    return preact_1.h("svg", { width: size, height: size, viewBox: "0 0 1792 1792", xmlns: "http://www.w3.org/2000/svg" },
         preact_1.h("path", { d: "M1008 1200v160q0 14-9 23t-23 9h-160q-14 0-23-9t-9-23v-160q0-14 9-23t23-9h160q14 0 23 9t9 23zm256-496q0 50-15 90t-45.5 69-52 44-59.5 36q-32 18-46.5 28t-26 24-11.5 29v32q0 14-9 23t-23 9h-160q-14 0-23-9t-9-23v-68q0-35 10.5-64.5t24-47.5 39-35.5 41-25.5 44.5-21q53-25 75-43t22-49q0-42-43.5-71.5t-95.5-29.5q-56 0-95 27-29 20-80 83-9 12-25 12-11 0-19-6l-108-82q-10-7-12-20t5-23q122-192 349-192 129 0 238.5 89.5t109.5 214.5zm-368-448q-130 0-248.5 51t-204 136.5-136.5 204-51 248.5 51 248.5 136.5 204 204 136.5 248.5 51 248.5-51 204-136.5 136.5-204 51-248.5-51-248.5-136.5-204-204-136.5-248.5-51zm768 640q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z" }));
 };
 
@@ -36118,7 +36189,7 @@ exports = module.exports = __webpack_require__(32)(undefined);
 
 
 // module
-exports.push([module.i, "\n.uirStateVisContainer {\n    z-index: 3;\n    position: fixed;\n    right: 2em;\n    bottom: 4em;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    background-color: rgba(255, 255, 255, 0.8);\n    transform: scale(1);\n    transform-origin: right bottom;\n    transition: right 0.5s ease, bottom 0.5s ease, transform 0.5s ease;\n    overflow: hidden;\n    resize: both;\n}\n\n.uirStateVisContainer.minimized {\n    cursor: pointer;\n    transform: scale(0.25);\n}\n\n.uirStateVisContainer:hover {\n    outline: 3px solid rgba(0,0,0,0.35)\n}\n\n.uirStateVisContainer:hover .uirStateVisControls {\n    visibility: visible;\n}\n\n.uirStateVisContainer .uirStateVisControls {\n    visibility: hidden;\n    display: flex;\n    width: 100%;\n    flex-flow: row nowrap;\n    justify-content: space-between;\n    flex: 1 0 auto;\n    z-index: 1;\n}\n\n.uirStateVisContainer .uirStateVisControls .uirStateVisIcons span svg {\n    padding: 0.25em;\n    fill: #777777;\n}\n\n.uirStateVisContainer .uirStateVisControls .uirStateVisIcons span:hover svg {\n    fill: black;\n}\n\n.uirStateVisHover > div {\n    transition: opacity 500ms ease;\n    opacity: 0;\n    height: 0px;\n    padding: 0;\n\n    position: absolute;\n    top: 0;\n    right: 0;\n    overflow: hidden;\n\n    margin-top: 1.5em;\n    font-size: 0.8em;\n}\n\n.uirStateVisHover > div.hoverBlock {\n    left: 0;\n    border-bottom: none;\n    background: white;\n}\n\n.uirStateVisHover:hover > div.hoverBlock {\n    border-bottom: 2px solid lightgrey;\n}\n\n\n.uirStateVisHover:hover > div {\n    opacity: 1;\n    height: auto;\n}\n\n.uirStateVisHover .uirStateVisLayoutPrefs {\n    padding: 0.75em 1.5em;\n}\n\n.uirStateVisContainer .statevis {\n    flex: 1 1 auto;\n    transition: all 1s ease;\n}\n\n.uirStateVisWindowOverlay {\n    display: none;\n}\n\n.minimized .uirStateVisWindowOverlay {\n    display: block;\n    position: absolute;\n    left: 0;\n    right: 0; \n    top: 0;\n    bottom: 0;\n    z-index: 10;\n}\n  \n.statevis circle {\n    /*r: 10;*/\n    fill: #fff;\n    stroke: grey;\n    /*stroke-width: 3px;*/\n\n    transition-property: r, fill, stroke, stroke-width;\n    transition-duration: 350ms;\n    transition-timing-function: ease-in-out;\n\n    cursor: pointer;\n}\n\n.statevis text {\n    transition-property: x, y, font-size, stroke, stroke-width;\n    transition-duration: 350ms;\n    transition-timing-function: ease-in-out;\n}\n\n.statevis circle.future {\n    /*r: 10;*/\n    stroke: grey;\n    stroke-dasharray: 7,5;\n    /*stroke-width: 1px;*/\n}\n\n.statevis circle.entered {\n    /*r: 10;*/\n    stroke: black;\n    fill: lightgreen;\n}\n\n.statevis circle.entered:after {\n    content: \"<text>Entered</text>\"\n}\n\n.statevis circle.active {\n    /*r: 15;*/\n    fill: green;\n    stroke: black;\n}\n\n.statevis circle.collapsed {\n    stroke-dasharray: 2, 2\n}\n\n.statevis text {\n    font-family: sans-serif;\n}\n\n.statevis .link {\n    fill: none;\n    stroke: #ccc;\n    /*stroke-width: 2px;*/\n}\n\n.statevis text.label {\n    fill: grey;\n    alignment-baseline: middle;\n}\n\n\n.draggable {\n    cursor: move;\n}\n\n/*.draggable:hover {*/\n    /*outline: 3px solid rgba(0,0,0,0.15)*/\n/*}*/", ""]);
+exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/\n   v2.0 | 20110126\n   License: none (public domain)\n*/\n\n#uirStateVisualizer {\n    margin: 0;\n    padding: 0;\n    border: 0;\n    font-size: 16px;\n    font-family: sans-serif;\n    font-weight: normal;\n    vertical-align: baseline;\n    line-height: 1;\n    display: block;\n    box-sizing: content-box;\n}\n#uirStateVisualizer svg {\n    box-sizing: content-box;\n}\n\n.uirStateVisContainer {\n    z-index: 3;\n    position: fixed;\n    right: 32px;\n    bottom: 64px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    background-color: rgba(255, 255, 255, 0.8);\n    transform: scale(1);\n    transform-origin: right bottom;\n    transition: right 0.5s ease, bottom 0.5s ease, transform 0.5s ease;\n    overflow: hidden;\n    resize: both;\n}\n\n.uirStateVisContainer.minimized {\n    cursor: pointer;\n    transform: scale(0.25);\n    z-index: 60;\n}\n\n.uirStateVisContainer:hover {\n    outline: 2px solid rgba(0,0,0,0.35)\n}\n\n.uirStateVisContainer:hover .uirStateVisControls {\n    visibility: visible;\n}\n\n.uirStateVisContainer .uirStateVisControls {\n    visibility: hidden;\n    display: flex;\n    width: 100%;\n    flex-flow: row nowrap;\n    justify-content: space-between;\n    flex: 1 0 auto;\n    z-index: 1;\n}\n\n.uirStateVisContainer .uirStateVisControls .uirStateVisIcons span svg {\n    padding: 3px;\n    fill: #777777;\n}\n\n.uirStateVisContainer .uirStateVisControls .uirStateVisIcons span:hover svg {\n    fill: black;\n}\n\n.uirStateVisHover > div {\n    transition: opacity 500ms ease;\n    opacity: 0;\n    height: 0;\n    padding: 0;\n\n    position: absolute;\n    top: 0;\n    right: 0;\n    overflow: hidden;\n\n    margin-top: 26px;\n    font-size: 14px;\n}\n\n.uirStateVisHover > div.hoverBlock {\n    left: 0;\n    border-bottom: none;\n    background: white;\n}\n\n.uirStateVisHover:hover > div.hoverBlock {\n    border-bottom: 2px solid lightgrey;\n}\n\n\n.uirStateVisHover:hover > div {\n    opacity: 1;\n    height: auto;\n}\n\n.uirStateVisHover .uirStateVisLayoutPrefs {\n    padding: 12px 24px;\n}\n\n.uirStateVisContainer .statevis {\n    flex: 1 1 auto;\n    transition: all 1s ease;\n}\n\n.uirStateVisWindowOverlay {\n    display: none;\n}\n\n.minimized .uirStateVisWindowOverlay {\n    display: block;\n    position: absolute;\n    left: 0;\n    right: 0; \n    top: 0;\n    bottom: 0;\n    z-index: 10;\n}\n  \n.statevis circle {\n    /*r: 10;*/\n    fill: #fff;\n    stroke: grey;\n    /*stroke-width: 3px;*/\n\n    transition-property: r, fill, stroke, stroke-width;\n    transition-duration: 350ms;\n    transition-timing-function: ease-in-out;\n\n    cursor: pointer;\n}\n\n.statevis text {\n    transition-property: x, y, font-size, stroke, stroke-width;\n    transition-duration: 350ms;\n    transition-timing-function: ease-in-out;\n}\n\n.statevis circle.future {\n    /*r: 10;*/\n    stroke: grey;\n    stroke-dasharray: 7,5;\n    /*stroke-width: 1px;*/\n}\n\n.statevis circle.entered {\n    /*r: 10;*/\n    stroke: black;\n    fill: lightgreen;\n}\n\n.statevis circle.entered:after {\n    content: \"<text>Entered</text>\"\n}\n\n.statevis circle.active {\n    /*r: 15;*/\n    fill: green;\n    stroke: black;\n}\n\n.statevis circle.collapsed {\n    stroke-dasharray: 2, 2\n}\n\n.statevis text {\n    font-family: sans-serif;\n}\n\n.statevis .link {\n    fill: none;\n    stroke: #ccc;\n    /*stroke-width: 2px;*/\n}\n\n.statevis text.label {\n    fill: grey;\n    alignment-baseline: middle;\n}\n\n\n.draggable {\n    cursor: move;\n}\n\n/*.draggable:hover {*/\n    /*outline: 3px solid rgba(0,0,0,0.15)*/\n/*}*/\n", ""]);
 
 // exports
 
@@ -36236,10 +36307,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-var transitionView_1 = __webpack_require__(89);
+var TransitionView_1 = __webpack_require__(89);
 var easing_1 = __webpack_require__(6);
 var animatepath_1 = __webpack_require__(19);
-__webpack_require__(101);
+__webpack_require__(100);
 /**
  * This outer component manages the list of all transitions (history), and provides a fixed, scrolling viewport.
  * It attaches hooks for lifecycle events and decorates the transition with a descriptive message.
@@ -36378,10 +36449,10 @@ var TransitionVisualizer = /** @class */ (function (_super) {
         var _this = this;
         var pointerEvents = this.state.pointerEvents;
         return (preact_1.h("div", { ref: function (el) { return _this._div = el; } },
-            preact_1.h("div", { className: "transitionHistory", style: { pointerEvents: pointerEvents } },
+            preact_1.h("div", { className: "uirTranVis_history", style: { pointerEvents: pointerEvents } },
                 this.state.transitions.map(function (trans) {
-                    return preact_1.h("div", { key: trans.$id },
-                        preact_1.h(transitionView_1.TransitionView, { transition: trans }),
+                    return preact_1.h("div", { key: trans.$id, className: "uirTranVis_transition" },
+                        preact_1.h(TransitionView_1.TransitionView, { transition: trans }),
                         preact_1.h("div", { style: { minWidth: "18em", border: "1px solid transparent" } }));
                 }),
                 preact_1.h("div", { style: { width: "200px", height: "1px" } }))));
@@ -36413,10 +36484,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-var transitionPopover_1 = __webpack_require__(90);
-var breadcrumbArrow_1 = __webpack_require__(99);
+var TransitionPopover_1 = __webpack_require__(90);
+var BreadcrumbArrow_1 = __webpack_require__(98);
 var strings_1 = __webpack_require__(15);
-var cancelablePromise_1 = __webpack_require__(100);
+var cancelablePromise_1 = __webpack_require__(99);
 var TransitionView = /** @class */ (function (_super) {
     __extends(TransitionView, _super);
     function TransitionView() {
@@ -36487,8 +36558,8 @@ var TransitionView = /** @class */ (function (_super) {
     };
     TransitionView.prototype.render = function () {
         return (preact_1.h("div", { onMouseEnter: this.open, onMouseLeave: this.close },
-            preact_1.h(transitionPopover_1.TransitionPopover, { transition: this.props.transition, status: this.state.status, rejection: this.state.rejection, pinned: this.state.pinned, expanded: this.state.expanded, open: this.state.open, togglePinned: this.togglePin, toggleExpand: this.toggleExpand }),
-            preact_1.h(breadcrumbArrow_1.BreadcrumbArrow, { transition: this.props.transition, status: this.state.status, message: this.state.message, toggleExpand: this.toggleExpand })));
+            preact_1.h(TransitionPopover_1.TransitionPopover, { transition: this.props.transition, status: this.state.status, rejection: this.state.rejection, pinned: this.state.pinned, expanded: this.state.expanded, open: this.state.open, togglePinned: this.togglePin, toggleExpand: this.toggleExpand }),
+            preact_1.h(BreadcrumbArrow_1.BreadcrumbArrow, { transition: this.props.transition, status: this.state.status, message: this.state.message, toggleExpand: this.toggleExpand })));
     };
     return TransitionView;
 }(preact_1.Component));
@@ -36513,9 +36584,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-var popoverHeading_1 = __webpack_require__(91);
-var transSummary_1 = __webpack_require__(92);
-var nodePaths_1 = __webpack_require__(95);
+var PopoverHeading_1 = __webpack_require__(91);
+var TransSummary_1 = __webpack_require__(92);
+var NodePaths_1 = __webpack_require__(95);
 var TransitionPopover = /** @class */ (function (_super) {
     __extends(TransitionPopover, _super);
     function TransitionPopover() {
@@ -36525,17 +36596,17 @@ var TransitionPopover = /** @class */ (function (_super) {
         var _this = this;
         if (!this.props.open && !this.props.pinned)
             return null;
-        var classes = function () { return "transitionDetail uir-panel panel-default " +
+        var classes = function () { return "uirTranVis_transitionDetail uirTranVis_panel panel-default " +
             (_this.props.pinned ? "pin " : "") +
             (_this.props.expanded ? "expand " : "") +
             (_this.props.open ? "showDetail " : ""); };
         return (preact_1.h("div", { className: classes() },
-            preact_1.h(popoverHeading_1.PopoverHeading, { transition: this.props.transition, pinned: this.props.pinned, expanded: this.props.expanded, togglePinned: this.props.togglePinned, toggleExpand: this.props.toggleExpand }),
-            preact_1.h("div", { className: "uir-panel-body" },
-                preact_1.h(transSummary_1.TransSummary, { trans: this.props.transition, status: this.props.status, rejection: this.props.rejection }),
+            preact_1.h(PopoverHeading_1.PopoverHeading, { transition: this.props.transition, pinned: this.props.pinned, expanded: this.props.expanded, togglePinned: this.props.togglePinned, toggleExpand: this.props.toggleExpand }),
+            preact_1.h("div", { className: "uirTranVis_panelBody" },
+                preact_1.h(TransSummary_1.TransSummary, { trans: this.props.transition, status: this.props.status, rejection: this.props.rejection }),
                 preact_1.h("hr", null),
-                preact_1.h(nodePaths_1.NodePaths, { transition: this.props.transition })),
-            preact_1.h("div", { className: "downArrow" })));
+                preact_1.h(NodePaths_1.NodePaths, { transition: this.props.transition })),
+            preact_1.h("div", { className: "uirTranVis_downArrow" })));
     };
     return TransitionPopover;
 }(preact_1.Component));
@@ -36568,11 +36639,11 @@ var PopoverHeading = /** @class */ (function (_super) {
     PopoverHeading.prototype.render = function () {
         var _this = this;
         var tackClass = function () { return "uir-icon uir-icon-thumb-tack " + (_this.props.pinned ? "" : "uir-rotate-35"); };
-        var expandClass = function () { return "uir-icon tooltip-right " + (_this.props.expanded ? "uir-icon-toggle-on" : "uir-icon-toggle-off"); };
-        return (preact_1.h("div", { className: "uir-panel-heading uir-header" },
+        var expandClass = function () { return "uir-icon uirTranVis_tooltipRight " + (_this.props.expanded ? "uir-icon-toggle-on" : "uir-icon-toggle-off"); };
+        return (preact_1.h("div", { className: "uirTranVis_panelHeading uirTranVis_heading" },
             preact_1.h("div", { style: { cursor: "pointer" }, onClick: this.props.togglePinned },
                 preact_1.h("i", { className: tackClass() })),
-            preact_1.h("h3", { className: "uir-panel-title" },
+            preact_1.h("h3", { className: "uirTranVis_panelTitle" },
                 "Transition #",
                 this.props.transition.$id),
             preact_1.h("div", { style: { cursor: "pointer" }, onClick: this.props.toggleExpand },
@@ -36601,34 +36672,30 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-var keysAndValues_1 = __webpack_require__(34);
+var KeysAndValues_1 = __webpack_require__(34);
 var TransSummary = /** @class */ (function (_super) {
     __extends(TransSummary, _super);
     function TransSummary() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     TransSummary.prototype.render = function () {
-        return (preact_1.h("table", { className: "summary" },
-            preact_1.h("tbody", null,
-                preact_1.h("tr", null,
-                    preact_1.h("td", null, "From State:"),
-                    preact_1.h("td", null, this.props.trans.from().name || '(root)')),
-                preact_1.h("tr", null,
-                    preact_1.h("td", null, "To State:"),
-                    preact_1.h("td", null, this.props.trans.to().name || '(root)')),
-                preact_1.h("tr", null,
-                    preact_1.h("td", { colSpan: 1 }, "Parameters:"),
-                    preact_1.h("td", { colSpan: 1 },
-                        preact_1.h(keysAndValues_1.KeysAndValues, { data: this.props.trans.params(), labels: { section: '', modalTitle: 'Parameter value: ' }, classes: { outerdiv: '', keyvaldiv: 'keyvalue', section: '', _key: '', value: '' } }))),
-                preact_1.h("tr", null,
-                    preact_1.h("td", null, "Outcome:"),
-                    preact_1.h("td", null,
-                        this.props.status,
-                        this.props.rejection
-                            ? preact_1.h("span", null,
-                                ": ",
-                                this.props.rejection)
-                            : null)))));
+        return (preact_1.h("div", { className: "uirTranVis_transSummary" },
+            preact_1.h("div", { className: "uirTranVis_summaryData" },
+                preact_1.h("span", null, "From:"),
+                preact_1.h("strong", null, this.props.trans.from().name || '(root)')),
+            preact_1.h("div", { className: "uirTranVis_summaryData" },
+                preact_1.h("span", null, "To:"),
+                preact_1.h("strong", null, this.props.trans.to().name || '(root)')),
+            preact_1.h("div", { className: "uirTranVis_summaryData" },
+                preact_1.h("span", null, "Result:"),
+                preact_1.h("div", null,
+                    preact_1.h("strong", null, this.props.status),
+                    this.props.rejection ? preact_1.h("span", null,
+                        ": ",
+                        this.props.rejection) : null)),
+            preact_1.h("div", { className: "uirTranVis_summaryHeading" }, "Parameter Values:"),
+            preact_1.h("div", null,
+                preact_1.h(KeysAndValues_1.KeysAndValues, { groupedValues: KeysAndValues_1.KeysAndValues.falsyGroupDefinitions, enableGroupToggle: true, data: this.props.trans.params(), modalTitle: "Parameter value", classes: { div: 'uirTranVis_keyValue', key: '', val: '' } }))));
     };
     return TransSummary;
 }(preact_1.Component));
@@ -36665,17 +36732,17 @@ var ResolveData = /** @class */ (function (_super) {
     ResolveData.prototype.render = function () {
         return (preact_1.h("div", null,
             preact_1.h(modal_1.Modal, null,
-                preact_1.h("div", { className: "uir-modal-header uir-resolve-header" },
-                    preact_1.h("div", { style: { "fontSize": "1.5em" } },
-                        this.props.labels.modalTitle,
+                preact_1.h("div", { className: "uirTranVis_modal-header uir-resolve-header" },
+                    preact_1.h("div", { style: { "fontSize": "20px" } },
+                        this.props.modalTitle,
                         ": ",
                         this.props.id),
-                    preact_1.h("button", { className: "btn btn-xs btn-primary", onClick: this.close },
+                    preact_1.h("button", { className: "uirTranVis_btn uirTranVis_btnXs uirTranVis_btnPrimary", onClick: this.close },
                         preact_1.h("i", { className: "uir-icon uir-iconw-close" }))),
-                preact_1.h("div", { className: "uir-modal-body" },
+                preact_1.h("div", { className: "uirTranVis_modalBody" },
                     preact_1.h(pretty_1.Pretty, { data: this.props.value })),
-                preact_1.h("div", { className: "uir-modal-footer" },
-                    preact_1.h("button", { className: "btn btn-primary", onClick: this.close }, "Close")))));
+                preact_1.h("div", { className: "uirTranVis_modalFooter" },
+                    preact_1.h("button", { className: "uirTranVis_btn uirTranVis_btnPrimary", onClick: this.close }, "Close")))));
     };
     return ResolveData;
 }(preact_1.Component));
@@ -36744,8 +36811,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
-var nodeDetail_1 = __webpack_require__(96);
-var flowArrow_1 = __webpack_require__(98);
+var NodeDetail_1 = __webpack_require__(96);
+var FlowArrow_1 = __webpack_require__(97);
 var NodePaths = /** @class */ (function (_super) {
     __extends(NodePaths, _super);
     function NodePaths() {
@@ -36785,11 +36852,12 @@ var NodePaths = /** @class */ (function (_super) {
         this.setState({ retained: retained, enterExit: enterExit });
     };
     NodePaths.prototype.render = function () {
+        var _this = this;
         var height = 2000;
         var retained = this.state.retained || [];
         var enterExit = this.state.enterExit || [];
         var lastEnterIdx = enterExit.filter(function (x) { return !!x.toType; }).length - 1;
-        return (preact_1.h("table", { className: "paths" },
+        return (preact_1.h("table", { className: "uirTranVis_paths" },
             preact_1.h("thead", null,
                 preact_1.h("tr", null,
                     preact_1.h("th", null, "From Path"),
@@ -36798,22 +36866,20 @@ var NodePaths = /** @class */ (function (_super) {
                 retained.map(function (elem) {
                     return preact_1.h("tr", { key: elem.key },
                         preact_1.h("td", { className: elem.fromType, colSpan: 2 },
-                            preact_1.h(nodeDetail_1.NodeDetail, { node: elem.from, type: elem.fromType })));
+                            preact_1.h(NodeDetail_1.NodeDetail, { trans: _this.props.transition, node: elem.from, type: elem.fromType })));
                 }),
                 enterExit.map(function (elem, idx) {
                     return preact_1.h("tr", { key: elem.key },
                         preact_1.h("td", { colSpan: 2 },
-                            preact_1.h("div", { className: "uirTransVisRow" },
+                            preact_1.h("div", { className: "uirTranVis_Row" },
                                 preact_1.h("div", { className: "" + elem.fromType }, !elem.fromType ? null :
-                                    preact_1.h("div", null,
-                                        preact_1.h("div", { className: "uirNodeContent" },
-                                            preact_1.h(nodeDetail_1.NodeDetail, { node: elem.from, type: elem.fromType }),
-                                            preact_1.h(flowArrow_1.FlowArrow, { bottom: 'V', top: idx ? 'V' : elem.toType ? 'RU' : 'AU' })))),
+                                    preact_1.h("div", { className: "uirTranVis_nodeContent" },
+                                        preact_1.h(NodeDetail_1.NodeDetail, { trans: _this.props.transition, node: elem.from, type: elem.fromType }),
+                                        preact_1.h(FlowArrow_1.FlowArrow, { bottom: 'V', top: idx ? 'V' : elem.toType ? 'RU' : 'AU' }))),
                                 preact_1.h("div", { className: "" + elem.toType }, !elem.toType ? null :
-                                    preact_1.h("div", null,
-                                        preact_1.h("div", { className: "uirNodeContent" },
-                                            preact_1.h(flowArrow_1.FlowArrow, { top: idx ? 'V' : elem.fromType ? 'RD' : 'V', bottom: idx == lastEnterIdx ? 'AD' : 'V' }),
-                                            preact_1.h(nodeDetail_1.NodeDetail, { node: elem.to, type: elem.toType })))))));
+                                    preact_1.h("div", { className: "uirTranVis_nodeContent" },
+                                        preact_1.h(FlowArrow_1.FlowArrow, { top: idx ? 'V' : elem.fromType ? 'RD' : 'V', bottom: idx == lastEnterIdx ? 'AD' : 'V' }),
+                                        preact_1.h(NodeDetail_1.NodeDetail, { trans: _this.props.transition, node: elem.to, type: elem.toType }))))));
                 }))));
     };
     return NodePaths;
@@ -36840,8 +36906,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = __webpack_require__(0);
 var strings_1 = __webpack_require__(15);
-var keysAndValues_1 = __webpack_require__(34);
-var core_1 = __webpack_require__(97);
+var KeysAndValues_1 = __webpack_require__(34);
 var NodeDetail = /** @class */ (function (_super) {
     __extends(NodeDetail, _super);
     function NodeDetail() {
@@ -36866,21 +36931,29 @@ var NodeDetail = /** @class */ (function (_super) {
             return typeof val === 'string' ? val : strings_1.maxLength(30, strings_1.stringify(val));
         };
         var node = this.props.node;
-        var ignoredTokens = ['$stateParams', '$transition$', '$state$', core_1.Transition];
+        var ignoredTokens = ['$stateParams', '$transition$', '$state$', this.props.trans.constructor];
         return node && node.resolvables
             .filter(function (r) { return ignoredTokens.indexOf(r.token) === -1; })
             .reduce(function (acc, r) { acc[asString(r.token)] = r.data; return acc; }, {});
     };
     NodeDetail.prototype.render = function () {
-        return !this.props.node ? null : (preact_1.h("div", { className: "uirNodeDetail" },
-            preact_1.h("div", { className: "uir-header" },
-                preact_1.h("div", { className: "nowrap deemphasize" },
+        if (!this.props.node)
+            return null;
+        var params = this.params();
+        var resolves = this.resolves();
+        return !this.props.node ? null : (preact_1.h("div", { className: "uirTranVis_nodeDetail" },
+            preact_1.h("div", { className: "uirTranVis_heading" },
+                preact_1.h("div", { className: "uirTranVis_nowrap uirTranVis_deemphasize" },
                     "(",
                     this.props.type,
                     " state)"),
-                preact_1.h("div", { className: "statename" }, this.stateName())),
-            preact_1.h(keysAndValues_1.KeysAndValues, { data: this.params(), classes: { outerdiv: 'params', section: 'paramslabel deemphasize' }, labels: { section: 'Parameter values', modalTitle: 'Parameter value: ' } }),
-            preact_1.h(keysAndValues_1.KeysAndValues, { data: this.resolves(), classes: { outerdiv: 'params resolve', section: 'resolvelabel deemphasize' }, labels: { section: 'Resolved data', modalTitle: 'Resolved value: ' } })));
+                preact_1.h("div", { className: "uirTranVis_stateName" }, this.stateName())),
+            !!Object.keys(params).length && (preact_1.h("div", { className: "params" },
+                preact_1.h("div", { className: "uirTranVis_paramsLabel uirTranVis_deemphasize" }, "Parameter values"),
+                preact_1.h(KeysAndValues_1.KeysAndValues, { data: this.params(), classes: { div: 'uirTranVis_keyValue' }, modalTitle: "Parameter value" }))),
+            !!Object.keys(resolves).length && (preact_1.h("div", { className: "params resolve" },
+                preact_1.h("div", { className: "uirTranVis_resolveLabel uirTranVis_deemphasize" }, "Resolved data"),
+                preact_1.h(KeysAndValues_1.KeysAndValues, { data: this.resolves(), classes: { div: 'uirTranVis_keyValue' }, modalTitle: "Resolved value" })))));
     };
     return NodeDetail;
 }(preact_1.Component));
@@ -36889,12 +36962,6 @@ exports.NodeDetail = NodeDetail;
 
 /***/ }),
 /* 97 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_97__;
-
-/***/ }),
-/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36950,7 +37017,7 @@ exports.FlowArrow = FlowArrow;
 
 
 /***/ }),
-/* 99 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36987,18 +37054,17 @@ var BreadcrumbArrow = /** @class */ (function (_super) {
         return iconClasses[this.props.status];
     };
     BreadcrumbArrow.prototype.render = function () {
-        return !this.props.transition ? null : (preact_1.h("div", { className: this.props.status + " historyEntry", onClick: this.handleClick },
-            preact_1.h("div", { className: "summary" },
-                preact_1.h("div", { className: "transid" }, this.props.transition.$id),
-                preact_1.h("div", { className: "status" },
+        return !this.props.transition ? null : (preact_1.h("div", { className: this.props.status + " uirTranVis_historyEntry", onClick: this.handleClick },
+            preact_1.h("div", { className: "uirTranVis_historyEntrySummary" },
+                preact_1.h("div", { className: "uirTranVis_transId" }, this.props.transition.$id),
+                preact_1.h("div", { className: "uirTranVis_status" },
                     this.props.status,
                     !this.props.message ? null : preact_1.h("span", null,
                         ": ",
                         this.props.message)),
-                preact_1.h("div", { className: "transname" },
+                preact_1.h("div", { className: "uirTranVis_transName" },
                     preact_1.h("i", { className: this.iconClass() }),
-                    " ",
-                    this.props.transition.to().name))));
+                    preact_1.h("span", null, this.props.transition.to().name)))));
     };
     return BreadcrumbArrow;
 }(preact_1.Component));
@@ -37006,7 +37072,7 @@ exports.BreadcrumbArrow = BreadcrumbArrow;
 
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37029,13 +37095,13 @@ exports.makeCancelable = function (promise) {
 
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(102);
+var content = __webpack_require__(101);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -37048,7 +37114,7 @@ if(content.locals) module.exports = content.locals;
 
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(32)(undefined);
@@ -37056,55 +37122,55 @@ exports = module.exports = __webpack_require__(32)(undefined);
 
 
 // module
-exports.push([module.i, "/*\n    .transitionHistory is the breadcrumbs and transition details block.\n    It fills the footer of the screen, and scrolls horizontally.\n    Mouse clicks should pass through to the elements underneath.\n*/\n\n.transitionHistory {\n    display: flex;\n    align-items: flex-end;\n    position: fixed;\n    left: 0;\n    bottom: 0;\n    right: 0;\n    padding: 0 1em;\n    overflow-x: scroll;\n    z-index: 2;\n    /* disable mouse clicks, hover, etc, for the overall div */\n    pointer-events: none;\n}\n\n.transitionHistory * {\n    /* Enable mouse for any sub-elements (the breadcrumb elemetns and detail elements) */\n    pointer-events: all;\n    flex: 0 0 auto;\n}\n\n/*  workaround for modal screen, and chrome and safari not allowing it to be\n    visible outside the .transitionHistory overflow while the .transitionHistory div is scrolled */\n.fullScreen .transitionHistory {\n    top: 0;\n}\n\n/* A single history entry (breadcrumb) arrow looking thing */\n.transitionHistory .historyEntry {\n    position: relative;\n    text-align: center;\n    padding: 12px 30px;\n    margin-bottom: 6px;\n    margin-right: 6px;\n    color: #000;\n    cursor: pointer;\n}\n\n\n/* History entry arrow CSS */\n.transitionHistory .historyEntry:before,.historyEntry:after {\n    content: '';\n    position: absolute;\n    background: darkgrey;\n    left: 0;\n    height: 50.2%; /* +0.2% so firefox doesn't render a white line down the center */\n    width: 100%;\n    border: 1px solid black;\n    box-sizing: border-box;\n    z-index: -1;\n}\n\n.transitionHistory .historyEntry:before {\n    top: 0;\n    border-bottom: 0;\n    -webkit-transform: skew(40deg, 0deg);\n    -ms-transform: skew(40deg, 0deg);\n    transform: skew(40deg, 0deg);\n}\n\n.transitionHistory .historyEntry:after {\n    bottom: 0;\n    border-top: 0;\n    -webkit-transform: skew(-40deg, 0deg);\n    -ms-transform: skew(-40deg, 0deg);\n    transform: skew(-40deg, 0deg);\n}\n\n/*.historyEntry::before height: 51% (|| ::after) */\n\n/* Styling for breadcrumb contents */\n.historyEntry .summary {\n    color: white;\n    white-space: nowrap;\n    font-size: small;\n}\n\n.historyEntry .summary .transid {\n    position: absolute;\n    top: 0.1em;\n    left: 0.85em;\n    font-size: smaller;\n}\n\n.historyEntry .summary .status {\n    position: absolute;\n    bottom: 0.1em;\n    left: 0.85em;\n    font-size: smaller;\n}\n.historyEntry .summary .transname {\n    font-weight: bold;\n    display: flex;\n    flex-flow: row nowrap;\n    align-items: center;\n    justify-content: center\n}\n\n/* breadcrumb/history entry color coding */\n.transitionHistory .historyEntry:before,.historyEntry:after {\n    background: #737373;\n}\n.transitionHistory .historyEntry:hover:before,.historyEntry:hover:after {\n    background: #a6a6a6;\n}\n\n.transitionHistory .historyEntry.success:before,.historyEntry.success:after {\n    background: #45803b;\n}\n.transitionHistory .historyEntry.success:hover:before,.historyEntry.success:hover:after {\n    background: #19a600;\n}\n\n\n.transitionHistory .historyEntry.error:before,.historyEntry.error:after {\n    background: #bf1f1d;\n}\n.transitionHistory .historyEntry.error:hover:before,.historyEntry.error:hover:after {\n    background: #e62622;\n}\n\n\n.transitionHistory .historyEntry.ignored:before,.historyEntry.ignored:after {\n    background: #e68b05;\n}\n.transitionHistory .historyEntry.ignored:hover:before,.historyEntry.ignored:hover:after {\n    background: #ff9808;\n}\n\n.transitionHistory .historyEntry.redirected:before,.historyEntry.redirected:after {\n    background: #e68b05;\n}\n.transitionHistory .historyEntry.redirected:hover:before,.historyEntry.redirected:hover:after {\n    background: #ff9808;\n}\n\n.transitionHistory .keyvalue {\n    display: flex;\n    flex-flow: row nowrap;\n    justify-content: space-between;\n}\n\n\n\n\n\n\n\n/* The transition detail popover (when hovering over a breadcrumb) */\n.transitionDetail {\n    border: 1px solid lightgrey;\n    font-size: small;\n    transition: box-shadow 0.5s ease,  border 1.0s ease\n}\n\n/* Pointer element points from the transitionDetail to the breadcrumb */\n.transitionDetail .downArrow {\n    position: relative;\n    width: 100%;\n    bottom: -10px;\n    margin-bottom: 10px;\n}\n\n.transitionDetail .downArrow:before, .transitionDetail .downArrow:after {\n    content: \"\";\n    position: absolute;\n    border-left: 10px solid transparent;\n    border-right: 10px solid transparent;\n    top: 100%;\n    left: 50%;\n    margin-left: -10px;\n}\n\n.transitionDetail .downArrow:before {\n    border-top: 10px solid lightgray;\n}\n\n.transitionDetail .downArrow:after{\n    border-top: 10px solid white;\n    margin-top: -1px;\n    z-index: 1;\n}\n\n\n/* The layout and styling of the transition detail popover */\n.transitionDetail .panel-heading {\n    text-align: center;\n}\n\n.transitionDetail table {\n    border-collapse: collapse;\n}\n\n.transitionDetail th {\n    text-align: center;\n    font-size: small;\n}\n\n.transitionDetail .uir-header {\n    display: flex;\n    flex-flow: row-reverse nowrap;\n    justify-content: space-between;\n    align-items: baseline;\n}\n\n.transitionDetail .uir-header > *  {\n    flex: 0 1 auto;\n}\n\n.transitionDetail .uir-header > * i {\n    transition: all 0.5s ease;\n}\n\n.transitionDetail table.paths {\n    min-width: 25em;\n}\n\n.transitionDetail table.paths td {\n    color: white;\n    border: 0;\n    font-size: small;\n    min-width: 10em;\n}\n\n.transitionDetail .summary .keyvalue {\n    justify-content: flex-start !important;\n    align-items: baseline;\n}\n\n.transitionDetail .summary .keyvalue > div:nth-child(2){\n    padding-left: 0.5em;\n    font-weight: normal;\n}\n\n\n.transitionDetail table.summary {\n    max-width: 400px;\n}\n\n.transitionDetail table.summary td {\n    font-size: small;\n    vertical-align: top;\n}\n\n.transitionDetail table.summary td:nth-child(1) {\n    white-space: nowrap;\n}\n\n.transitionDetail table.summary td:nth-child(2) {\n    font-weight: bold;\n    padding-left: 1em;\n}\n\n\n.transitionDetail td {\n    padding: 0;\n}\n\n.transitionDetail td .flowArrowCell {\n    display: flex;\n    flex-flow: column nowrap;\n    align-items: stretch;\n    justify-content: space-between;\n    width: 1em;\n    transition: width 0.25s ease;\n    height: auto;\n}\n.transitionDetail.expand td .flowArrowCell { width: 2em; }\n\n.transitionDetail .exit  .flowArrowSvg          { right: 0; }\n.transitionDetail .enter .flowArrowSvg          { left: 0; }\n.transitionDetail        .flowArrowSvg.bottom   { bottom: 0 }\n.transitionDetail        .flowArrowSvg.top      { top: 0 }\n.transitionDetail        .flowArrowSvg {\n    position: absolute;\n    width: 100%;\n    height: auto;\n    transition: width 0.25s ease;\n}\n\n/* color code path elements by retained/exited/entered */\n.transitionDetail .retain {\n    background-color: #737273;\n}\n\n.transitionDetail .exit {\n    background-color: #7c1010;\n}\n\n.transitionDetail .enter {\n    background-color: #31592a;\n}\n\n.transitionDetail .deemphasize {\n    color: #eaeaea;\n    font-size: x-small;\n}\n\n/* Styling for parameter values and resolve values */\n.transitionDetail .params {\n    background-color: rgba(255,255,255,0.15);\n    padding: 0;\n    opacity: 0;\n    overflow: hidden;\n    transition: opacity 1s ease;\n    max-height: 0;\n    max-width: 150px;\n}\n\n.transitionDetail.expand .params {\n    display: block;\n    border-radius: 4px;\n    box-shadow: 1px 1px 2px black;\n    padding: 0.5em;\n    max-height: 250px;\n    max-width: 300px;\n    overflow-y: auto;\n    opacity: 1;\n    margin: 0.5em 0;\n}\n\n.transitionDetail.pin {\n    box-shadow: 4px 4px 12px rgba(0,0,0,0.3);\n    border: 1px solid black;\n}\n\n.transitionDetail.pin .downArrow:before {\n    border-top-color: black;\n}\n\n\n/* When showing expanded details, put space between path elements */\n.transitionDetail.expand table.paths td {\n    max-height: 100px;\n    vertical-align: top;\n}\n\n.transitionDetail .uirTransVisRow {\n    display: flex;\n    flex-flow: row nowrap;\n    justify-content: space-between;\n    align-items: stretch;\n}\n\n.transitionDetail .uirTransVisRow > div {\n    flex: 1 0 50%;\n}\n\n.transitionDetail .uirNodeContent {\n    display: flex;\n    flex-flow: row nowrap;\n    min-height: 1em;\n    transition: min-height 0.25s ease;\n}\n\n.transitionDetail.expand .uirNodeContent {\n    min-height: 5em;\n}\n\n.transitionDetail .uirNodeDetail {\n    flex: 1 0 auto;\n    padding: 0.2em 0.5em;\n}\n\n.transitionDetail .statename {\n    font-weight: bolder;\n    margin-right: 1em;\n    margin-left: 0;\n}\n.transitionDetail .enter .statename {\n    margin-right: 0;\n    margin-left: 1em;\n}\n\n.transitionDetail .nowrap {\n    white-space: nowrap;\n}\n\n.transitionHistory .paramid {\n    font-weight: bolder;\n    color: #eaeaea;\n    margin-right: 0.5em;\n}\n\n.transitionHistory .paramslabel {\n    color: white;\n    margin-top: -0.5em;\n    text-align: center;\n    font-weight: bold;\n}\n\n.transitionHistory .resolvelabel {\n    color: white;\n    margin-top: -0.5em;\n    text-align: center;\n    font-weight: bold;\n}\n\n.transitionHistory .paramvalue {\n    color: #e6e6e6;\n}\n\n\n\nspan.link {\n    cursor: pointer;\n    text-decoration: underline;\n}\n\n\n.tooltip-right {\n    display: inline;\n    position: relative;\n    transition: all 1.5s ease;\n}\n\n.tooltip-right:after {\n    color: rgba(0,0,0,0);\n    text-decoration: none;\n    transition: all 1.5s ease;\n}\n\n.tooltip-right:hover:after {\n    bottom: 0;\n    color: rgba(0,0,0,0.5);\n    content: attr(title);\n    display: block;\n    position: absolute;\n    white-space: nowrap;\n    font-size: smaller;\n}\n\n\n\n/* Bootstrap stuff */\n\n.uir-modal .btn-primary {\n    color: #fff;\n    background-color: #337ab7;\n    border-color: #2e6da4;\n}\n\n.uir-modal .btn {\n    display: inline-block;\n    padding: 6px 12px;\n    margin-bottom: 0;\n    font-size: 14px;\n    font-weight: normal;\n    line-height: 1.42857143;\n    text-align: center;\n    white-space: nowrap;\n    vertical-align: middle;\n    -ms-touch-action: manipulation;\n    touch-action: manipulation;\n    cursor: pointer;\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    background-image: none;\n    border: 1px solid transparent;\n    border-radius: 4px;\n}\n\n.uir-modal .btn-xs, .btn-group-xs > .btn {\n    padding: 1px 5px;\n    font-size: 12px;\n    line-height: 1.5;\n    border-radius: 3px;\n}\n\n\n.transitionDetail span.link {\n    color: white;\n}\n\n.transitionHistory *:not(.fa):not(pre) {\n    font-family: Arial, Helvetica, sans-serif;\n}\n\n.transitionDetail .enter .uir-header {\n    flex-flow: row nowrap;\n}\n.transitionDetail .uir-header {\n    display: flex;\n    flex-flow: row-reverse nowrap;\n    justify-content: space-between;\n    align-items: baseline;\n}\n\n.transitionDetail .retain .uir-header {\n    justify-content: center;\n}\n\n.uir-panel {\n    margin-bottom: 20px;\n    background-color: #fff;\n    border: 1px solid lightgrey;\n    border-radius: 4px;\n    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n\n.uir-panel-heading {\n    color: #333;\n    background-color: #f5f5f5;\n    border-color: #ddd;\n\n    padding: 10px 15px;\n    border-bottom: 1px solid transparent;\n    border-top-left-radius: 3px;\n    border-top-right-radius: 3px;\n}\n\n.uir-panel-title {\n    margin-top: 0;\n    margin-bottom: 0;\n    font-size: 16px;\n    color: inherit;\n}\n\n.uir-panel-body {\n    padding: 15px;\n}\n\n\n\n\n\n/* Styles go here */\n.uir-fade {\n    opacity: 0;\n    -webkit-transition: opacity .15s linear;\n    -o-transition: opacity .15s linear;\n    transition: opacity .15s linear;\n}\n\n.uir-fade.in {\n    opacity: 1;\n}\n\n.uir-modal-backdrop {\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 1040;\n    background-color: #000;\n}\n\n.uir-modal-backdrop.in {\n    filter: alpha(opacity=50);\n    opacity: .5;\n}\n\n.uir-modal {\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 1050;\n    display: block;\n    overflow-y: auto;\n    -webkit-overflow-scrolling: touch;\n    outline: 0;\n}\n\n\n.uir-modal-dialog {\n    position: relative;\n    width: auto;\n    margin: 10px;\n}\n\n.uir-modal-content {\n    position: relative;\n    background-color: #fff;\n    -webkit-background-clip: padding-box;\n    background-clip: padding-box;\n    border: 1px solid #999;\n    border: 1px solid rgba(0, 0, 0, .2);\n    border-radius: 6px;\n    outline: 0;\n    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);\n    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);\n}\n\n.uir-modal-header {\n    padding: 15px;\n    border-bottom: 1px solid #e5e5e5;\n}\n\n.uir-resolve-header {\n    display: flex;\n    flex-flow: row nowrap;\n    justify-content: space-between;\n    background-color: cornflowerblue;\n}\n\n.uir-modal-body {\n    color: black;\n    position: relative;\n    padding: 15px;\n}\n\n.uir-modal-footer {\n    padding: 15px;\n    text-align: right;\n    border-top: 1px solid #e5e5e5;\n}\n\n.uir-icon {\n    display: inline-block;\n    height: 1em; width: 1em;\n    margin: 0.25em;\n    background-size: cover;\n    background-position: 0 0;\n}\n\n.uir-spin {\n    animation: uirspin 2s infinite;\n    transform: rotate(0deg);\n}\n\n.uir-rotate-35 {\n    transform: rotate(35deg);\n    opacity: 0.5;\n}\n\n@keyframes uirspin {\n    0% { transform: rotate(0deg); }\n    100% { transform: rotate(360deg); }\n}\n\n\n.uir-iconw-spinner       { background-image: url(" + __webpack_require__(103) + "); }\n.uir-iconw-check         { background-image: url(" + __webpack_require__(104) + "); }\n.uir-iconw-circle-o      { background-image: url(" + __webpack_require__(105) + "); }\n.uir-iconw-share         { background-image: url(" + __webpack_require__(106) + "); }\n.uir-iconw-close         { background-image: url(" + __webpack_require__(107) + "); }\n\n.uir-icon-thumb-tack     { background-image: url(" + __webpack_require__(108) + "); }\n.uir-icon-toggle-on      { background-image: url(" + __webpack_require__(109) + "); }\n.uir-icon-toggle-off     { background-image: url(" + __webpack_require__(110) + "); }\n", ""]);
+exports.push([module.i, "/*\n    .uirTranVis_history is the breadcrumbs and transition details block.\n    It fills the footer of the screen, and scrolls horizontally.\n    Mouse clicks should pass through to the elements underneath.\n*/\n\n.uirTranVis_history {\n    display: flex;\n    align-items: flex-end;\n    position: fixed;\n    left: 0;\n    bottom: 0;\n    right: 0;\n    padding: 0 16px;\n    overflow-x: scroll;\n    z-index: 50;\n    /* disable mouse clicks, hover, etc, for the overall div */\n    pointer-events: none;\n}\n\n.uirTranVis_history > * {\n    /* Enable mouse for any sub-elements (the breadcrumb elemetns and detail elements) */\n    pointer-events: all;\n    flex: 0 0 auto;\n}\n\n/*  workaround for modal screen, and chrome and safari not allowing it to be\n    visible outside the .uirTranVis_history overflow while the .uirTranVis_history div is scrolled */\n.fullScreen .uirTranVis_history {\n    top: 0;\n}\n\n/* A single history entry (breadcrumb) arrow looking thing */\n.uirTranVis_history .uirTranVis_historyEntry {\n    position: relative;\n    text-align: center;\n    padding: 12px 30px;\n    margin-bottom: 6px;\n    margin-right: 6px;\n    color: #000;\n    cursor: pointer;\n}\n\n\n/* History entry arrow CSS */\n.uirTranVis_history .uirTranVis_historyEntry:before,.uirTranVis_historyEntry:after {\n    content: '';\n    position: absolute;\n    background: darkgrey;\n    left: 0;\n    height: 50.2%; /* +0.2% so firefox doesn't render a white line down the center */\n    width: 100%;\n    border: 1px solid black;\n    box-sizing: border-box;\n    z-index: -1;\n}\n\n.uirTranVis_history .uirTranVis_historyEntry:before {\n    top: 0;\n    border-bottom: 0;\n    -webkit-transform: skew(40deg, 0deg);\n    -ms-transform: skew(40deg, 0deg);\n    transform: skew(40deg, 0deg);\n}\n\n.uirTranVis_history .uirTranVis_historyEntry:after {\n    bottom: 0;\n    border-top: 0;\n    -webkit-transform: skew(-40deg, 0deg);\n    -ms-transform: skew(-40deg, 0deg);\n    transform: skew(-40deg, 0deg);\n}\n\n/*.uirTranVis_historyEntry::before height: 51% (|| ::after) */\n\n/* Styling for breadcrumb contents */\n.uirTranVis_historyEntry .uirTranVis_historyEntrySummary {\n    color: white;\n    white-space: nowrap;\n    font-size: small;\n}\n.uirTranVis_historyEntry .uirTranVis_historyEntrySummary .uirTranVis_transId {\n    position: absolute;\n    top: 3px;\n    left: 10px;\n    font-size: smaller;\n}\n.uirTranVis_historyEntry .uirTranVis_historyEntrySummary .uirTranVis_status {\n    position: absolute;\n    bottom: 3px;\n    left: 10px;\n    font-size: smaller;\n}\n.uirTranVis_historyEntry .uirTranVis_historyEntrySummary .uirTranVis_transName {\n    font-weight: bold;\n    display: flex;\n    flex-flow: row nowrap;\n    align-items: center;\n    justify-content: center\n}\n.uirTranVis_historyEntry .uirTranVis_historyEntrySummary .uirTranVis_transName span {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    direction: rtl;\n}\n\n.uirTranVis_transSummary {\n    margin: 8px 0;\n}\n.uirTranVis_transSummary .uirTranVis_summaryHeading {\n    background-color: #f5f5f5;\n    margin: 8px -16px;\n    padding: 4px 16px;\n}\n.uirTranVis_transSummary .uirTranVis_summaryData {\n    display: flex;\n    flex-flow: row nowrap;\n    align-items: baseline;\n}\n.uirTranVis_transSummary .uirTranVis_summaryData span {\n    min-width: 60px;\n    text-align: right;\n    padding-right: 6px;\n}\n.uirTranVis_transSummary .uirTranVis_summaryData strong {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    direction: rtl;\n}\n\n.uirTranVis_history .uirTranVis_code {\n    padding: 0px 2px;\n    color: black;\n    background: #e6e6e6;\n    margin: 0;\n    font-family: monospace;\n}\n\n/* breadcrumb/history entry color coding */\n.uirTranVis_history .uirTranVis_historyEntry:before,.uirTranVis_historyEntry:after {\n    background: #737373;\n}\n.uirTranVis_history .uirTranVis_historyEntry:hover:before,.uirTranVis_historyEntry:hover:after {\n    background: #a6a6a6;\n}\n\n.uirTranVis_history .uirTranVis_historyEntry.success:before,.uirTranVis_historyEntry.success:after {\n    background: #45803b;\n}\n.uirTranVis_history .uirTranVis_historyEntry.success:hover:before,.uirTranVis_historyEntry.success:hover:after {\n    background: #19a600;\n}\n\n\n.uirTranVis_history .uirTranVis_historyEntry.error:before,.uirTranVis_historyEntry.error:after {\n    background: #bf1f1d;\n}\n.uirTranVis_history .uirTranVis_historyEntry.error:hover:before,.uirTranVis_historyEntry.error:hover:after {\n    background: #e62622;\n}\n\n\n.uirTranVis_history .uirTranVis_historyEntry.ignored:before,.uirTranVis_historyEntry.ignored:after {\n    background: #e68b05;\n}\n.uirTranVis_history .uirTranVis_historyEntry.ignored:hover:before,.uirTranVis_historyEntry.ignored:hover:after {\n    background: #ff9808;\n}\n\n.uirTranVis_history .uirTranVis_historyEntry.redirected:before,.uirTranVis_historyEntry.redirected:after {\n    background: #e68b05;\n}\n.uirTranVis_history .uirTranVis_historyEntry.redirected:hover:before,.uirTranVis_historyEntry.redirected:hover:after {\n    background: #ff9808;\n}\n\n.uirTranVis_history .uirTranVis_keyValue {\n    display: flex;\n    flex-flow: row nowrap;\n    justify-content: space-between;\n    align-items: baseline;\n}\n\n.uirTranVis_history .uirTranVis_keyValue + .uirTranVis_keyValue {\n    margin-top: 3px;\n}\n\n\n\n\n/* The transition detail popover (when hovering over a breadcrumb) */\n.uirTranVis_transitionDetail {\n    border: 1px solid lightgrey;\n    font-size: small;\n    transition: box-shadow 0.5s ease,  border 1.0s ease\n}\n\n/* Pointer element points from the uirTranVis_transitionDetail to the breadcrumb */\n.uirTranVis_transitionDetail .uirTranVis_downArrow {\n    position: relative;\n    width: 100%;\n    bottom: -10px;\n    margin-bottom: 10px;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_downArrow:before, .uirTranVis_transitionDetail .uirTranVis_downArrow:after {\n    content: \"\";\n    position: absolute;\n    border-left: 10px solid transparent;\n    border-right: 10px solid transparent;\n    top: 100%;\n    left: 50%;\n    margin-left: -10px;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_downArrow:before {\n    border-top: 10px solid lightgray;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_downArrow:after{\n    border-top: 10px solid white;\n    margin-top: -1px;\n    z-index: 1;\n}\n\n\n/* The layout and styling of the transition detail popover */\n/*.uirTranVis_transitionDetail .panel-heading {*/\n    /*text-align: center;*/\n/*}*/\n\n.uirTranVis_transitionDetail table {\n    border-collapse: collapse;\n}\n\n.uirTranVis_transitionDetail th {\n    text-align: center;\n    font-size: small;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_heading {\n    display: flex;\n    flex-flow: row-reverse nowrap;\n    justify-content: space-between;\n    align-items: baseline;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_heading > *  {\n    flex: 0 1 auto;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_heading > * i {\n    transition: all 0.5s ease;\n}\n\n.uirTranVis_transitionDetail table.uirTranVis_paths {\n    width: 100%;\n}\n\n.uirTranVis_transitionDetail table.uirTranVis_paths td {\n    color: white;\n    border: 0;\n    font-size: small;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_transSummary .uirTranVis_keyValue > div:nth-child(2){\n    padding-left: 8px;\n    font-weight: normal;\n}\n\n\n.uirTranVis_transitionDetail td {\n    padding: 0;\n}\n\n.uirTranVis_transitionDetail td .flowArrowCell {\n    display: flex;\n    flex-flow: column nowrap;\n    align-items: stretch;\n    justify-content: space-between;\n    width: 12px;\n    transition: width 0.25s ease;\n    height: auto;\n    flex: 0 0 auto;\n}\n.uirTranVis_transitionDetail.expand td .flowArrowCell { width: 24px; }\n\n.uirTranVis_transitionDetail .exit  .flowArrowSvg          { right: 0; }\n.uirTranVis_transitionDetail .enter .flowArrowSvg          { left: 0; }\n.uirTranVis_transitionDetail        .flowArrowSvg.bottom   { bottom: 0 }\n.uirTranVis_transitionDetail        .flowArrowSvg.top      { top: 0 }\n.uirTranVis_transitionDetail        .flowArrowSvg {\n    position: absolute;\n    width: 100%;\n    height: auto;\n    transition: width 0.25s ease;\n}\n\n/* color code path elements by retained/exited/entered */\n.uirTranVis_transitionDetail .retain {\n    background-color: #737273;\n}\n\n.uirTranVis_transitionDetail .exit {\n    background-color: #7c1010;\n}\n\n.uirTranVis_transitionDetail .enter {\n    background-color: #31592a;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_deemphasize {\n    color: #eaeaea;\n    font-size: x-small;\n}\n\n/* Styling for parameter values and resolve values */\n.uirTranVis_transitionDetail .params {\n    background-color: rgba(255,255,255,0.15);\n    padding: 0;\n    opacity: 0;\n    overflow: hidden;\n    transition: opacity 1s ease;\n    max-height: 0;\n}\n\n.uirTranVis_transitionDetail.expand .params {\n    display: block;\n    border-radius: 4px;\n    box-shadow: 1px 1px 2px black;\n    padding: 8px;\n    max-height: 250px;\n    overflow-y: auto;\n    opacity: 1;\n    margin: 8px 0;\n}\n\n.uirTranVis_transitionDetail.pin {\n    box-shadow: 4px 4px 12px rgba(0,0,0,0.3);\n    border: 1px solid black;\n}\n\n.uirTranVis_transitionDetail.pin .uirTranVis_downArrow:before {\n    border-top-color: black;\n}\n\n\n/* When showing expanded details, put space between path elements */\n.uirTranVis_transitionDetail.expand table.uirTranVis_paths td {\n    max-height: 100px;\n    vertical-align: top;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_Row {\n    display: flex;\n    flex-flow: row nowrap;\n    justify-content: space-between;\n    align-items: stretch;\n    min-width: 400px;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_Row > div {\n    flex: 1 0 50%;\n    min-width: 0;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_nodeContent {\n    display: flex;\n    flex-flow: row nowrap;\n    min-height: 16px;\n    transition: min-height 0.25s ease;\n}\n\n.uirTranVis_transitionDetail.expand .uirTranVis_nodeContent {\n    height: 100%;\n    min-height: 65px;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_nodeDetail {\n    flex: 1 1 auto;\n    padding: 3px 7px;\n    min-width: 0;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_stateName {\n    font-weight: bolder;\n    margin-right: 16px;\n    margin-left: 0;\n}\n.uirTranVis_transitionDetail .enter .uirTranVis_stateName {\n    margin-right: 0;\n    margin-left: 16px;\n}\n\n.uirTranVis_transitionDetail .uirTranVis_nowrap {\n    white-space: nowrap;\n}\n\n.uirTranVis_history .uirTranVis_paramsLabel,\n.uirTranVis_history .uirTranVis_resolveLabel {\n    color: white;\n    margin-top: -8px;\n    text-align: center;\n    font-weight: bold;\n}\n\n\nspan.link {\n    cursor: pointer;\n    text-decoration: underline;\n}\n\n\n.uirTranVis_tooltipRight {\n    display: inline;\n    position: relative;\n    transition: all 1.5s ease;\n}\n\n.uirTranVis_tooltipRight:after {\n    color: rgba(0,0,0,0);\n    text-decoration: none;\n    transition: all 1.5s ease;\n}\n\n.uirTranVis_tooltipRight:hover:after {\n    bottom: 0;\n    color: rgba(0,0,0,0.5);\n    content: attr(title);\n    display: block;\n    position: absolute;\n    white-space: nowrap;\n    font-size: smaller;\n}\n\n\n\n/* Bootstrap stuff */\n\n.uirTranVis_modal .uirTranVis_btnPrimary {\n    color: #fff;\n    background-color: #337ab7;\n    border-color: #2e6da4;\n}\n\n.uirTranVis_modal .uirTranVis_btn {\n    display: inline-block;\n    padding: 6px 12px;\n    margin-bottom: 0;\n    font-size: 14px;\n    font-weight: normal;\n    line-height: 1.42857143;\n    text-align: center;\n    white-space: nowrap;\n    vertical-align: middle;\n    -ms-touch-action: manipulation;\n    touch-action: manipulation;\n    cursor: pointer;\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    background-image: none;\n    border: 1px solid transparent;\n    border-radius: 4px;\n}\n\n.uirTranVis_modal .uirTranVis_btnXs, .uirTranVis_btnGroupXs > .uirTranVis_btn {\n    padding: 1px 5px;\n    font-size: 12px;\n    line-height: 1.5;\n    border-radius: 3px;\n}\n\n.uirTranVis_transition {\n    max-width: 550px;\n}\n\n.uirTranVis_transitionDetail span.link {\n    color: white;\n}\n\n.uirTranVis_history *:not(.fa):not(pre):not(.uirTranVis_code) {\n    font-family: Arial, Helvetica, sans-serif;\n}\n\n.uirTranVis_transitionDetail .enter .uirTranVis_heading {\n    flex-flow: row nowrap;\n}\n.uirTranVis_transitionDetail .uirTranVis_heading {\n    display: flex;\n    flex-flow: row-reverse nowrap;\n    justify-content: space-between;\n    align-items: baseline;\n}\n\n.uirTranVis_transitionDetail .retain .uirTranVis_heading {\n    justify-content: center;\n}\n\n.uirTranVis_panel {\n    margin-bottom: 20px;\n    background-color: #fff;\n    border: 1px solid lightgrey;\n    border-radius: 4px;\n    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n\n.uirTranVis_panelHeading {\n    color: #333;\n    background-color: #f5f5f5;\n    border-color: #ddd;\n\n    padding: 10px 16px;\n    border-bottom: 1px solid transparent;\n    border-top-left-radius: 3px;\n    border-top-right-radius: 3px;\n}\n\n.uirTranVis_panelTitle {\n    margin-top: 0;\n    margin-bottom: 0;\n    font-size: 16px;\n    color: inherit;\n}\n\n.uirTranVis_panelBody {\n    padding: 0 16px;\n}\n\n\n\n\n\n/* Styles go here */\n.uir-fade {\n    opacity: 0;\n    -webkit-transition: opacity .15s linear;\n    -o-transition: opacity .15s linear;\n    transition: opacity .15s linear;\n}\n\n.uir-fade.in {\n    opacity: 1;\n}\n\n.uirTranVis_modal-backdrop {\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 1040;\n    background-color: #000;\n}\n\n.uirTranVis_modal-backdrop.in {\n    filter: alpha(opacity=50);\n    opacity: .5;\n}\n\n.uirTranVis_modal {\n    position: fixed;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 1050;\n    display: block;\n    overflow-y: auto;\n    -webkit-overflow-scrolling: touch;\n    outline: 0;\n}\n\n\n.uirTranVis_modal-dialog {\n    position: relative;\n    width: auto;\n    margin: 10px;\n}\n\n.uirTranVis_modal-content {\n    position: relative;\n    background-color: #fff;\n    -webkit-background-clip: padding-box;\n    background-clip: padding-box;\n    border: 1px solid #999;\n    border: 1px solid rgba(0, 0, 0, .2);\n    border-radius: 6px;\n    outline: 0;\n    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);\n    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);\n}\n\n.uirTranVis_modal-header {\n    padding: 16px;\n    border-bottom: 1px solid #e5e5e5;\n}\n\n.uir-resolve-header {\n    display: flex;\n    flex-flow: row nowrap;\n    justify-content: space-between;\n    background-color: cornflowerblue;\n}\n\n.uirTranVis_modalBody {\n    color: black;\n    position: relative;\n    padding: 16px;\n}\n\n.uirTranVis_modalFooter {\n    padding: 16px;\n    text-align: right;\n    border-top: 1px solid #e5e5e5;\n}\n\n.uir-icon {\n    display: inline-block;\n    height: 16px; width: 16px;\n    margin: 4px;\n    background-size: cover;\n    background-position: 0 0;\n}\n\n.uir-spin {\n    animation: uirspin 2s infinite;\n    transform: rotate(0deg);\n}\n\n.uir-rotate-35 {\n    transform: rotate(35deg);\n    opacity: 0.5;\n}\n\n@keyframes uirspin {\n    0% { transform: rotate(0deg); }\n    100% { transform: rotate(360deg); }\n}\n\n\n.uir-iconw-spinner       { background-image: url(" + __webpack_require__(102) + "); }\n.uir-iconw-check         { background-image: url(" + __webpack_require__(103) + "); }\n.uir-iconw-circle-o      { background-image: url(" + __webpack_require__(104) + "); }\n.uir-iconw-share         { background-image: url(" + __webpack_require__(105) + "); }\n.uir-iconw-close         { background-image: url(" + __webpack_require__(106) + "); }\n\n.uir-icon-thumb-tack     { background-image: url(" + __webpack_require__(107) + "); }\n.uir-icon-toggle-on      { background-image: url(" + __webpack_require__(108) + "); }\n.uir-icon-toggle-off     { background-image: url(" + __webpack_require__(109) + "); }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABCElEQVQ4ja2SMU4CYRCF34Db6RISmi04gCZacgDuYElDYcFZLLWx1c4b6BE0sbaysBEh0aCdm3w2szKQ/1cTmGSz+795897Mzm/KBGCSjv14bWbkuDmBCcuY5HitUNAGxsDQoSrwKuAAeATegVHKcexuX0AFdIELf7rAVejoranbCRpPkmpJU0kfZvYp6SQYvARu/F7pogJ2M7k94BS4BPbXkwYUSdW0WOFb+gFugVeg94/iHjADbqTlFlh7/6mzwt14hK0E0AHugbNfOOfAHVA2WLwHpaRDhdman2pmc4cGko4kdSQtUg79Rt3nnPl2CsdKoB9rYgcys+dwrCU9eEe15xdJ503iGzoj4fOiDj0FAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAAc0lEQVQ4jeXQuwmAQBCE4SvEOwOtwjK0KEEQDOzORyD28Rt4wnLoPYwEJ935Jlil/hUgB0agfItXzuyAScFG4Cu1WyqAAdARuHOxBjZ7nIFM4MWLbbFxShNQRWEx0uJPH/Osp5Ew9ozE45uRdCxGdLj1hRzpQwNP2Cwv6wAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAAzElEQVQ4jaWTPQ7CMAyFnzkL7IUNRtoDlPugSkxciwlWFrr0CHCGfgw4qGrTFBVLUST7+fnnJdKfZjEnYJLWkpbuaiTdzYxJRuAA1AytBsqp5BPQesIFOPu5uK8FqlTlFngCeSSeAy/HlP2gddreJzrMHfPwPX0Dm9B2csYPNoyTSdLC/WHb1ykCSTe/V12C2RYIGr93P+RsezmDJQ4U6OCK6BI9GGR8jchYjMrYAVU/PKRjckCg9Bb79ohVjn4mJ8rkUklqzOyerDzX3pD9HgkYdWTVAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAA0UlEQVQ4jb2SvQ4BQRSFz/WXSESF0G6j8g7iAXQa4QE0ai+ip9ZIRDTeQUGjUJJ4BUs+hdlkbVixEqeZyZ05352ZM9K/BCyAzi+AA3AFuuF65s3mvKSqpLKkoivnJaUlTQHfzGZRUw4YAGvgQrz8p+sAFWDzwfQK0gwAyy/NAEfAE+AlNNeD7r3IscZAC6gB2UgKz2aXQsnNb5LaZraKSfMkqWVm+/AD9h15HmMUMAp3Di80HGAYB3inlJltJe0knRMB3DjR45clE1AAvMSAX3QHLbpPOaoNWa0AAAAASUVORK5CYII="
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAAlElEQVQ4jd3QMQqDQBhEYU8kpBZio41pTBov5B31IEFEhC+NkkU2a7pABrYZeI+dP8v+L7ggj/Q5LmdwgxkT6qCvt25GkxKM3pk2cIf3jClBi+UgCeEF7dmM2/bVYxbck3Ag6SOC/lv4imdEMKE6g6vI5uNNPkswHODH9kLJkBJ0WHc46HfJiu5sRoki0hcok/BP8gJcS0AygPBo+gAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAArElEQVQ4jbXSPQ5BQRiF4cdfZQWXpdgBW1LZjaugsgoqDdFfKpVEQ2huMcb9E3GSU8yXM2/OZD5+VKtglmCMTjR/YI1THTTFs8TzJq0myHDBLbic5c0aKc29CQBpUbDdlFimvwJ6ub9SHyvcff7AHcs8U6pZwcXYs6onjBq0fMvEm5hgEJwXOGAazDLBNnYjwMn7qu5wxLasTgyItce5KlAHOOBak6lUgmFV4AV5rTJf7ROKuAAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 109 */
+/* 108 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAApUlEQVQ4jcXSPQrCQBQE4E9B8Rg2gmW0UvEyegQP41XsDWirheDPIbQRtBAtTEACu4opMrDFsjPvvZl9VI1a4d5BF60A/4Y9TsWHPtZ4Bs4DG6Q4Y4VeLh7hGhEv0P5o1sQsKzSQjRMSL9EI2JngKCJ+YhwQ885vFytwRz1SAObfCD+htIVYiKlwiFMcYKjkN0LivRyxRdpmE10ybpL7+MTfq1wdXiIXWWLHZLTUAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 110 */
+/* 109 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAA4UlEQVQ4jcXSsUoDURAF0JPFDWmsrOxshBQKwcqI+Re3ttLCT/AP9FsEI2gW0wqSJUEb/YKk0ybEYp+wbHbXwiIXXvFm7p2Zd+exabRK93100anhf2OG93KBI9wE8QTbOESEZ3wFXgcHmOIcL3CCOS7QLnTbwx0eEBfibVwGzbEwTlIzcowRripyCd4gs+5FEaf4rIi3kEV4xKqhwBi72CnFV3iKGoTFTo346wkDfNQUziK5q2c14hjXuK3IJdiCvuY1Dn+JAWtrhJ7crAVSvGIpNyrFfThp4IyD5v9fefP4AeEQL7aw+eK/AAAAAElFTkSuQmCC"
