@@ -73,15 +73,15 @@
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-4.0.0.tgz#9a93ffa4ee1329e85166278a5ed99f81dc4c8362"
 
-"@uirouter/core@5.0.11":
-  version "5.0.11"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.11.tgz#bec461fcda767d79c98f6647cc9313ef9e5de03a"
+"@uirouter/core@^5.0.15":
+  version "5.0.15"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.15.tgz#09f5f76368f76274e64af3ab8080a77f1c0ca304"
 
-"@uirouter/react@0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-0.5.5.tgz#b69ff0620d0c571bf198b2f80446c9db3974fed0"
+"@uirouter/react@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-0.6.0.tgz#2acaa470cd7a4506bf8eb30740fd1ffbdc7b70a4"
   dependencies:
-    "@uirouter/core" "5.0.11"
+    "@uirouter/core" "^5.0.15"
     classnames "^2.2.5"
     prop-types "^15.5.8"
 
