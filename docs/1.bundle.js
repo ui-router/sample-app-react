@@ -17313,7 +17313,7 @@ exports.MessagesStorage = MessagesStorage;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 68), __webpack_require__(/*! ./../webpack/buildin/module.js */ 137)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 70), __webpack_require__(/*! ./../webpack/buildin/module.js */ 137)(module)))
 
 /***/ }),
 
@@ -17639,7 +17639,7 @@ var Contacts = function (_Component) {
   _createClass(Contacts, [{
     key: 'render',
     value: function render() {
-      var contacts = this.props.resolves.contacts;
+      var contacts = this.props.contacts;
 
       return _react2.default.createElement(
         'div',
@@ -17662,9 +17662,7 @@ var Contacts = function (_Component) {
 }(_react.Component);
 
 Contacts.propTypes = {
-  resolves: _propTypes2.default.shape({
-    contacts: _propTypes2.default.arrayOf(_propTypes2.default.object)
-  })
+  contacts: _propTypes2.default.arrayOf(_propTypes2.default.object)
 };
 exports.default = Contacts;
 
@@ -17853,7 +17851,7 @@ var ContactView = function (_Component) {
   _createClass(ContactView, [{
     key: 'render',
     value: function render() {
-      var contact = this.props.resolves.contact;
+      var contact = this.props.contact;
 
       // This button has an ui-sref to the mymessages.compose state. The ui-sref provides the mymessages.compose
       // state with an non-url parameter, which is used as the initial message model
@@ -17904,9 +17902,7 @@ var ContactView = function (_Component) {
 }(_react.Component);
 
 ContactView.propTypes = {
-  resolves: _propTypes2.default.shape({
-    contact: _propTypes2.default.object
-  })
+  contact: _propTypes2.default.object
 };
 exports.default = ContactView;
 
@@ -18100,7 +18096,7 @@ var _ContactForm2 = _interopRequireDefault(_ContactForm);
 
 var _dataSources = __webpack_require__(/*! ../global/dataSources */ 133);
 
-var _dialogService = __webpack_require__(/*! ../global/dialogService */ 67);
+var _dialogService = __webpack_require__(/*! ../global/dialogService */ 69);
 
 var _dialogService2 = _interopRequireDefault(_dialogService);
 
@@ -18144,7 +18140,7 @@ var EditContact = function (_Component) {
     var _this = _possibleConstructorReturn(this, (EditContact.__proto__ || Object.getPrototypeOf(EditContact)).call(this, props));
 
     _this.uiCanExit = function (trans) {
-      if (_this.canExit || (0, _lodash.isEqual)(_this.state.contact, _this.props.resolves.contact)) return true;
+      if (_this.canExit || (0, _lodash.isEqual)(_this.state.contact, _this.props.contact)) return true;
 
       var message = 'You have unsaved changes to this contact.';
       var question = 'Navigate away and lose changes?';
@@ -18182,7 +18178,7 @@ var EditContact = function (_Component) {
 
     _this.canExit = false;
     _this.state = {
-      contact: (0, _lodash.cloneDeep)(_this.props.resolves.contact)
+      contact: (0, _lodash.cloneDeep)(_this.props.contact)
     };
     return _this;
   }
@@ -18243,9 +18239,7 @@ var EditContact = function (_Component) {
 }(_react.Component);
 
 EditContact.propTypes = {
-  resolves: _propTypes2.default.shape({
-    contact: _propTypes2.default.object
-  })
+  contact: _propTypes2.default.object
 };
 exports.default = EditContact;
 

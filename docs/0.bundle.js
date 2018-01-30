@@ -17344,7 +17344,7 @@ exports.MessagesStorage = MessagesStorage;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 68), __webpack_require__(/*! ./../webpack/buildin/module.js */ 137)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/global.js */ 70), __webpack_require__(/*! ./../webpack/buildin/module.js */ 137)(module)))
 
 /***/ }),
 
@@ -17716,7 +17716,7 @@ var _appConfig = __webpack_require__(/*! ../global/appConfig */ 27);
 
 var _appConfig2 = _interopRequireDefault(_appConfig);
 
-var _dialogService = __webpack_require__(/*! ../global/dialogService */ 67);
+var _dialogService = __webpack_require__(/*! ../global/dialogService */ 69);
 
 var _dialogService2 = _interopRequireDefault(_dialogService);
 
@@ -17792,7 +17792,7 @@ var Compose = function (_Component) {
       };
     };
 
-    _this.pristineMessage = _extends({ body: '', to: '', subject: '', from: _appConfig2.default.emailAddress }, _this.props.resolves.$stateParams.message);
+    _this.pristineMessage = _extends({ body: '', to: '', subject: '', from: _appConfig2.default.emailAddress }, _this.props.$stateParams.message);
     _this.state = {
       message: _extends({}, _this.pristineMessage)
     };
@@ -17901,10 +17901,8 @@ var Compose = function (_Component) {
 }(_react.Component);
 
 Compose.propTypes = {
-  resolves: _propTypes2.default.shape({
-    $stateParams: _propTypes2.default.shape({
-      message: _propTypes2.default.object
-    })
+  $stateParams: _propTypes2.default.shape({
+    message: _propTypes2.default.object
   }) };
 exports.default = Compose;
 
@@ -17964,7 +17962,7 @@ var MyMessages = function (_Component) {
   _createClass(MyMessages, [{
     key: 'render',
     value: function render() {
-      var folders = this.props.resolves.folders.map(function (folder) {
+      var folders = this.props.folders.map(function (folder) {
         return (
           // Highlight the selected folder:
           // When the current state matches the UISref's state (and its parameters)
@@ -18015,9 +18013,7 @@ var MyMessages = function (_Component) {
 }(_react.Component);
 
 MyMessages.propTypes = {
-  resolves: _propTypes2.default.shape({
-    folders: _propTypes2.default.arrayOf(_propTypes2.default.object)
-  })
+  folders: _propTypes2.default.arrayOf(_propTypes2.default.object)
 };
 exports.default = MyMessages;
 
@@ -18050,7 +18046,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _dataSources = __webpack_require__(/*! ../global/dataSources */ 133);
 
-var _dialogService = __webpack_require__(/*! ../global/dialogService */ 67);
+var _dialogService = __webpack_require__(/*! ../global/dialogService */ 69);
 
 var _dialogService2 = _interopRequireDefault(_dialogService);
 
@@ -18096,14 +18092,14 @@ var Message = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).call(this, props));
 
     _this.reply = function () {
-      var message = _this.props.resolves.message;
+      var message = _this.props.message;
 
       var replyMsg = makeResponseMsg("Re: ", message);
       _this.stateService.go('mymessages.compose', { message: replyMsg });
     };
 
     _this.forward = function () {
-      var message = _this.props.resolves.message;
+      var message = _this.props.message;
 
       var fwdMsg = makeResponseMsg("Fwd: ", message);
       delete fwdMsg.to;
@@ -18111,15 +18107,15 @@ var Message = function (_Component) {
     };
 
     _this.editDraft = function () {
-      var message = _this.props.resolves.message;
+      var message = _this.props.message;
 
       _this.stateService.go('mymessages.compose', { message: message });
     };
 
     _this.remove = function () {
-      var message = _this.props.resolves.message;
+      var message = _this.props.message;
 
-      var nextMessageId = _this.props.resolves.nextMessageGetter(message._id);
+      var nextMessageId = _this.props.nextMessageGetter(message._id);
       var nextState = nextMessageId ? 'mymessages.messagelist.message' : 'mymessages.messagelist';
       var params = { messageId: nextMessageId };
 
@@ -18130,7 +18126,7 @@ var Message = function (_Component) {
       });
     };
 
-    _this.actions = props.resolves.folder.actions.reduce(function (obj, action) {
+    _this.actions = props.folder.actions.reduce(function (obj, action) {
       obj[action] = true;return obj;
     }, {});
     _this.stateService = _this.props.transition.router.stateService;
@@ -18144,7 +18140,7 @@ var Message = function (_Component) {
   _createClass(Message, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(props) {
-      var message = props.resolves.message;
+      var message = props.message;
       message.read = true;
       _dataSources.MessagesStorage.put(message);
     }
@@ -18175,10 +18171,10 @@ var Message = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props$resolves = this.props.resolves,
-          folder = _props$resolves.folder,
-          message = _props$resolves.message,
-          nextMessageGetter = _props$resolves.nextMessageGetter;
+      var _props = this.props,
+          folder = _props.folder,
+          message = _props.message,
+          nextMessageGetter = _props.nextMessageGetter;
 
       return _react2.default.createElement(
         'div',
@@ -18266,12 +18262,10 @@ var Message = function (_Component) {
 }(_react.Component);
 
 Message.propTypes = {
-  resolves: _propTypes2.default.shape({
-    message: _propTypes2.default.object,
-    nextMessageGetter: _propTypes2.default.func,
-    folder: _propTypes2.default.shape({
-      actions: _propTypes2.default.arrayOf(_propTypes2.default.string)
-    })
+  message: _propTypes2.default.object,
+  nextMessageGetter: _propTypes2.default.func,
+  folder: _propTypes2.default.shape({
+    actions: _propTypes2.default.arrayOf(_propTypes2.default.string)
   })
 };
 exports.default = Message;
@@ -18330,9 +18324,9 @@ var MessageList = function (_Component) {
   _createClass(MessageList, [{
     key: 'render',
     value: function render() {
-      var _props$resolves = this.props.resolves,
-          folder = _props$resolves.folder,
-          messages = _props$resolves.messages;
+      var _props = this.props,
+          folder = _props.folder,
+          messages = _props.messages;
 
       return _react2.default.createElement(
         'div',
@@ -18350,11 +18344,9 @@ var MessageList = function (_Component) {
 }(_react.Component);
 
 MessageList.propTypes = {
-  resolves: _propTypes2.default.shape({
-    messages: _propTypes2.default.arrayOf(_propTypes2.default.object),
-    folder: _propTypes2.default.shape({
-      columns: _propTypes2.default.arrayOf(_propTypes2.default.string)
-    })
+  messages: _propTypes2.default.arrayOf(_propTypes2.default.object),
+  folder: _propTypes2.default.shape({
+    columns: _propTypes2.default.arrayOf(_propTypes2.default.string)
   })
 };
 exports.default = MessageList;
