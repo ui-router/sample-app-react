@@ -15,11 +15,9 @@ import DialogService from '../global/dialogService';
 */
 class Compose extends Component {
   static propTypes = {
-    resolves: PropTypes.shape({
-      $stateParams: PropTypes.shape({
-        message: PropTypes.object
-      })
-    })
+    $stateParams: PropTypes.shape({
+      message: PropTypes.object
+    }),
   }
   /**
   * Create our message's model using the current user's email address as 'message.from'
@@ -29,7 +27,7 @@ class Compose extends Component {
   */
   constructor(props) {
     super(props);
-    this.pristineMessage = { body: '', to: '', subject: '', from: AppConfig.emailAddress, ...this.props.resolves.$stateParams.message };
+    this.pristineMessage = { body: '', to: '', subject: '', from: AppConfig.emailAddress, ...this.props.$stateParams.message };
     this.state = {
       message: { ...this.pristineMessage }
     }

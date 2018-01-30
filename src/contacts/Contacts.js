@@ -11,17 +11,15 @@ import ContactList from './components/ContactList';
  */
 class Contacts extends Component {
   static propTypes = {
-    resolves: PropTypes.shape({
-      contacts: PropTypes.arrayOf(PropTypes.object)
-    })
+    contacts: PropTypes.arrayOf(PropTypes.object),
   }
 
   constructor (props) {
     super(props);
   }
-  
+
   render () {
-    let {contacts} = this.props.resolves;
+    let {contacts} = this.props;
     return (
       <div className="my-contacts flex-h">
         <ContactList contacts={contacts} className="flex nogrow" />

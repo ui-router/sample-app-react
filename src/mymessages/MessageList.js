@@ -8,16 +8,14 @@ import MessageTable from './components/MessageTable';
  */
 class MessageList extends Component {
   static propTypes = {
-    resolves: PropTypes.shape({
-      messages: PropTypes.arrayOf(PropTypes.object),
-      folder: PropTypes.shape({
-        columns: PropTypes.arrayOf(PropTypes.string)
-      })
-    })
+    messages: PropTypes.arrayOf(PropTypes.object),
+    folder: PropTypes.shape({
+      columns: PropTypes.arrayOf(PropTypes.string)
+    }),
   }
 
   render () {
-    let {folder, messages} = this.props.resolves;
+    let {folder, messages} = this.props;
     return (
       <div className="messagelist">
         <div className="messages">

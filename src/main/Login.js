@@ -16,9 +16,7 @@ import LoginForm from './components/LoginForm';
  */
 class Login extends Component {
   static propTypes = {
-    resolves: PropTypes.shape({
-      returnTo: PropTypes.object,
-    })
+    returnTo: PropTypes.object,
   }
 
   constructor (props) {
@@ -35,8 +33,7 @@ class Login extends Component {
     this.setState(credentials);
   }
   handleLogin = (credentials) => {
-    let {transition} = this.props;
-    let {returnTo} = this.props.resolves;
+    let {transition, returnTo} = this.props;
     const done = () => this.setState({authenticating:false});
     const showError = (errorMessage) => this.setState({errorMessage});
     const returnToOriginalState = () => transition.router.stateService.go(returnTo.state(), returnTo.params(), { reload: true });
