@@ -11,13 +11,11 @@ import {UIView, UISref, UISrefActive} from '@uirouter/react';
  */
 class MyMessages extends Component {
   static propTypes = {
-    resolves: PropTypes.shape({
-      folders: PropTypes.arrayOf(PropTypes.object)
-    })
+    folders: PropTypes.arrayOf(PropTypes.object)
   }
 
   render () {
-    let folders = this.props.resolves.folders.map(folder => (
+    let folders = this.props.folders.map(folder => (
       // Highlight the selected folder:
       // When the current state matches the UISref's state (and its parameters)
       // UISrefActive applies the 'selected' class to the li element

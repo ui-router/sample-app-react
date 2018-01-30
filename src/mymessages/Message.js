@@ -28,26 +28,24 @@ ${message.body}`;
 */
 class Message extends Component {
   static propTypes = {
-    resolves: PropTypes.shape({
-      message: PropTypes.object,
-      nextMessageGetter: PropTypes.func,
-      folder: PropTypes.shape({
-        actions: PropTypes.arrayOf(PropTypes.string)
-      })
-    })
+    message: PropTypes.object,
+    nextMessageGetter: PropTypes.func,
+    folder: PropTypes.shape({
+      actions: PropTypes.arrayOf(PropTypes.string)
+    }),
   }
 
   constructor (props) {
     super(props);
     // Apply the available actions for the message, depending on the folder the message belongs to.
-    this.actions = props.resolves.folder.actions.reduce((obj, action) => { obj[action] = true; return obj; }, {});
+    this.actions = props.folder.actions.reduce((obj, action) => { obj[action] = true; return obj; }, {});
     this.stateService = this.props.transition.router.stateService;
   }
   /**
   * When the user views a message, mark it as read and save (PUT) the resource.
   */
   componentWillReceiveProps (props) {
-    let message = props.resolves.message;
+    let message = props.message;
     message.read = true;
     MessagesStorage.put(message);
   }
@@ -55,7 +53,7 @@ class Message extends Component {
   * Compose a new message as a reply to this one
   */
   reply = () => {
-    let {message} = this.props.resolves;
+    let {message} = this.props;
     let replyMsg = makeResponseMsg("Re: ", message);
     this.stateService.go('mymessages.compose', { message: replyMsg });
   };
@@ -64,7 +62,7 @@ class Message extends Component {
   * Compose a new message as a forward of this one.
   */
   forward = () => {
-    let {message} = this.props.resolves;
+    let {message} = this.props;
     let fwdMsg = makeResponseMsg("Fwd: ", message);
     delete fwdMsg.to;
     this.stateService.go('mymessages.compose', { message: fwdMsg });
@@ -74,7 +72,7 @@ class Message extends Component {
   * Continue composing this (draft) message
   */
   editDraft = () => {
-    let {message} = this.props.resolves;
+    let {message} = this.props;
     this.stateService.go('mymessages.compose', { message: message });
   };
 
@@ -87,8 +85,8 @@ class Message extends Component {
   * - show that message
   */
   remove = () => {
-    let {message} = this.props.resolves;
-    let nextMessageId = this.props.resolves.nextMessageGetter(message._id);
+    let {message} = this.props;
+    let nextMessageId = this.props.nextMessageGetter(message._id);
     let nextState = nextMessageId ? 'mymessages.messagelist.message' : 'mymessages.messagelist';
     let params = { messageId: nextMessageId };
 
@@ -97,7 +95,7 @@ class Message extends Component {
       .then(() => this.stateService.go(nextState, params, { reload: 'mymessages.messagelist' }));
   };
   render () {
-    let { folder, message, nextMessageGetter } = this.props.resolves;
+    let { folder, message, nextMessageGetter } = this.props;
     return (
       <div className="message">
         <div className="header">

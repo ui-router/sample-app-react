@@ -31,21 +31,19 @@ import DialogService from '../global/dialogService';
 */
 class EditContact extends Component {
   static propTypes = {
-    resolves: PropTypes.shape({
-      contact: PropTypes.object
-    })
+    contact: PropTypes.object,
   }
 
   constructor (props) {
     super(props);
     this.canExit = false;
     this.state = {
-      contact: cloneDeep(this.props.resolves.contact)
+      contact: cloneDeep(this.props.contact)
     }
   }
 
   uiCanExit = (trans) => {
-    if (this.canExit || isEqual(this.state.contact, this.props.resolves.contact)) return true;
+    if (this.canExit || isEqual(this.state.contact, this.props.contact)) return true;
 
     let message = 'You have unsaved changes to this contact.';
     let question = 'Navigate away and lose changes?';

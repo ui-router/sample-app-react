@@ -12,13 +12,11 @@ import ContactDetail from './components/ContactDetail';
 
 class ContactView extends Component {
   static propTypes = {
-    resolves: PropTypes.shape({
-      contact: PropTypes.object
-    })
+    contact: PropTypes.object,
   }
 
   render () {
-    let {contact} = this.props.resolves;
+    let {contact} = this.props;
 
     // This button has an ui-sref to the mymessages.compose state. The ui-sref provides the mymessages.compose
     // state with an non-url parameter, which is used as the initial message model
