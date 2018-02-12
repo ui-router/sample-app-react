@@ -24,7 +24,7 @@
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
-    "autoprefixer": "7.2.6",
+    "autoprefixer": "8.0.0",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.2",
     "babel-plugin-syntax-trailing-function-commas": "6.22.0",
