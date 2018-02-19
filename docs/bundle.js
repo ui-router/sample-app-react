@@ -78,7 +78,7 @@
 /******/ 		// start chunk loading
 /******/ 		var head = document.getElementsByTagName('head')[0];
 /******/ 		var script = document.createElement('script');
-/******/ 		script.type = 'text/javascript';
+/******/ 		script.type = "text/javascript";
 /******/ 		script.charset = 'utf-8';
 /******/ 		script.async = true;
 /******/ 		script.timeout = 120000;
@@ -4962,11 +4962,8 @@ exports.Glob = Glob;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/** @module common */
 var common_1 = __webpack_require__(/*! ./common */ 0);
-/**
- * @module common
- */
-/** for typedoc */
 var Queue = /** @class */ (function () {
     function Queue(_items, _limit) {
         if (_items === void 0) { _items = []; }
@@ -9367,7 +9364,7 @@ function reactViewsBuilder(state) {
             if (val.component)
                 return val;
             return { component: val };
-        }, viewsDefinitionObject);
+        });
     }
     core_1.forEach(viewsDefinitionObject, function (config, name) {
         name = name || '$default'; // Account for views: { "": { template... } }
@@ -27139,16 +27136,14 @@ var isTransition = common_1.inArray(TRANSITION_TOKENS);
 // This function removes resolves for '$transition$' and `Transition` from the treeChanges.
 // Do not use this on current transitions, only on old ones.
 exports.treeChangesCleanup = function (trans) {
+    var nodes = common_1.values(trans.treeChanges()).reduce(common_1.unnestR, []).reduce(common_1.uniqR, []);
     // If the resolvable is a Transition, return a new resolvable with null data
     var replaceTransitionWithNull = function (r) {
         return isTransition(r.token) ? resolve_1.Resolvable.fromData(r.token, null) : r;
     };
-    var cleanPath = function (path) { return path.map(function (node) {
-        var resolvables = node.resolvables.map(replaceTransitionWithNull);
-        return common_1.extend(node.clone(), { resolvables: resolvables });
-    }); };
-    var treeChanges = trans.treeChanges();
-    common_1.mapObj(treeChanges, cleanPath, treeChanges);
+    nodes.forEach(function (node) {
+        node.resolvables = node.resolvables.map(replaceTransitionWithNull);
+    });
 };
 //# sourceMappingURL=coreResolvables.js.map
 
@@ -28375,13 +28370,18 @@ var UIView = /** @class */ (function (_super) {
                 _this.registerUiCanExitHook(stateName);
             };
         }
+        // attach any style or className to the rendered component
+        // specified on the UIView itself
+        var _c = this.props, className = _c.className, style = _c.style;
+        var styleProps = { className: className, style: style };
+        var childProps = __assign({}, props, styleProps);
         var child = !loaded && react_1.isValidElement(children)
-            ? react_1.cloneElement(children, props)
-            : react_1.createElement(component, props);
+            ? react_1.cloneElement(children, childProps)
+            : react_1.createElement(component, childProps);
         // if a render function is passed use that,
         // otherwise render the component normally
         return typeof render !== 'undefined' && loaded
-            ? render(component, props)
+            ? render(component, childProps)
             : child;
     };
     UIView.prototype.getChildContext = function () {
@@ -28418,39 +28418,38 @@ var UIView = /** @class */ (function (_super) {
     /**
      * View config updated callback
      *
-     * This is called by UI-Router when a state was activated, and one of its views targets this `UIView`
+     * This is called by UI-Router during ViewService.sync().
+     * The `newConfig` parameter will contain view configuration (component, etc) when a
+     * state is activated and one of its views targets this `UIView`.
      */
     UIView.prototype.viewConfigUpdated = function (newConfig) {
-        var newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
-        var trans = undefined, resolves = {};
+        if (newConfig === this.uiViewData.config) {
+            return;
+        }
+        var trans;
+        var resolves = {};
         if (newConfig) {
-            var context = newConfig.viewDecl && newConfig.viewDecl.$context;
-            this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context: context };
-            var ctx = new core_1.ResolveContext(newConfig.path);
-            trans = ctx.getResolvable(core_1.Transition).data;
-            var stringTokens = trans
-                .getResolveTokens()
+            var viewContext = newConfig.viewDecl && newConfig.viewDecl.$context;
+            this.uiViewAddress = { fqn: this.uiViewAddress.fqn, context: viewContext };
+            var resolveContext = new core_1.ResolveContext(newConfig.path);
+            var injector_1 = resolveContext.injector();
+            var stringTokens = resolveContext.getTokens()
                 .filter(function (x) { return typeof x === 'string'; });
-            resolves = stringTokens
-                .map(function (token) { return [token, trans.injector().get(token)]; })
-                .reduce(core_1.applyPairs, {});
             if (stringTokens.indexOf('transition') !== -1) {
                 throw exports.TransitionPropCollisionError;
             }
+            trans = injector_1.get(core_1.Transition);
+            resolves = stringTokens
+                .map(function (token) { return [token, injector_1.get(token)]; })
+                .reduce(core_1.applyPairs, {});
         }
         this.uiViewData.config = newConfig;
         var props = __assign({}, resolves, { transition: trans });
-        // attach any style or className to the rendered component
-        // specified on the UIView itself
-        var styleProps = {};
-        if (this.props.className)
-            styleProps.className = this.props.className;
-        if (this.props.className)
-            styleProps.style = this.props.style;
+        var newComponent = newConfig && newConfig.viewDecl && newConfig.viewDecl.component;
         this.setState({
             component: newComponent || 'div',
-            props: newComponent ? core_1.extend(props, styleProps) : styleProps,
-            loaded: newComponent ? true : false,
+            props: newComponent ? props : {},
+            loaded: !!newComponent,
         });
     };
     UIView.prototype.registerUiCanExitHook = function (stateName) {
@@ -29482,7 +29481,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "button.btn i + span {\n  margin-left: 0.75em;\n}\n\n.flex-h {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: row wrap;\n          flex-flow: row wrap;\n}\n\n.flex-v {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: column wrap;\n          flex-flow: column wrap;\n}\n\n.flex-h > * {\n  -webkit-box-flex: 1;\n      -ms-flex: 1 1;\n          flex: 1 1;\n}\n\n.flex.grow {\n  -webkit-box-flex: 1;\n      -ms-flex: 1 0 auto;\n          flex: 1 0 auto;\n}\n\n.flex.nogrow {\n  -webkit-box-flex: 0;\n      -ms-flex: 0 1 auto;\n          flex: 0 1 auto;\n}\n\n\n.home.buttons {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: row wrap;\n          flex-flow: row wrap;\n  -ms-flex-pack: distribute;\n      justify-content: space-around;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  height: 45%;\n}\n\n.home.buttons button {\n  padding: 2em;\n  margin: 0;\n  border: 3px solid black;\n  border-radius: 1em;\n  text-shadow: 0.1em 0.1em 0.1em black;\n}\n\n.home.buttons button i {\n  padding: 0;\n  margin: 0;\n  text-shadow: 0.1em 0.1em 0.1em black;\n}\n\n.navheader {\n  margin: 0.3em 0.3em 0 0.3em;\n}\n\n.navheader .nav-tabs li.active a:focus {\n  background-color: #f7f7f7;\n}\n\n.navheader .nav-tabs li.active a {\n  border-color: lightgray lightgray rgba(0,0,0,0) lightgray ;\n  background-color: #f7f7f7;\n}\n\n.navheader .nav-tabs li a {\n  border-width: 1px;\n  border-radius: 10px 10px 0 0;\n}\n\n.navheader .logged-in-user div.hoverdrop {\n  display: none;\n  position: absolute;\n  width: 100%;\n}\n\n.navheader .logged-in-user:hover div.hoverdrop {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient:horizontal;\n  -webkit-box-direction:reverse;\n      -ms-flex-direction:row-reverse;\n          flex-direction:row-reverse;\n}\n\n/* my messages */\n\n.my-messages {\n  width: 100%;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  max-height: 200px;\n}\n\n.my-messages .folderlist {\n  -webkit-box-flex: 0;\n      -ms-flex: 0 0 auto;\n          flex: 0 0 auto;\n  overflow-y: scroll;\n  max-height: 200px;\n}\n\n\n\n\n/* selection lists */\n.selectlist {\n  margin: 0;\n  padding: 1.5em 0;\n  background-color: #DDD;\n}\n.selectlist a {\n  display: block;\n  color: black;\n  padding: 0.15em 1.5em;\n  text-decoration: none;\n  font-size: small;\n}\n.selectlist .selected {\n  background-color: cornflowerblue;\n}\n.selectlist .selected a {\n  color: white;\n}\n.selectlist i.fa {\n  width: 1.35em;\n}\n\n\n\n/* folder list */\n.selectlist .folder.selected i.fa:before {\n  content: \"\\F115\";\n}\n.selectlist .folder:not(.selected) i.fa:before {\n  content: \"\\F114\";\n}\n\n\n\n.ellipsis {\n  text-overflow: ellipsis;\n}\n\n\n\n\n/* message list */\n\n.messagelist {\n  -webkit-box-flex: 1;\n      -ms-flex: 1 0 12em;\n          flex: 1 0 12em;\n  overflow-y: scroll;\n  max-height: 200px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n.messagelist table {\n  table-layout: fixed;\n  width:100%;\n}\n\n.messagelist thead td {\n  font-weight: bold;\n}\n\n.messagelist thead td.st-sort-ascent:after {\n  content: \" \\F0DE\";\n  font-family: \"FontAwesome\";\n}\n\n.messagelist thead td.st-sort-descent:after {\n  content: \" \\F0DD\";\n  font-family: \"FontAwesome\";\n}\n\n.messagelist table td {\n  padding: 0.25em 0.75em;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  font-size: small;\n  cursor: default;\n}\n\n.messagelist i.fa-circle {\n  color: cornflowerblue;\n  font-size: 50%;\n}\n\n.messagelist table tr.active {\n  background-color: cornflowerblue;\n  color: white;\n}\n\n.messagelist table td:nth-child(1){ width: 1.75em; }\n.messagelist table td:nth-child(2){ width: 21%; }\n.messagelist table td:nth-child(3){ width: 62%; }\n.messagelist table td:nth-child(4){ width: 15%; }\n\n.messagelist thead tr:first-child {\n  /*position:absolute;*/\n}\n\n.messagelist tbody tr:first-child td{\n  /*padding-top:28px;*/\n}\n\n\n\n\n/* message content */\n\n.message .header,.body {\n  padding: 1em 2em;\n}\n\n.message .header {\n  background-color: darkgray;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: row wrap;\n          flex-flow: row wrap;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  -webkit-box-align: baseline;\n      -ms-flex-align: baseline;\n          align-items: baseline;\n}\n\n\n.message .header .line2 {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: column;\n          flex-flow: column;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n\n\n.compose .header label {\n  padding: 0 1em;\n  -webkit-box-flex: 0;\n      -ms-flex: 0 0 6em;\n          flex: 0 0 6em;\n}\n\n.compose .body {\n  background-color: lightgray;\n  height: 100%;\n}\n.compose .body textarea {\n  width: 100%;\n  border: 0;\n  outline: 0;\n}\n\n.compose .body .buttons {\n  padding: 1em 0;\n  float: right;\n}\n\n\n\n\n\n.contact {\n  padding: 1em 3em;\n}\n\n.contact .details > div {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: row wrap;\n          flex-flow: row wrap;\n}\n\n.contact .details h3 {\n  margin-top: 0;\n}\n\n.contact .details label {\n  width: 8em;\n  -webkit-box-flex: 0;\n      -ms-flex: 0 1 auto;\n          flex: 0 1 auto;\n}\n\n.contact .details input {\n  -webkit-box-flex: 1;\n      -ms-flex: 1 1 auto;\n          flex: 1 1 auto;\n}\n\n\n\n\n\n.dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1040;\n}\n\n.dialog .backdrop {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  -webkit-transition: opacity 0.25s ease;\n  transition: opacity 0.25s ease;\n  background: #000;\n  opacity: 0;\n}\n\n.dialog.active .backdrop {\n  opacity: 0.5;\n}\n\n.dialog .wrapper {\n  z-index: 1041;\n  opacity: 1;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n\n.dialog .content {\n  -webkit-transition: top 0.25s ease;\n  transition: top 0.25s ease;\n  -webkit-box-flex: 1;\n      -ms-flex: 1 1 auto;\n          flex: 1 1 auto;\n  background: white;\n  padding: 2em;\n  position: relative;\n  top: -200px;\n}\n\n.dialog.active .content {\n  top: 4em;\n}\n\n\n.bounce-horizontal {\n  -webkit-animation: bounce-horizontal 0.5s alternate infinite;\n          animation: bounce-horizontal 0.5s alternate infinite;\n}\n\n@-webkit-keyframes bounce-horizontal {\n  0% { left: 1.5em; }\n  100% { left: 0.5em; }\n}\n\n@keyframes bounce-horizontal {\n  0% { left: 1.5em; }\n  100% { left: 0.5em; }\n}\n", ""]);
+exports.push([module.i, "button.btn i + span {\n  margin-left: 0.75em;\n}\n\n.flex-h {\n  display: flex;\n  flex-flow: row wrap;\n}\n\n.flex-v {\n  display: flex;\n  flex-flow: column wrap;\n}\n\n.flex-h > * {\n  flex: 1 1;\n}\n\n.flex.grow {\n  flex: 1 0 auto;\n}\n\n.flex.nogrow {\n  flex: 0 1 auto;\n}\n\n\n.home.buttons {\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: space-around;\n  align-items: center;\n  height: 45%;\n}\n\n.home.buttons button {\n  padding: 2em;\n  margin: 0;\n  border: 3px solid black;\n  border-radius: 1em;\n  text-shadow: 0.1em 0.1em 0.1em black;\n}\n\n.home.buttons button i {\n  padding: 0;\n  margin: 0;\n  text-shadow: 0.1em 0.1em 0.1em black;\n}\n\n.navheader {\n  margin: 0.3em 0.3em 0 0.3em;\n}\n\n.navheader .nav-tabs li.active a:focus {\n  background-color: #f7f7f7;\n}\n\n.navheader .nav-tabs li.active a {\n  border-color: lightgray lightgray rgba(0,0,0,0) lightgray ;\n  background-color: #f7f7f7;\n}\n\n.navheader .nav-tabs li a {\n  border-width: 1px;\n  border-radius: 10px 10px 0 0;\n}\n\n.navheader .logged-in-user div.hoverdrop {\n  display: none;\n  position: absolute;\n  width: 100%;\n}\n\n.navheader .logged-in-user:hover div.hoverdrop {\n  display: flex;\n  flex-direction:row-reverse;\n}\n\n/* my messages */\n\n.my-messages {\n  width: 100%;\n  display: flex;\n  max-height: 200px;\n}\n\n.my-messages .folderlist {\n  flex: 0 0 auto;\n  overflow-y: scroll;\n  max-height: 200px;\n}\n\n\n\n\n/* selection lists */\n.selectlist {\n  margin: 0;\n  padding: 1.5em 0;\n  background-color: #DDD;\n}\n.selectlist a {\n  display: block;\n  color: black;\n  padding: 0.15em 1.5em;\n  text-decoration: none;\n  font-size: small;\n}\n.selectlist .selected {\n  background-color: cornflowerblue;\n}\n.selectlist .selected a {\n  color: white;\n}\n.selectlist i.fa {\n  width: 1.35em;\n}\n\n\n\n/* folder list */\n.selectlist .folder.selected i.fa:before {\n  content: \"\\F115\";\n}\n.selectlist .folder:not(.selected) i.fa:before {\n  content: \"\\F114\";\n}\n\n\n\n.ellipsis {\n  text-overflow: ellipsis;\n}\n\n\n\n\n/* message list */\n\n.messagelist {\n  flex: 1 0 12em;\n  overflow-y: scroll;\n  max-height: 200px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n.messagelist table {\n  table-layout: fixed;\n  width:100%;\n}\n\n.messagelist thead td {\n  font-weight: bold;\n}\n\n.messagelist thead td.st-sort-ascent:after {\n  content: \" \\F0DE\";\n  font-family: \"FontAwesome\";\n}\n\n.messagelist thead td.st-sort-descent:after {\n  content: \" \\F0DD\";\n  font-family: \"FontAwesome\";\n}\n\n.messagelist table td {\n  padding: 0.25em 0.75em;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  font-size: small;\n  cursor: default;\n}\n\n.messagelist i.fa-circle {\n  color: cornflowerblue;\n  font-size: 50%;\n}\n\n.messagelist table tr.active {\n  background-color: cornflowerblue;\n  color: white;\n}\n\n.messagelist table td:nth-child(1){ width: 1.75em; }\n.messagelist table td:nth-child(2){ width: 21%; }\n.messagelist table td:nth-child(3){ width: 62%; }\n.messagelist table td:nth-child(4){ width: 15%; }\n\n.messagelist thead tr:first-child {\n  /*position:absolute;*/\n}\n\n.messagelist tbody tr:first-child td{\n  /*padding-top:28px;*/\n}\n\n\n\n\n/* message content */\n\n.message .header,.body {\n  padding: 1em 2em;\n}\n\n.message .header {\n  background-color: darkgray;\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: space-between;\n  align-items: baseline;\n}\n\n\n.message .header .line2 {\n  display: flex;\n  flex-flow: column;\n  justify-content: space-between;\n}\n\n\n.compose .header label {\n  padding: 0 1em;\n  flex: 0 0 6em;\n}\n\n.compose .body {\n  background-color: lightgray;\n  height: 100%;\n}\n.compose .body textarea {\n  width: 100%;\n  border: 0;\n  outline: 0;\n}\n\n.compose .body .buttons {\n  padding: 1em 0;\n  float: right;\n}\n\n\n\n\n\n.contact {\n  padding: 1em 3em;\n}\n\n.contact .details > div {\n  display: flex;\n  flex-flow: row wrap;\n}\n\n.contact .details h3 {\n  margin-top: 0;\n}\n\n.contact .details label {\n  width: 8em;\n  flex: 0 1 auto;\n}\n\n.contact .details input {\n  flex: 1 1 auto;\n}\n\n\n\n\n\n.dialog {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1040;\n}\n\n.dialog .backdrop {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  transition: opacity 0.25s ease;\n  background: #000;\n  opacity: 0;\n}\n\n.dialog.active .backdrop {\n  opacity: 0.5;\n}\n\n.dialog .wrapper {\n  z-index: 1041;\n  opacity: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n\n.dialog .content {\n  transition: top 0.25s ease;\n  flex: 1 1 auto;\n  background: white;\n  padding: 2em;\n  position: relative;\n  top: -200px;\n}\n\n.dialog.active .content {\n  top: 4em;\n}\n\n\n.bounce-horizontal {\n  -webkit-animation: bounce-horizontal 0.5s alternate infinite;\n          animation: bounce-horizontal 0.5s alternate infinite;\n}\n\n@-webkit-keyframes bounce-horizontal {\n  0% { left: 1.5em; }\n  100% { left: 0.5em; }\n}\n\n@keyframes bounce-horizontal {\n  0% { left: 1.5em; }\n  100% { left: 0.5em; }\n}\n", ""]);
 
 // exports
 
@@ -30034,7 +30033,7 @@ module.exports = function (css) {
 			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
 
 		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
 		  return fullMatch;
 		}
 
@@ -30129,11 +30128,11 @@ router.transitionService.onBefore(_requiresAuth2.default.criteria, _requiresAuth
 	if(true)
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("ui-router-visualizer", [], factory);
+		define("@uirouter/visualizer", [], factory);
 	else if(typeof exports === 'object')
-		exports["ui-router-visualizer"] = factory();
+		exports["@uirouter/visualizer"] = factory();
 	else
-		root["ui-router-visualizer"] = factory();
+		root["@uirouter/visualizer"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -36173,7 +36172,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {"hmr":false}
+var options = {"hmr":false,"attrs":{"nonce":"uiroutervisualizer"}}
 options.transform = transform
 // add the styles to the DOM
 var update = __webpack_require__(33)(content, options);
@@ -37106,7 +37105,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
 
-var options = {"hmr":false}
+var options = {"hmr":false,"attrs":{"nonce":"uiroutervisualizer"}}
 options.transform = transform
 // add the styles to the DOM
 var update = __webpack_require__(33)(content, options);
