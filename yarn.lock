@@ -75,15 +75,15 @@
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-4.0.0.tgz#9a93ffa4ee1329e85166278a5ed99f81dc4c8362"
 
-"@uirouter/core@5.0.16":
-  version "5.0.16"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.16.tgz#c6f9e2041df1b6ad3bc28b089e55241a1cb4610f"
+"@uirouter/core@5.0.17":
+  version "5.0.17"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.17.tgz#c85d422b1e9a45df885be8b84f9b7f53233a7973"
 
-"@uirouter/react@0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-0.6.1.tgz#49e8e88331894f84dd758d67005e8eeff585f097"
+"@uirouter/react@0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-0.6.2.tgz#cfedcba0e3aa134968689bae2045ce38b05a96ca"
   dependencies:
-    "@uirouter/core" "5.0.16"
+    "@uirouter/core" "5.0.17"
     classnames "2.2.5"
     prop-types "15.6.0"
 
@@ -1935,9 +1935,9 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
 
-cypress@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-2.0.1.tgz#cbb62e7c2ff7e646aab5ab0570db07ceaecf3d4e"
+cypress@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-2.0.2.tgz#df7a5c2105c3877617ceafa02f18b554c2ce31dd"
   dependencies:
     "@cypress/listr-verbose-renderer" "0.4.1"
     "@cypress/xvfb" "1.1.3"
