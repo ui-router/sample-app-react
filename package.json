@@ -37,7 +37,7 @@
     "copy-webpack-plugin": "4.4.1",
     "css-loader": "0.28.9",
     "cypress": "2.0.2",
-    "file-loader": "1.1.6",
+    "file-loader": "1.1.7",
     "npm-run-all": "4.1.2",
     "postcss-load-config": "1.2.0",
     "postcss-loader": "2.1.0",
