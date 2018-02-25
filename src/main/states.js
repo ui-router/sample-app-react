@@ -14,7 +14,7 @@ const appState = {
   name: 'app',
   redirectTo: 'welcome',
   component: App
-}
+};
 
 /**
  * This is the 'welcome' state.  It is the default state (as defined by app.js) if no other state
@@ -25,7 +25,7 @@ const welcomeState = {
   name: 'welcome',
   url: '/welcome',
   component: Welcome
-}
+};
 
 /**
  * This is a home screen for authenticated users.
@@ -52,7 +52,13 @@ const loginState = {
   name: 'login',
   url: '/login',
   component: Login,
-  resolve: { returnTo: returnTo }
+  resolve: [
+    {
+      token: 'returnTo',
+      deps: [ '$transition$' ],
+      resolveFn: returnTo,
+    },
+  ]
 };
 
 /**
@@ -86,7 +92,7 @@ export const contactsFutureState = {
   parent: 'app',
   name: 'contacts.**',
   url: '/contacts',
-  lazyLoad: () => System.import('../contacts/states'),
+  lazyLoad: () => import('../contacts/states'),
 };
 
 // Future State (Placeholder) for the prefs module
@@ -94,7 +100,7 @@ export const prefsFutureState = {
   parent: 'app',
   name: 'prefs.**',
   url: '/prefs',
-  lazyLoad: () => System.import('../prefs/states'),
+  lazyLoad: () => import('../prefs/states'),
 };
 
 // Future State (Placeholder) for the mymessages module
@@ -102,7 +108,7 @@ export const mymessagesFutureState = {
   parent: 'app',
   name: 'mymessages.**',
   url: '/mymessages',
-  lazyLoad: () => System.import('../mymessages/states'),
+  lazyLoad: () => import('../mymessages/states'),
 };
 
 

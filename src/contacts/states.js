@@ -14,10 +14,13 @@ const contactsState = {
   parent: 'app', // declares that 'contacts' is a child of 'app'
   name: "contacts",
   url: "/contacts",
-  resolve: {
+  resolve: [
     // Resolve all the contacts. The resolved contacts are injected as props into the Contacts component.
-    contacts: () => ContactsStorage.all()
-  },
+    {
+      token: 'contacts',
+      resolveFn: () => ContactsStorage.all(),
+    }
+  ],
   data: { requiresAuth: true },
   component: Contacts
 };
@@ -29,11 +32,15 @@ const contactsState = {
 const viewContactState = {
   name: 'contacts.contact',
   url: '/:contactId',
-  resolve: {
+  resolve: [
     // Resolve the contact, based on the contactId parameter value.
     // The resolved contact is provided to the contactComponent's contact binding
-    contact: ($transition$) => ContactsStorage.get($transition$.params().contactId)
-  },
+    {
+      token: 'contact',
+      deps: ['$transition$'],
+      resolveFn: ($transition$) => ContactsStorage.get($transition$.params().contactId),
+    }
+  ],
   component: ContactView
 };
 
