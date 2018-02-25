@@ -35,9 +35,9 @@
     "babel-preset-react": "6.24.1",
     "browser-sync": "2.23.6",
     "copy-webpack-plugin": "4.4.2",
-    "css-loader": "0.28.9",
+    "css-loader": "0.28.10",
     "cypress": "2.0.3",
-    "file-loader": "1.1.7",
+    "file-loader": "1.1.9",
     "npm-run-all": "4.1.2",
     "postcss-load-config": "1.2.0",
     "postcss-loader": "2.1.0",
@@ -45,6 +45,7 @@
     "style-loader": "0.20.2",
     "wait-on": "2.1.0",
     "webpack": "3.11.0",
+    "webpack-cli": "^2.0.9",
     "webpack-dev-server": "3.0.0"
   }
 }
