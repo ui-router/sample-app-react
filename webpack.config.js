@@ -1,14 +1,17 @@
-var path = require('path');
-var webpack = require('webpack');
-var autoprefixer = require('autoprefixer');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const isdev = (process.env['NODE_ENV'] || 'development') === 'development';
 
 module.exports = {
-  mode: process.env['NODE_ENV'] || 'development',
+  mode: isdev ? 'development' : 'production',
   watch: process.env['WATCH'] === 'true',
   entry: [
     path.join(__dirname, 'src', 'index.js')
   ],
+  devtool: isdev ? 'eval' : 'source-map',
   output: {
     path: path.join(__dirname, 'docs'),
     pathinfo: true,
