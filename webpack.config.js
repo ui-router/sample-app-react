@@ -4,7 +4,8 @@ var autoprefixer = require('autoprefixer');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  devtool: 'source-map',
+  mode: process.env['NODE_ENV'] || 'development',
+  watch: process.env['WATCH'] === 'true',
   entry: [
     path.join(__dirname, 'src', 'index.js')
   ],
@@ -14,22 +15,12 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: ''
   },
-  watch: process.env['WATCH'] === 'true',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         include: path.join(__dirname, 'src'),
         loader: 'babel-loader',
-        options: {
-          cacheDirectory: true,
-          presets: ['es2015', 'es2016', 'react'],
-          plugins: [
-            'babel-plugin-syntax-trailing-function-commas',
-            'babel-plugin-transform-class-properties',
-            'babel-plugin-transform-object-rest-spread'
-          ]
-      },
         exclude: /node_modules/
       },
       {

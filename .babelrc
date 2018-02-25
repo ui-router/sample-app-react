@@ -1,0 +1,12 @@
+{
+  "presets": [
+    "react",
+    ["env", { "targets": { "browsers": ["last 2 versions", "safari >= 7"] } }]
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    "syntax-trailing-function-commas",
+    "transform-class-properties",
+    "transform-object-rest-spread"
+  ]
+}
