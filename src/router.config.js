@@ -1,5 +1,4 @@
 import {UIRouterReact, servicesPlugin, hashLocationPlugin} from '@uirouter/react';
-import {Visualizer} from '@uirouter/visualizer';
 
 import appStates from './main/states';
 
@@ -7,7 +6,9 @@ import appStates from './main/states';
 export const router = new UIRouterReact();
 router.plugin(servicesPlugin);
 router.plugin(hashLocationPlugin);
-router.plugin(Visualizer);
+
+// Lazy load visualizer
+import('@uirouter/visualizer').then(module => router.plugin(module.Visualizer));
 
 // Register the initial (eagerly loaded) states
 appStates.forEach(state => router.stateRegistry.register(state));
