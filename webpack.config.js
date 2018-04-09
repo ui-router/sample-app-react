@@ -1,6 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isdev = (process.env['NODE_ENV'] || 'development') === 'development';
@@ -37,9 +35,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new CopyWebpackPlugin([
-      { from: 'static', to: 'static' }
-    ]),
-    new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"' })
+    new CopyWebpackPlugin([ { from: 'static', to: 'static' } ]),
   ]
-}
+};
