@@ -5,12 +5,8 @@
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server --host 0.0.0.0 --port 3000 --config webpack.config.js --history-api-fallback --content-base ./",
     "build": "rimraf docs && mkdirp docs && cp index.html docs/index.html && NODE_ENV=production webpack",
-    "test": "run-s build e2e",
-    "test:ui": "run-s build && run-p -r browser-sync cypress:ui",
-    "e2e": "run-p -r browser-sync cypress",
-    "cypress": "wait-on tcp:4000 && cypress run",
-    "cypress:ui": "wait-on tcp:4000 && cypress open",
-    "browser-sync": "browser-sync start --port 4000 --server docs --no-open",
+    "test": "npm run build && cypress-runner run --path docs",
+    "test:open": "npm run build && cypress-runner open --path docs",
     "gh-pages": "npm run build && git add docs && git commit -m 'update github pages' docs && git push"
   },
   "author": "",
@@ -24,6 +20,7 @@
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
+    "@uirouter/cypress-runner": "^1.0.4",
     "autoprefixer": "8.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
@@ -33,17 +30,13 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
-    "browser-sync": "2.23.6",
     "copy-webpack-plugin": "4.5.1",
     "css-loader": "0.28.11",
-    "cypress": "2.1.0",
     "file-loader": "1.1.11",
-    "npm-run-all": "4.1.2",
     "postcss-load-config": "1.2.0",
     "postcss-loader": "2.1.2",
     "rimraf": "2.6.2",
     "style-loader": "0.20.3",
-    "wait-on": "2.1.0",
     "webpack": "4.1.1",
     "webpack-cli": "^2.0.10",
     "webpack-dev-server": "3.1.1"
