@@ -1,23 +1,14 @@
 language: node_js
-node_js:
-- 8.9.1
-cache:
-  directories:
-  - "$HOME/.npm"
-  - node_modules
-before_script:
-- greenkeeper-lockfile-update
+node_js: 8.9.1
 before_install:
 - sh -e /etc/init.d/xvfb start
-- curl -o- -L https://yarnpkg.com/install.sh | bash
-- export PATH="$HOME/.yarn/bin:$PATH"
-- yarn global add greenkeeper-lockfile@1
-after_script: greenkeeper-lockfile-upload
-env:
-  global:
-    secure: tOE+iA90YXovHQvN6B+eW+CSibPwgQvrcDBsCsbFnDsUyjcIf+4NKNwe6lBT+e1e9oWkoEHeuNYEsSnEbUIRVYgKQfacfndTHPdI1Zrsqrn1glAFlpGyMhoBVFZnciGyglV124Dq+cx0UKWnrKTWLErXqvi/beiqcY9EXFvQHptIINc8j2+87wcMS6IJrFmf5d1hFY04l0xzWyxnhp3dPixkV4yX2v/CDkAiAlTQoz3QGd7f3QeZ3EXldTJM9X3leHKM8DcA56+BzrdlThyn2q/ymXoqWCIEfFCGJ1IXS5D/+gTXikUbfdEzB53A7o/trhr1EEBj02sOCb6pEN+c1CbyZmweXISShUqh0uCmHoLzfFSo9Z/MtkYvJ8hkZsGxf9qnZrPhHT7/e/qgN5vgQ7YI7ctjhqyHoL/IcmyZmqA6hOyn+AazpyLCiNdDnJlSzTSRlCNwoipH58ZG6Jd985UtVl6+SHPEANGmWG4g7cVxWQLSn5csUpSCRgS9EZgINO6SlVpI4hQiOba8JOb1c+CRE9zb9x0DnGl2fr4HyPswZer1BqXqZ//6zS4424Ud+GJv6rgAWAN99ZqspZ3lN9zlp0071flLb7DCRCtDaCzxkOnv8yftGl46S9QwLCxeVbyxtOxaJQggnqlVA8iuhkQVRjjjh3jX40fgIXhJ51s=
+- export PATH=$HOME/.yarn/bin:$PATH
+- curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.5.1
 notifications:
   slack:
-    on_success: change
+    on_success: never
     rooms:
       secure: MDU9cEYS9SO42Ci2BQgpFqlXEcrzZOEKIzOAEp2SrK/lsLO3r2eoXDm+VcnfWMXoL8ptDVAdzCkWSac0PLQveKgkOEnKJce1VhnVQ7Boijh4HriqdIr7h6iwVC2uBUQ7M01VZJEbN3fMjgZ5+6tHN7mw4tCfDbVrMISZQb8sY0y45hr/Koji9YvE3Q9vs4nyhFeQgnPpQaUm7D1RDJbwcr3pSL0k4T1/feH8Vib22IenWEnbVGGT7uU5Slts75zWF6/EFuxmSI0b8gxOeNVMMpqfbqsZU1MUXzRzQ2lTyP1i5GrQtCJME0OuWY05SMp5AzONIdyIZSlWLJDOY12Nr7JpamJ2hBwqM6lsz98GsOobpTusAlUriSK2WdIrKZFaH9GB7A8HDGC1ohNYaklo3CIyFi2A9e5a34AQ0K3qJ8RSbIH+r+oB6ITLv8d9cTMzuTFHRhqRxu3jJih4DN7yL6gXOWNeLwapEeDj3vYo7cHCefi57D53Yq1EaaaQ2OOHEkrYst3QuF2y2hjbRGMhIL1Et4SpY5Xv1kdbl3I3+hyGqNjxAaXUaL4EAz9bkUkaELlEwD22RxYV7NgyrPP4uh+iELphmRsMnVrxH4k+4kfwR+MoB71sYMqRm/IyCOyKSs+EIntehySJDVGQrcZI6lTnpng+xwlE9HOmZaIbN2E=
+cache:
+  directories:
+  - node_modules
