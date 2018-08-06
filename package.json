@@ -16,7 +16,7 @@
     "@uirouter/react": "^0.8.3",
     "@uirouter/visualizer": "^6.0.2",
     "lodash": "^4.17.10",
-    "react": "^16.4.1",
+    "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "whatwg-fetch": "^2.0.3"
   },
