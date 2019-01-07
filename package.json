@@ -36,7 +36,7 @@
     "file-loader": "^1.1.11",
     "postcss-load-config": "^2.0.0",
     "postcss-loader": "^3.0.0",
-    "rimraf": "^2.6.2",
+    "rimraf": "^2.6.3",
     "style-loader": "^0.22.1",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.1.2",
