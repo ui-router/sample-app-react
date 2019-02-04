@@ -76,9 +76,9 @@
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-7.0.0.tgz#84e707e157ec17d3e4c2a137f41fc3f416c0551e"
 
-"@uirouter/core@5.0.22":
-  version "5.0.22"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.22.tgz#4d36280b8d7871f7bd3e5f695a0f83ce6e559e48"
+"@uirouter/core@5.0.23":
+  version "5.0.23"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.23.tgz#363b4bea635a1b48900dc7e65793a65a3b58a79e"
 
 "@uirouter/cypress-runner@^1.0.10":
   version "1.0.10"
@@ -91,11 +91,11 @@
     wait-on "^3.2.0"
     yargs "^12.0.5"
 
-"@uirouter/react@^0.8.8":
-  version "0.8.8"
-  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-0.8.8.tgz#da3401989292af2d2c1c7b9eccf419ebbf0aa135"
+"@uirouter/react@^0.8.9":
+  version "0.8.9"
+  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-0.8.9.tgz#15285739c64cab53bb73eeb6e8ceb0836ed2b43b"
   dependencies:
-    "@uirouter/core" "5.0.22"
+    "@uirouter/core" "5.0.23"
     classnames "^2.2.5"
     prop-types "^15.6.1"
 

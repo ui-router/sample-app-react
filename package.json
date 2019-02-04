@@ -13,7 +13,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@uirouter/react": "^0.8.8",
+    "@uirouter/react": "^0.8.9",
     "@uirouter/visualizer": "^6.0.2",
     "lodash": "^4.17.11",
     "react": "^16.7.0",
