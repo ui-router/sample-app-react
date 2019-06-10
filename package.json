@@ -32,7 +32,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "^4.6.0",
-    "css-loader": "^1.0.1",
+    "css-loader": "^2.1.1",
     "file-loader": "^1.1.11",
     "postcss-load-config": "^2.0.0",
     "postcss-loader": "^3.0.0",
