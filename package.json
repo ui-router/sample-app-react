@@ -39,7 +39,7 @@
     "rimraf": "^2.6.3",
     "style-loader": "^0.22.1",
     "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.6",
+    "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.8.1"
   }
 }
