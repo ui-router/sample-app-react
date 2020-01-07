@@ -1,51 +1,50 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {UISref} from '@uirouter/react';
+import { useSref } from '@uirouter/react';
 
 import ContactDetail from './components/ContactDetail';
+
 /**
-* This component renders details for a single contact
-*
-* A button messages the contact by linking to `mymessages.compose` state passing the email as a state parameter.
-* Another button edits the contact by linking to `contacts.contact.edit` state.
-*/
+ * This component renders details for a single contact
+ *
+ * A button messages the contact by linking to `mymessages.compose` state passing the email as a state parameter.
+ * Another button edits the contact by linking to `contacts.contact.edit` state.
+ */
+function ContactView(props) {
+  let { contact } = props;
 
-class ContactView extends Component {
-  static propTypes = {
-    contact: PropTypes.object,
-  }
-
-  render () {
-    let {contact} = this.props;
-
-    // This button has an ui-sref to the mymessages.compose state. The ui-sref provides the mymessages.compose
-    // state with an non-url parameter, which is used as the initial message model
-    let composeButton = (
-      <UISref to={'mymessages.compose'} params={{message: {to: contact.email}}}>
-        <button className="btn btn-primary">
-          <i className="fa fa-envelope" /><span>Message</span>
-        </button>
-      </UISref>
-    );
-
-    // This button has a relative ui-sref to the contacts.contact.edit state
-    let editContactButton = (
-      <UISref to={'.edit'}>
-        <button className="btn btn-primary">
-          <i className="fa fa-pencil" /><span>Edit Contact</span>
-        </button>
-      </UISref>
-    );
-
+  // This button has an sref to the mymessages.compose state. The sref passes the mymessages.compose
+  // state an object parameter 'message' (a non-url parameter) which is used as the initial message model
+  const ComposeButton = () => {
+    const composeSref = useSref('mymessages.compose', { message: { to: contact.email } });
     return (
-      <div className="contact">
-        <ContactDetail contact={contact} />
-        {composeButton}
-        {' '}
-        {editContactButton}
-      </div>
+        <button {...composeSref} className="btn btn-primary">
+          <i className="fa fa-envelope"/><span>Message</span>
+        </button>
     );
-  }
+  };
+
+  // This button has a relative ui-sref to the contacts.contact.edit state
+  const EditContactButton = () => {
+    const editSref = useSref('.edit');
+    return (
+        <button {...editSref} className="btn btn-primary">
+          <i className="fa fa-pencil"/><span>Edit Contact</span>
+        </button>
+    );
+  };
+
+  return (
+      <div className="contact">
+        <ContactDetail contact={contact}/>
+        <ComposeButton/>
+        <EditContactButton/>
+      </div>
+  );
 }
+
+ContactView.propTypes = {
+  contact: PropTypes.object,
+};
 
 export default ContactView;

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { UIView } from '@uirouter/react';
+import React from 'react';
+import { UIView, useRouter } from '@uirouter/react';
 
 import AuthService from '../global/authService';
 import NavHeader from './components/NavHeader';
@@ -10,27 +10,21 @@ import NavHeader from './components/NavHeader';
  * This component renders the outermost chrome (application header and tabs, the compose  and logout button)
  * It has a `UIView` viewport for nested states to fill in.
  */
-class App extends Component {
-  constructor (props) {
-    super(props);
-  }
-
-  handleLogout = () => {
-    let {transition} = this.props;
+function App() {
+  const { stateService } = useRouter();
+  const handleLogout = () => {
     AuthService.logout();
-    transition.router.stateService.go('welcome', {}, { reload: true });
-  }
+    stateService.go('welcome', {}, { reload: true });
+  };
 
-  render () {
-    return (
+  return (
       <div>
         <div className="navheader">
-          <NavHeader onLogout={this.handleLogout}/>
+          <NavHeader onLogout={handleLogout}/>
         </div>
         <UIView/>
       </div>
-    );
-  }
+  );
 }
 
 export default App;

@@ -1,46 +1,47 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {get, set} from 'lodash';
+import { get, set } from 'lodash';
 
 const formInputs = [
-  { label: 'First',   path: 'name.first' },
-  { label: 'Last',   path: 'name.last' },
+  { label: 'First', path: 'name.first' },
+  { label: 'Last', path: 'name.last' },
   { label: 'Company', path: 'company' },
-  { label: 'Age',   path: 'age' },
-  { label: 'Phone',   path: 'phone' },
-  { label: 'Email',   path: 'email' },
-  { label: 'Street',  path: 'address.street' },
-  { label: 'City',   path: 'address.city' },
-  { label: 'State',   path: 'address.state' },
-  { label: 'Zip',   path: 'address.zip' },
-  { label: 'Image',   path: 'picture' }
+  { label: 'Age', path: 'age' },
+  { label: 'Phone', path: 'phone' },
+  { label: 'Email', path: 'email' },
+  { label: 'Street', path: 'address.street' },
+  { label: 'City', path: 'address.city' },
+  { label: 'State', path: 'address.state' },
+  { label: 'Zip', path: 'address.zip' },
+  { label: 'Image', path: 'picture' }
 ];
 
-class ContactForm extends Component {
-  static propTypes = {
-    contact: PropTypes.object,
-    onContactChange: PropTypes.func
-  }
-  handleChangeFor = (path) => {
-    const {contact, onContactChange} = this.props;
+function ContactForm(props) {
+  const handleChangeFor = (path) => {
+    const { contact, onContactChange } = props;
     return event => {
       onContactChange(set({ ...contact }, path, event.target.value));
     }
-  }
-  render () {
-    let {contact} = this.props;
-    let inputs = formInputs.map(input =>
+  };
+
+  let { contact } = props;
+  let inputs = formInputs.map(input =>
       <div key={input.path}>
         <label>{input.label}</label>
-        <input type="text" value={get(contact, input.path)} onChange={this.handleChangeFor(input.path)}/>
+        <input type="text" value={get(contact, input.path)} onChange={handleChangeFor(input.path)}/>
       </div>
-    );
-    return (
+  );
+
+  return (
       <div className="details">
         {inputs}
       </div>
-    );
-  }
+  );
+}
+
+ContactForm.propTypes = {
+  contact: PropTypes.object,
+  onContactChange: PropTypes.func
 }
 
 export default ContactForm;

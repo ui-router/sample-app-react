@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { useSref } from "@uirouter/react";
 
-import {UISref} from '@uirouter/react';
+function Welcome() {
+  const mymessagesSref = useSref('mymessages');
+  const contactsSref = useSref('contacts');
+  const prefsSref = useSref('prefs');
 
-class Welcome extends Component {
-  render () {
-    return (
+  return (
       <div className="container-fluid">
         <h3>UI-Router Sample App</h3>
         <p>Welcome to the sample app!</p>
         <p>This is a demonstration app intended to highlight some patterns that can be used within UI-Router.
-          These patterns should help you to to build cohesive, robust apps.  Additionally, this app uses state-vis
+          These patterns should help you to to build cohesive, robust apps. Additionally, this app uses state-vis
           to show the tree of states, and a transition log visualizer.</p>
         <h4>App Overview</h4>
         <p>First, start exploring the application's functionality at a high level by activating
@@ -17,9 +19,9 @@ class Welcome extends Component {
           you will be taken to an authentication screen (the authentication is fake; the password is "password")
         </p>
         <div>
-          <UISref to={'mymessages'}><button className="btn btn-primary"><i className="fa fa-envelope"></i><span>Messages</span></button></UISref>
-          <UISref to={'contacts'}><button className="btn btn-primary"><i className="fa fa-users"></i><span>Contacts</span></button></UISref>
-          <UISref to={'prefs'}><button className="btn btn-primary"><i className="fa fa-cogs"></i><span>Preferences</span></button></UISref>
+          <button {...mymessagesSref} className="btn btn-primary"><i className="fa fa-envelope"></i><span>Messages</span></button>
+          <button {...contactsSref} className="btn btn-primary"><i className="fa fa-users"></i><span>Contacts</span></button>
+          <button {...prefsSref} className="btn btn-primary"><i className="fa fa-cogs"></i><span>Preferences</span></button>
         </div>
         <h4>Patterns and Recipes</h4>
         <ul>
@@ -29,8 +31,7 @@ class Welcome extends Component {
           <li>Default Param Values</li>
         </ul>
       </div>
-    );
-  }
+  );
 }
 
 export default Welcome;

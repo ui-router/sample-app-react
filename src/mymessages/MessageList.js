@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import MessageTable from './components/MessageTable';
@@ -6,24 +6,22 @@ import MessageTable from './components/MessageTable';
 /**
  * This component renders a list of messages using the `MessageTable` component
  */
-class MessageList extends Component {
-  static propTypes = {
-    messages: PropTypes.arrayOf(PropTypes.object),
-    folder: PropTypes.shape({
-      columns: PropTypes.arrayOf(PropTypes.string)
-    }),
-  }
-
-  render () {
-    let {folder, messages} = this.props;
-    return (
+function MessageList(props) {
+  let { folder, messages } = props;
+  return (
       <div className="messagelist">
         <div className="messages">
-          <MessageTable columns={folder.columns} messages={messages} />
+          <MessageTable columns={folder.columns} messages={messages}/>
         </div>
       </div>
-    );
-  }
+  );
 }
+
+MessageList.propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.object),
+  folder: PropTypes.shape({
+    columns: PropTypes.arrayOf(PropTypes.string)
+  }),
+};
 
 export default MessageList;

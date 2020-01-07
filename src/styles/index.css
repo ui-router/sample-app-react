@@ -25,6 +25,10 @@ button.btn i + span {
 }
 
 
+button + button {
+  margin-left: 1em;
+}
+
 .home.buttons {
   display: flex;
   flex-flow: row wrap;

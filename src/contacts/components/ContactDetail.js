@@ -1,16 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
  * This component renders a read only view of the details for a single contact.
  */
-class ContactDetail extends Component {
-  static propTypes = {
-    contact: PropTypes.object
-  }
-  render () {
-    let {contact} = this.props;
-    return (
+function ContactDetail(props) {
+  let { contact } = props;
+  return (
       <div className="flex-h">
         <div className="details">
           <h3>{contact.name.first + ' ' + contact.name.last}</h3>
@@ -30,8 +26,11 @@ class ContactDetail extends Component {
           <img src={contact.picture}/>
         </div>
       </div>
-    );
-  }
+  );
 }
+
+ContactDetail.propTypes = {
+  contact: PropTypes.object
+};
 
 export default ContactDetail;
