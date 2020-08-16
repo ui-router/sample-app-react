@@ -15,7 +15,7 @@
   "dependencies": {
     "@uirouter/react": "^1.0.3",
     "@uirouter/visualizer": "^7.0.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "whatwg-fetch": "^3.4.0"
