@@ -16,8 +16,8 @@
     "@uirouter/react": "^1.0.3",
     "@uirouter/visualizer": "^7.2.1",
     "lodash": "^4.17.20",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "whatwg-fetch": "^3.4.1"
   },
   "devDependencies": {
