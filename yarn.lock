@@ -1015,10 +1015,10 @@
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.2.tgz#a811b8c18e2babab7d542b3365887ae2e4d9de47"
 
-"@uirouter/core@6.0.5":
-  version "6.0.5"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-6.0.5.tgz#60f13fd530fc75daa283e2bece944516559d066b"
-  integrity sha512-WN2HyELsxvqLaCMYCWojGW/QLRBgFBfwyERp5jC3Vn1njo/FLI5hplVqWMu6LIGp6Hpz3pbdtSaiFb1iY7iTVw==
+"@uirouter/core@6.0.6":
+  version "6.0.6"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-6.0.6.tgz#4bea0ca88790a939d8e84ba05a31b96f50d9abe8"
+  integrity sha512-+i1iNaPQRp1JoEnxi4EsTX30bSvkWtPEenENWdvdIzX615Q3WCWwnbW9DtrwX9gSD5qmWEaQEtGMU0uF3qJ+1g==
 
 "@uirouter/cypress-runner@^1.1.0":
   version "1.1.0"
@@ -1032,12 +1032,12 @@
     wait-on "^4.0.0"
     yargs "^15.0.2"
 
-"@uirouter/react@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-1.0.3.tgz#fbfa63e9aa6ad8444198754ef732e63c187d44ed"
-  integrity sha512-LTZK2BFapYTTjAVOc1mQF1mSeC5v++SNzOizhGNn//0npjzbhzy4qSt0EsFwlDtIkuZscVMsxBVNBRxnuy6G/Q==
+"@uirouter/react@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@uirouter/react/-/react-1.0.4.tgz#f5b2ad8bb724e50b6f23be90769eaf78728e9ad2"
+  integrity sha512-BcAed4BPKouOP0dHatGN/rLZnTjTL758/yIOQr9TSldYbckZ/9LZNO3F+CaGoTb0gVLEueoca4nggZsFd+0kKw==
   dependencies:
-    "@uirouter/core" "6.0.5"
+    "@uirouter/core" "6.0.6"
     classnames "^2.2.5"
     prop-types "^15.6.1"
 
