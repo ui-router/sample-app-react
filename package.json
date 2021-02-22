@@ -18,7 +18,7 @@
     "lodash": "^4.17.21",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "whatwg-fetch": "^3.5.0"
+    "whatwg-fetch": "^3.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.17",
