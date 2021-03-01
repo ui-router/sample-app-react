@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.8",
-    "@babel/preset-env": "^7.12.17",
+    "@babel/preset-env": "^7.13.8",
     "@babel/preset-react": "^7.12.13",
     "@uirouter/cypress-runner": "^1.1.0",
     "autoprefixer": "^9.8.6",
