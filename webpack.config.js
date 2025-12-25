@@ -16,6 +16,14 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: ''
   },
+  devServer: {
+    host: '0.0.0.0',
+    port: 3000,
+    static: {
+      directory: path.join(__dirname),
+    },
+    historyApiFallback: true,
+  },
   module: {
     rules: [
       {
@@ -26,15 +34,15 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader!postcss-loader'
+        use: ['style-loader', 'css-loader', 'postcss-loader']
       },
       {
         test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader',
+        type: 'asset/resource',
       }
     ]
   },
   plugins: [
-    new CopyWebpackPlugin([ { from: 'static', to: 'static' } ]),
-  ]
+    new CopyWebpackPlugin({ patterns: [{ from: 'static', to: 'static' }] }),
+  ],
 };
