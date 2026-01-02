@@ -20,14 +20,14 @@ import AppConfig from './appConfig';
 class Contacts extends SessionStorage {
   constructor() {
     // http://beta.json-generator.com/api/json/get/V1g6UwwGx
-    super("contacts", "static/data/contacts.json");
+    super("contacts", "data/contacts.json");
   }
 }
 
 /** A fake Folders REST client API */
 class Folders extends SessionStorage {
   constructor() {
-    super('folders', 'static/data/folders.json');
+    super('folders', 'data/folders.json');
   }
 }
 
@@ -35,7 +35,7 @@ class Folders extends SessionStorage {
 class Messages extends SessionStorage {
   constructor() {
     // http://beta.json-generator.com/api/json/get/VJl5GbIze
-    super('messages', 'static/data/messages.json');
+    super('messages', 'data/messages.json');
   }
 
   byFolder(folder) {
