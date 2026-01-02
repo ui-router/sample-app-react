@@ -20,14 +20,23 @@ jobs:
       matrix:
         yarncmd: ["test"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Configure
         run: |
           git config --global user.email uirouter@github.actions
           git config --global user.name uirouter_github_actions
       - name: Install Dependencies
         run: yarn install --pure-lockfile
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium
       - name: Check Peer Dependencies
         run: npx check-peer-dependencies
       - name: Run Tests
         run: yarn ${{ matrix.yarncmd }}
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

@@ -1,5 +1,8 @@
 node_modules/
 **/.*
-cypress/screenshots
-cypress/videos
 yarn-error.log
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
