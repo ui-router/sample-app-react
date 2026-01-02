@@ -2,10 +2,12 @@
   "name": "@uirouter/sample-app-react",
   "version": "1.0.0",
   "description": "Architecture overview demo for UI-Router React",
+  "type": "module",
   "scripts": {
     "clean": "rimraf docs",
-    "start": "NODE_ENV=development webpack serve --config webpack.config.js",
-    "build": "npm run clean && mkdirp docs && cp index.html docs/index.html && NODE_ENV=production webpack",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "npm run build && playwright test",
     "test:ui": "npm run build && playwright test --ui",
     "test:report": "playwright show-report",
@@ -16,31 +18,18 @@
   "dependencies": {
     "@uirouter/react": "^1.0.7",
     "@uirouter/visualizer": "^7.2.1",
-    "browserslist": "4.28.1",
     "lodash": "^4.17.21",
-    "picomatch": "4.0.3",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.8",
-    "@babel/preset-env": "^7.14.9",
-    "@babel/preset-react": "^7.14.5",
     "@playwright/test": "^1.48.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.23",
-    "babel-loader": "^10.0.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "copy-webpack-plugin": "^13.0.1",
-    "css-loader": "^7.1.2",
-    "mkdirp": "^3.0.1",
-    "postcss-load-config": "^6.0.1",
-    "postcss-loader": "^8.2.0",
+    "postcss": "^8.4.47",
     "rimraf": "^6.1.2",
     "serve": "^14.2.0",
-    "style-loader": "^4.0.0",
-    "webpack": "^5.104.1",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.2"
+    "vite": "^6.0.6"
   }
 }
