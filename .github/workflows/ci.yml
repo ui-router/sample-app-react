@@ -1,4 +1,4 @@
-name: 'CI'
+name: "CI"
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        npmcmd: ['test']
+        npmcmd: ["test"]
     steps:
       - uses: actions/checkout@v4
       - name: Configure
@@ -27,8 +27,6 @@ jobs:
           git config --global user.name uirouter_github_actions
       - name: Install Dependencies
         run: npm ci
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium
       - name: Check Peer Dependencies
         run: npx check-peer-dependencies
       - name: Run Tests
