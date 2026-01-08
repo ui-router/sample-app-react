@@ -8,8 +8,8 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "npm run build && playwright test",
-    "test:ui": "npm run build && playwright test --ui",
+    "test": "npx playwright install chromium && npm run build && playwright test",
+    "test:ui": "npx playwright install chromium && npm run build && playwright test --ui",
     "test:report": "playwright show-report",
     "gh-pages": "npm run build && git add docs && git commit -m 'update github pages' docs && git push"
   },
