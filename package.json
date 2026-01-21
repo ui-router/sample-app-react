@@ -18,7 +18,7 @@
   "dependencies": {
     "@uirouter/react": "^1.0.8",
     "@uirouter/visualizer": "^7.2.1",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
